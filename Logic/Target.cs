@@ -398,8 +398,8 @@ namespace Kombatant.Logic
             if (string.IsNullOrEmpty(Settings.BotBase.Instance.FixedCharacterName))
                 return null;
 
-            var character = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-                .FirstOrDefault(c => c.Name == Settings.BotBase.Instance.FixedCharacterName && c.Distance2D() < 25);
+            var character = GameObjectManager.GetObjectsOfType<BattleCharacter>().FirstOrDefault(c => c.Name == Settings.BotBase.Instance.FixedCharacterName && c.ObjectId == Settings.BotBase.Instance.FixedCharacterId) ??
+                            GameObjectManager.GetObjectsOfType<BattleCharacter>().FirstOrDefault(c => c.Name == Settings.BotBase.Instance.FixedCharacterName);
 
             // Character is not in the vicinity...
             if (character == null || !character.IsValid)

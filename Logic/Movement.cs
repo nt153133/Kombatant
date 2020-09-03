@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ff14bot;
 using ff14bot.Behavior;
+using ff14bot.Helpers;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
@@ -10,6 +12,8 @@ using Kombatant.Enums;
 using Kombatant.Extensions;
 using Kombatant.Helpers;
 using Kombatant.Interfaces;
+using Action = Kombatant.Constants.Action;
+using GameObject = ff14bot.Objects.GameObject;
 
 namespace Kombatant.Logic
 {
@@ -40,15 +44,15 @@ namespace Kombatant.Logic
 
             var result = false;
 
-            if(ShouldExecuteAutoMovement())
+            if (ShouldExecuteAutoMovement())
             {
                 if (AvoidanceManager.IsRunningOutOfAvoid)
                     return await Task.FromResult(true);
 
                 switch (Settings.BotBase.Instance.FollowMode)
                 {
-                    //case FollowMode.None:
-                    //    break;
+                    case FollowMode.None:
+                        break;
 
                     case FollowMode.PartyLeader:
                         result = await FollowPartyLeader();
@@ -60,6 +64,10 @@ namespace Kombatant.Logic
 
                     case FollowMode.Tank:
                         result = await FollowTank();
+                        break;
+
+                    case FollowMode.TargetedCharacter:
+                        result = await FollowTarget();
                         break;
                 }
             }
@@ -73,7 +81,7 @@ namespace Kombatant.Logic
         /// <returns></returns>
         private bool ShouldExecuteAutoMovement()
         {
-            return Settings.BotBase.Instance.EnableFollowing;
+	        return Settings.BotBase.Instance.EnableFollowing;
         }
 
         /// <summary>
@@ -91,9 +99,9 @@ namespace Kombatant.Logic
             if (await PerformMountDismount(characterToFollow))
                 return await Task.FromResult(true);
 
-            // Can't do mount stuff when I am under attack, you silly carbuncle!
-            if (Core.Me.InCombat && !Core.Me.IsMounted)
-                return await Task.FromResult(false);
+            //// Can't do mount stuff when I am under attack, you silly carbuncle!
+            //if (Core.Me.InCombat && !Core.Me.IsMounted)
+            //    return await Task.FromResult(false);
 
             if (await PerformFlightTakeOff(characterToFollow))
                 return await Task.FromResult(true);
@@ -118,13 +126,15 @@ namespace Kombatant.Logic
                 return await Task.FromResult(false);
 
             var fixedCharacter = GameObjectManager.GameObjects
-                .FirstOrDefault(obj => obj.Name == Settings.BotBase.Instance.FixedCharacterName && obj.IsBattleCharacter());
-
+                .FirstOrDefault(obj => obj.Name == Settings.BotBase.Instance.FixedCharacterName && obj.ObjectId == Settings.BotBase.Instance.FixedCharacterId && obj.Type == Settings.BotBase.Instance.FixedCharacterType) ??
+                                 GameObjectManager.GameObjects
+                                     .FirstOrDefault(obj => obj.Name == Settings.BotBase.Instance.FixedCharacterName && obj.Type == Settings.BotBase.Instance.FixedCharacterType);
+            var target = fixedCharacter.GetBattleCharacter();
             // Character not found?
-            if(fixedCharacter == null)
+            if (target == null)
                 return await Task.FromResult(false);
 
-            return await PerformFollowLogic(fixedCharacter.GetBattleCharacter());
+            return await PerformFollowLogic(target);
         }
 
         /// <summary>
@@ -148,7 +158,7 @@ namespace Kombatant.Logic
         }
 
         /// <summary>
-        /// Follor Mode: Follow Tank
+        /// Follow Mode: Follow Tank
         /// </summary>
         /// <returns></returns>
         private async Task<bool> FollowTank()
@@ -166,13 +176,26 @@ namespace Kombatant.Logic
         }
 
         /// <summary>
+        /// Follow Mode: Follow Target
+        /// </summary>
+        /// <returns></returns>
+        private async Task<bool> FollowTarget()
+        {
+            var target = Core.Target.GetBattleCharacter();
+            if (target == null)
+                return await Task.FromResult(false);
+
+            return await PerformFollowLogic(target);
+        }
+
+        /// <summary>
         /// Determines if the character we are watching has started flying
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        private async Task<bool> PerformFlightTakeOff(Character obj)
+        private async Task<bool> PerformFlightTakeOff(BattleCharacter obj)
         {
-            if (obj.Location.Y >= Core.Me.Location.Y + 5 && !MovementManager.IsFlying)
+            if (!MovementManager.IsFlying && (obj.IsMounted && obj.Location.IsOverGround(5) || obj.Location.Y > Core.Me.Location.Y + 5))
             {
                 await CommonTasks.TakeOff();
                 return await Task.FromResult(true);
@@ -217,7 +240,8 @@ namespace Kombatant.Logic
         /// <returns></returns>
         private bool PerformAutoSprint(BattleCharacter characterToWatch)
         {
-            if(characterToWatch.HasAura(Constants.Aura.Sprint) && ActionManager.IsSprintReady)
+            if (characterToWatch == null) return false;
+            if (characterToWatch.HasAura(Constants.Aura.Sprint) && ActionManager.IsSprintReady)
             {
                 LogHelper.Instance.Log("[{0}] Sprinting...", CallStackHelper.Instance.GetCaller());
                 ActionManager.Sprint();
@@ -236,18 +260,21 @@ namespace Kombatant.Logic
         {
             if (characterToWatch.IsMounted != Core.Me.IsMounted || characterToWatch.IsCasting && characterToWatch.CastingSpellId == Constants.Action.Mount)
             {
-                // Mount up!
-                if (characterToWatch.IsMounted || characterToWatch.CastingSpellId == Constants.Action.Mount)
+                if (!Core.Me.InCombat)
                 {
-                    LogHelper.Instance.Log(
-                        "[{0}] Mounting...",
-                        CallStackHelper.Instance.GetCaller());
-                    await CommonTasks.MountUp();
-                    return await Task.FromResult(true);
+                    // Mount up!
+                    if (characterToWatch.IsMounted || characterToWatch.CastingSpellId == Action.Mount)
+                    {
+                        LogHelper.Instance.Log(
+                            "[{0}] Mounting...",
+                            CallStackHelper.Instance.GetCaller());
+                        await CommonTasks.MountUp();
+                        return await Task.FromResult(true);
+                    }
                 }
 
                 // Dismount - but only when close to the leader!
-                if(characterToWatch.Distance2D() <= Settings.BotBase.Instance.FollowDistance + 0.5f)
+                if (characterToWatch.Distance2D() <= Settings.BotBase.Instance.FollowDistance + 0.5f)
                 {
                     LogHelper.Instance.Log(
                         "[{2}] Dismounting, {0} <= {1}...",

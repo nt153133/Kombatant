@@ -47,6 +47,7 @@
     <Compile Include="Constants\Aura.cs" />
     <Compile Include="Constants\GameObject.cs" />
     <Compile Include="Constants\Hotkey.cs" />
+    <Compile Include="Converters\EnumBooleanConverter.cs" />
     <Compile Include="Enums\ClassJobEffectType.cs" />
     <Compile Include="Enums\FollowMode.cs" />
     <Compile Include="Enums\WaypointGenerationMode.cs" />
