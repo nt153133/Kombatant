@@ -150,7 +150,7 @@ Kombatant comes with tons of features to make your life easier. Below is a short
 
 - [x] __Auto Follow__
 
-  Will cause the bot to automatically follow either the party leader, the party tank or a fixed character at a set distance.
+  Will cause the bot to automatically follow either the party leader, the target character, the party tank or a fixed character at a set distance.
 
   *Note: Due to technical limitations Auto Follow does not support jumping.*
 
@@ -180,7 +180,7 @@ Kombatant comes with tons of features to make your life easier. Below is a short
 
 - [x] __Hotkeys__
 
-  ~~Implemented, but no UI because WPF without processing it through the compiler is utter bullshit.
+  ~~Implemented, but no UI because WPF without processing it through the compiler is utter bullshit.~~
   
   Configure hotkeys through GUI. Added a hotkey to control following.
 
