@@ -202,9 +202,9 @@ There is **no** explicit support for the Chinese version of the bot.
 
 ## Known Issues And Limitations
 
- - **There is no support for changing the hotkeys via the UI.**
+ - ~~**There is no support for changing the hotkeys via the UI.**~~
 
-   This is a limitation of the current implementation and might be revised in the future.
+   ~~This is a limitation of the current implementation and might be revised in the future.~~
 
  - **Mechanic Warnings only work when Auto Face Target is turned off.**
 
