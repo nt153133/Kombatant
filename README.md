@@ -10,7 +10,7 @@
 
 Made by [Freiheit][Freiheit Github] with :two_hearts: and :cookie:.
 
-[Akira0245][Akira0245 Github]'s modify for my personal use.
+[Akira0245][Akira0245 Github]'s modify for personal use.
 
 Inspired by blasthoss' [MudAssist][MudAssist Github].
 
