@@ -10,7 +10,7 @@
 
 Made by [Freiheit][Freiheit Github] with :two_hearts: and :cookie:.
 
-Akira0245's modify for my personal use.
+[Akira0245][Akira0245 Github]'s modify for my personal use.
 
 Inspired by blasthoss' [MudAssist][MudAssist Github].
 
@@ -242,3 +242,4 @@ There is **no** explicit support for the Chinese version of the bot.
 [zzi Github]: https://github.com/zzi-zzi-zzi "zzi on Github"
 [LeveGen Github]: https://github.com/zzi-zzi-zzi/LeveGen "LeveGen on Github"
 [MudAssist Github]: https://github.com/mudbuddy/mud "MudAssist on Github"
+[Akira0245 Github]: https://github.com/Akira0245 "Akira0245 on Github"
