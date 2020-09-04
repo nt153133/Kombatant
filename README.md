@@ -10,6 +10,8 @@
 
 Made by [Freiheit][Freiheit Github] with :two_hearts: and :cookie:.
 
+Akira0245's modify for my personal use.
+
 Inspired by blasthoss' [MudAssist][MudAssist Github].
 
 Uses [zzi][zzi Github]'s WPF Wrapper from [LeveGen][LeveGen Github].
@@ -24,15 +26,41 @@ Kombatant comes with tons of features to make your life easier. Below is a short
 
   Allows fine-grained control over which behaviours you want the combat routine to potentially use. Don't want your routine to attack? What about healing? Perhaps today is a no-buff day.
 
-- [x] __Smart Pull__
-
-  When enabled, Kombatant will check whether you are in a party and if there is a tank present. The botbase will refrain from pulling mobs the tank has not tagged yet.
-
 - [x] __"Select Routine" Button__
 
   Quickly pop open the Combat Routine selection dialogue from within the botbase settings to change combat routines on the fly. Easy as peasy!
 
 ### Convenience
+
+- [x] __Auto HandOver Quest Items__
+
+  thanks to rb's new api we finally can auto handover them.
+  
+- [x] __Quick Trade__
+  
+  Auto open trade window when you right click on your friend. 
+  
+  one click on your bage item to trade whole stack. 
+  
+  auto set gil numeric to it's max value. 
+  
+  auto confirm trade window if you don't have any target.
+  
+- [x] __Auto Select Yes__
+
+  SelectYesno.SelectYes() when you are alive. 
+  
+- [x] __Auto Accept Revive__
+
+  SelectYesno.SelectYes() when you are dead and being reviving by someone. 
+  
+- [x] __An Overlay to Show Kombatant's current running status__
+  
+  Double click it to switch between pause and resume.
+
+- [x] __An Overlay to check how many player has select you as their target__
+  
+  useful in pvp.
 
 - [x] __Autonomous Mode__
 
@@ -41,7 +69,7 @@ Kombatant comes with tons of features to make your life easier. Below is a short
 - [x] __Auto Accept/Complete Quests__
 
   Automatically accepts open quests and will try to complete them if possible.
-
+  
 - [x] __Auto Commence Duty__
 
   Automatically commences a duty after x seconds.
@@ -93,14 +121,30 @@ Kombatant comes with tons of features to make your life easier. Below is a short
 - [x] __Auto Targeting__
 
   If enabled, the botbase will automatically select a target. Various different strategies for target selection are available. As a Red Mage, I love BestAoE which will select the target that will cause the most AoE damage.
+  
+- [x] __Auto Deselect Target__
 
+  When a target is out of reach or become invincible, auto deselect it in order to choose a new one.
+  
+- [x] __Smart Pull__ 
+
+  ~~When enabled, Kombatant will check whether you are in a party and if there is a tank present. The botbase will refrain from pulling mobs the tank has not tagged yet.~~
+  
+  When enabled, Kombatant will only care about mobs which already in your threat list or being tagged by partymenmbers.
+  
 - [x] __Max. Range Filter__
 
   When set to a value > 0 it will limit the range for target selection. Setting it to 0 will use the maximum pull range of the currently selected CR.
+  
+  *Added in both target and player's combatreach
+  
+- [x] __Target Scan Frequency__
 
-- [x] __Target Whitelist to farm specific mobs__
+  You can now manually set the frequency of target scan to improve bot performance.
+  
+- [ ] __Target Whitelist to farm specific mobs__
 
-  Special filter for farming just a few mobs in an area. Park the bot, set the targets, start.
+  ~~Special filter for farming just a few mobs in an area. Park the bot, set the targets, start.
 
 ### Movement
 
@@ -134,9 +178,11 @@ Kombatant comes with tons of features to make your life easier. Below is a short
 
 ### Hotkeys
 
-- [ ] __Hotkeys__
+- [x] __Hotkeys__
 
-  Implemented, but no UI because WPF without processing it through the compiler is utter bullshit.
+  ~~Implemented, but no UI because WPF without processing it through the compiler is utter bullshit.
+  
+  Configure hotkeys through GUI. Added a hotkey to control following.
 
 - [x] __Dynamic Hotkeys__
 
