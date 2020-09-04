@@ -82,8 +82,8 @@ namespace Kombatant.Logic
                     return await Task.FromResult(true);
 
             // Automatically keep up an emote
-            //if (ShouldExecuteAutoEmote())
-            //    ExecuteAutoEmote();
+            if (ShouldExecuteAutoEmote())
+                ExecuteAutoEmote();
 
             // Auto skip cutscenes
             if (BotBase.Instance.AutoSkipCutscenes && QuestLogManager.InCutscene)
@@ -131,7 +131,7 @@ namespace Kombatant.Logic
         private bool ShouldExecuteAutoEmote()
         {
             return BotBase.Instance.AutoEmoteInterval > 0 &&
-                   !String.IsNullOrEmpty(BotBase.Instance.AutoEmoteCommand.Trim());
+                   !string.IsNullOrEmpty(BotBase.Instance.AutoEmoteCommand.Trim());
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace Kombatant.Logic
             if (WaitHelper.Instance.IsFinished(AutoEmoteWaitName))
             {
                 ChatManager.SendChat(BotBase.Instance.AutoEmoteCommand);
-                WaitHelper.Instance.ResetWait(AutoEmoteWaitName);
+                WaitHelper.Instance.AddWait(AutoEmoteWaitName, new TimeSpan(0, 0, 0, BotBase.Instance.AutoEmoteInterval));
             }
         }
 

@@ -66,6 +66,23 @@ namespace Kombatant.Forms.Models
             }
         }
 
+        public ICommand InvertAll
+        {
+	        get
+	        {
+		        return new RelayCommand(s =>
+		        {
+			        BotBase.Instance.EnableRest = !BotBase.Instance.EnableRest;
+			        BotBase.Instance.EnableHeal = !BotBase.Instance.EnableHeal;
+			        BotBase.Instance.EnablePreCombatBuff = !BotBase.Instance.EnablePreCombatBuff;
+			        BotBase.Instance.EnablePullBuff = !BotBase.Instance.EnablePullBuff;
+			        BotBase.Instance.EnablePull = !BotBase.Instance.EnablePull;
+			        BotBase.Instance.EnableCombatBuff = !BotBase.Instance.EnableCombatBuff;
+			        BotBase.Instance.EnableCombat = !BotBase.Instance.EnableCombat;
+		        });
+	        }
+        }
+
         /// <summary>
         /// Pops open the combat routine selector.
         /// </summary>

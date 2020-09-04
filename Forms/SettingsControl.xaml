@@ -43,286 +43,286 @@
             <TabItem
                 Header="Main" RenderTransformOrigin="0.5,0.509" Height="21" Margin="-2,-2,-1.857,0.429" VerticalAlignment="Bottom">
                 <Grid
-                    Margin="5">
+                    Margin="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="253" />
-                        <ColumnDefinition Width="260" />
-                        <ColumnDefinition Width="260" />
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="250" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition
+                            Height="auto" />
+                        <RowDefinition
                             Height="Auto" />
                         <RowDefinition
-                            Height="8" />
-                        <RowDefinition
-                            Height="*" />
+                            Height="Auto" />
                     </Grid.RowDefinitions>
-                    <StackPanel
-                        Grid.Row="0" Grid.Column="0"
-                        Orientation="Vertical">
-                        <TextBlock
-                            TextWrapping="WrapWithOverflow">
-                            <Run Text="Convenience" />
-                        </TextBlock>
-                    </StackPanel>
-                    <StackPanel
-                        Grid.Row="0" Grid.Column="1"
-                        Orientation="Vertical">
-                        <TextBlock
-                            TextWrapping="WrapWithOverflow">
-                            <Run Text="Targeting" />
-                        </TextBlock>
-                    </StackPanel>
-                    <StackPanel
-                        Grid.Row="0" Grid.Column="2"
-                        Orientation="Vertical">
-                        <TextBlock
-                            TextWrapping="WrapWithOverflow">
-                            <Run Text="Movement" />
-                        </TextBlock>
-                    </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical">
-                        <CheckBox
+                        <GroupBox Header="Bot Status" Padding="3" Margin="0,0,5,0">
+                            <StackPanel>
+                                <CheckBox
                             Content="{x:Static resources:Localization.UI_IsPaused}"
                             ToolTip="{x:Static resources:Localization.UI_Tooltip_IsPaused}"
                             IsChecked="{Binding BotBase.IsPaused}" />
-                        <Label></Label>
-                        <CheckBox
-                            Content="Status Overlay"
-                            IsChecked="{Binding BotBase.UseStatusOverlay}"
-                            Command="{Binding StatusOverlaySwitch}" />
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox
-                                Content="Focus Overlay" Width="120" 
-                                IsChecked="{Binding BotBase.UseFocusOverlay}"
-                                Command="{Binding FocusOverlaySwitch}" />
-                            <CheckBox
-                                Content="Lock" IsEnabled="{Binding BotBase.UseFocusOverlay}"
-                                IsChecked="{Binding BotBase.FocusOverlayEnableClickThrough}"
-                                Command="{Binding FocusOverlaySwitch}" />
-                        </StackPanel>
-                        <Label></Label>
-                        <CheckBox
-                            Content="{x:Static resources:Localization.UI_IsAutonomous}"
-                            ToolTip="{x:Static resources:Localization.UI_Tooltip_IsAutonomous}"
-                            IsChecked="{Binding BotBase.IsAutonomous}" />
-                        <CheckBox
-									Content="{x:Static resources:Localization.UI_MechanicWarnings}"
-									ToolTip="{x:Static resources:Localization.UI_Tooltip_MechanicWarnings}"
-									IsChecked="{Binding BotBase.MechanicWarnings}" />
-                        <CheckBox
-                            Content="{x:Static resources:Localization.UI_AutoFaceTarget}"
-                            ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoFaceTarget}"
-                            IsChecked="{Binding BotBase.AutoFaceTarget}" />
-                        <Label></Label>
-                        <CheckBox
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Convenience" Padding="3" Margin="0,0,5,0">
+                            <StackPanel>
+                                <CheckBox
                             Content="{x:Static resources:Localization.UI_AutoAcceptQuests}"
                             ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoAcceptQuests}"
                             IsChecked="{Binding BotBase.AutoAcceptQuests}" />
 
-                        <CheckBox
+                                <CheckBox
                             Content="{x:Static resources:Localization.UI_AutoAdvanceDialogue}"
                             ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoAdvanceDialogue}"
                             IsChecked="{Binding BotBase.AutoAdvanceDialogue}" />
-                        <!--<CheckBox
+                                <!--<CheckBox
 									Content="{x:Static resources:Localization.UI_AutoEndActEncounters}"
 									ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoEndActEncounters}"
 									IsChecked="{Binding BotBase.AutoEndActEncounters}" />-->
-                        <CheckBox
+                                <CheckBox
                             Content="{x:Static resources:Localization.UI_AutoSkipCutscenes}"
                             ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoSkipCutscenes}"
                             IsChecked="{Binding BotBase.AutoSkipCutscenes}" />
-                        <CheckBox
+                                <CheckBox
                             Content="{x:Static resources:Localization.UI_AutoSyncFate}"
                             ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoSyncFate}"
                             IsChecked="{Binding BotBase.AutoSyncFate}" />
-                        <Label></Label>
-                        <CheckBox
+                                <Label/>
+                                <CheckBox
                             Content="Auto Accept Revive"
                             IsChecked="{Binding BotBase.AutoAcceptRevive}" />
-                        <CheckBox
+                                <CheckBox
                             Content="{x:Static resources:Localization.UI_AutoSprint}"
                             ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoSprint}"
                             IsChecked="{Binding BotBase.AutoSprint}" />
-                        <Label></Label>
-                        <CheckBox
+                                <Label/>
+                                <CheckBox
                             Content="Auto Select Yes"
                             IsChecked="{Binding BotBase.AutoSelectYes}" />
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox
                                 Content="Auto Handover" HorizontalAlignment="Left" Width="120"
                                 IsChecked="{Binding BotBase.AutoHandoverRequestItems}" />
-                            <CheckBox
+                                    <CheckBox
                                 Content="Handover HQ"
                                 ToolTip="Will attempt to use HQ items if no NQ of the requested item is available"
                                 IsChecked="{Binding BotBase.HandoverHqIfnoNQ}"
                                 IsEnabled="{Binding BotBase.AutoHandoverRequestItems}" />
-                            <!--<CheckBox
+                                    <!--<CheckBox
                                     Content="AutoLeaveDuty"
                                     IsChecked="{Binding BotBase.AutoLeaveDuty}" />-->
-                        </StackPanel>
-                        <!--<CheckBox
+                                </StackPanel>
+                                <!--<CheckBox
                                     Content="Auto Accept PartyInvite"
                                     IsChecked="{Binding BotBase.AutoAcceptPartyInvite}" />
                                 <CheckBox
                                     Content="Auto Accept Teleport"
                                     IsChecked="{Binding BotBase.AutoAcceptTeleport}" />-->
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox
                                 Content="Auto Trade"
                                 IsChecked="{Binding BotBase.AutoTrade}" HorizontalAlignment="Left" Width="120" />
-                            <CheckBox
-                                Content="Only With Friends"
+                                    <CheckBox
+                                Content="Friends Only"
                                 IsChecked="{Binding BotBase.AutoTradeFriendOnly}"
                                 IsEnabled="{Binding BotBase.AutoTrade}" />
-                            <!--<CheckBox
+                                    <!--<CheckBox
                                     Content="AutoLeaveDuty"
                                     IsChecked="{Binding BotBase.AutoLeaveDuty}" />-->
-                        </StackPanel>
-                        <Label></Label>
-                        <StackPanel Orientation="Vertical">
-                            <CheckBox
+                                </StackPanel>
+                                <Label/>
+                                <StackPanel Orientation="Vertical">
+                                    <CheckBox
                                 Content="{x:Static resources:Localization.UI_AutoAcceptDutyFinder}"
                                 ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoAcceptDutyFinder}"
                                 IsChecked="{Binding BotBase.AutoAcceptDutyFinder}" />
-                            <CheckBox
+                                    <CheckBox
                                 Content="{x:Static resources:Localization.UI_DutyFinderNotify}"
                                 ToolTip="{x:Static resources:Localization.UI_Tooltip_DutyFinderNotify}"
                                 IsChecked="{Binding BotBase.DutyFinderNotify}" />
-                            <StackPanel Orientation="Horizontal">
-                                <TextBox MinWidth="30" VerticalContentAlignment="Center"
+                                    <Label Height="4"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox Width="40" Margin="1,0,0,0" VerticalContentAlignment="Center"
                                          HorizontalContentAlignment="Center"
-                                         Text="{Binding BotBase.DutyFinderWaitTime}" Height="21" />
-                                <Label Content="{x:Static resources:Localization.UI_Lbl_DutyFinderWaitTime}" />
-                            </StackPanel>
-                            <Slider Margin="0,0,5,0" HorizontalAlignment="Stretch" Width="Auto" Minimum="0" 
+                                         Text="{Binding BotBase.DutyFinderWaitTime}" Height="21"/>
+                                        <Label Content="{x:Static resources:Localization.UI_Lbl_DutyFinderWaitTime}" />
+                                    </StackPanel>
+                                    <Slider  HorizontalAlignment="Stretch" Width="Auto" Minimum="0" 
                                     Maximum="45" TickPlacement="BottomRight" TickFrequency="5" SmallChange="1"
                                     IsSnapToTickEnabled="True" Value="{Binding BotBase.DutyFinderWaitTime}" />
-
-                            <!--<StackPanel Orientation="Horizontal">
-                                    <Label Content="{x:Static resources:Localization.UI_Lbl_AutoEmoteCommand}" />
-                                    <TextBox MinWidth="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding BotBase.AutoEmoteCommand}" />
                                 </StackPanel>
+
+
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Auto Emote" Padding="0" Margin="0,0,5,0">
+                            <StackPanel>
+                                <Label Content="{x:Static resources:Localization.UI_Lbl_AutoEmoteCommand}"/>
+                                <TextBox Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding BotBase.AutoEmoteCommand}" Height="21" />
                                 <StackPanel Orientation="Horizontal">
-                                    <Label Content="{x:Static resources:Localization.UI_Lbl_AutoEmoteInterval}" />
-                                    <TextBox MinWidth="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding BotBase.AutoEmoteInterval}" />
-                                </StackPanel>-->
-                        </StackPanel>
+                                    <Label Content="{x:Static resources:Localization.UI_Lbl_AutoEmoteInterval}" Width="189"/>
+                                    <TextBox MinWidth="40" Height="21" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding BotBase.AutoEmoteInterval}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
                         <!--<Button HorizontalAlignment="Left" Content="Reload Overlay" Command="{Binding ReloadOverlay}" Margin="4,18,4,4" Height="19" Width="110"/>-->
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical">
-                        <CheckBox
+                        <GroupBox Header="Utilities" Padding="3" Margin="0,0,5,0">
+                            <StackPanel>
+                                <CheckBox
+                            Content="Status Overlay"
+                            IsChecked="{Binding BotBase.UseStatusOverlay}"
+                            Command="{Binding StatusOverlaySwitch}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox
+                                Content="Focus Overlay" Width="120" 
+                                IsChecked="{Binding BotBase.UseFocusOverlay}"
+                                Command="{Binding FocusOverlaySwitch}" />
+                                    <CheckBox
+                                Content="Lock" IsEnabled="{Binding BotBase.UseFocusOverlay}"
+                                IsChecked="{Binding BotBase.FocusOverlayEnableClickThrough}"
+                                Command="{Binding FocusOverlaySwitch}" />
+                                </StackPanel>
+                                <Label/>
+                                <CheckBox
+                            Content="{x:Static resources:Localization.UI_IsAutonomous}"
+                            ToolTip="{x:Static resources:Localization.UI_Tooltip_IsAutonomous}"
+                            IsChecked="{Binding BotBase.IsAutonomous}" />
+                                <CheckBox
+									Content="{x:Static resources:Localization.UI_MechanicWarnings}"
+									ToolTip="{x:Static resources:Localization.UI_Tooltip_MechanicWarnings}"
+									IsChecked="{Binding BotBase.MechanicWarnings}" />
+                                <CheckBox
+                            Content="{x:Static resources:Localization.UI_AutoFaceTarget}"
+                            ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoFaceTarget}"
+                            IsChecked="{Binding BotBase.AutoFaceTarget}" />
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Targeting" Padding="3" Margin="0,0,5,0">
+                            <StackPanel>
+                                <CheckBox
                             Content="{x:Static resources:Localization.UI_AutoTarget}"
                             ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoTarget}"
                             IsChecked="{Binding BotBase.AutoTarget}"
                             Command="{Binding AutoTargetCommand}" />
-                        <CheckBox
-                            Content="{x:Static resources:Localization.UI_AutoTargetSwitch}"
-                            ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoTargetSwitch}"
-                            IsChecked="{Binding BotBase.AutoTargetSwitch}"/>
-                        <Label />
-                        <CheckBox
+                                <Label />
+                                <CheckBox
                             Content="{x:Static resources:Localization.UI_SmartPull}"
                             ToolTip="{x:Static resources:Localization.UI_Tooltip_SmartPull}"
                             IsChecked="{Binding BotBase.EnableSmartPull}" />
-                        <CheckBox
+                                <CheckBox
+                            Content="{x:Static resources:Localization.UI_AutoTargetSwitch}"
+                            ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoTargetSwitch}"
+                            IsChecked="{Binding BotBase.AutoTargetSwitch}"/>
+                                <CheckBox
                             Content="Auto Deselect"
                             IsChecked="{Binding BotBase.AutoDeSelectTarget}" />
-                        <CheckBox
+                                <CheckBox
                             Content="Check Los"
                             IsChecked="{Binding BotBase.EnableLosCheck}" />
-                        <Label />
-                        <CheckBox
+                                <Label />
+                                <CheckBox
                             Content="{x:Static resources:Localization.UI_FateFilter}"
                             ToolTip="{x:Static resources:Localization.UI_Tooltip_FateFilter}"
                             IsChecked="{Binding BotBase.FateTargetFilter}" />
-                        <Label />
-                        <!--<CheckBox
+                                <!--<CheckBox
                             Content="Mark Target"
                             IsChecked="{Binding BotBase.MarkTarget}"
                             IsEnabled="{Binding BotBase.AutoTarget}" />-->
-                        <Label Content="{x:Static resources:Localization.UI_Lbl_AutoTargetingMode}" />
-                        <ComboBox Margin="0,0,5,0" ItemsSource="{Binding Source={StaticResource AutoTargetingMode}}"
+                                <Label Content="{x:Static resources:Localization.UI_Lbl_AutoTargetingMode}" />
+                                <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Source={StaticResource AutoTargetingMode}}"
                                   SelectedValue="{Binding BotBase.AutoTargetingMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label />
+                                <Label />
 
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Target Scan Distance" Width="222" />
-                            <!--<CheckBox
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Target Scan Distance" Width="185" />
+                                    <!--<CheckBox
                                 Content="Manual" VerticalAlignment="Center" Width="72"
                                 IsChecked="{Binding BotBase.ManuallyTargetDistance}" />-->
-                            <TextBox MinWidth="33" VerticalContentAlignment="Center"
+                                    <TextBox MinWidth="40" VerticalContentAlignment="Center"
                                      HorizontalContentAlignment="Center" Text="{Binding BotBase.TargetScanMaxDistance}"
                                      Height="21" />
-                        </StackPanel>
-                        <Slider IsEnabled="{Binding BotBase.ManuallyTargetDistance}" Margin="5,0"
+                                </StackPanel>
+                                <Slider IsEnabled="{Binding BotBase.ManuallyTargetDistance}" Margin="5,0,0,0"
                                 HorizontalAlignment="Stretch" Width="Auto" Minimum="3" Maximum="54"
                                 TickPlacement="BottomRight" Ticks="3,5,8,12,15,20,25,30,54" IsSnapToTickEnabled="True"
                                 Value="{Binding BotBase.TargetScanMaxDistance}" />
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Target Scan Frequency (ms)" Width="222" />
-                            <TextBox MinWidth="33" HorizontalAlignment="Right" VerticalContentAlignment="Center"
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Target Scan Frequency (ms)" Width="185" />
+                                    <TextBox MinWidth="40" HorizontalAlignment="Right" VerticalContentAlignment="Center"
                                      HorizontalContentAlignment="Center" Text="{Binding BotBase.TargetScanRate}"
                                      Height="21" />
-                        </StackPanel>
-                        <Slider HorizontalAlignment="Stretch" Width="Auto" Minimum="50" Maximum="1000" Margin="5,0"
+                                </StackPanel>
+                                <Slider HorizontalAlignment="Stretch" Width="Auto" Minimum="50" Maximum="1000" Margin="5,0,0,0"
                                 TickPlacement="BottomRight" TickFrequency="50" IsSnapToTickEnabled="True"
                                 Value="{Binding BotBase.TargetScanRate}" />
-
+                            </StackPanel>
+                        </GroupBox>
                     </StackPanel>
+
                     <StackPanel Grid.Column="2" Grid.Row="2">
                         <StackPanel Orientation="Vertical">
-                            <CheckBox
+                            <GroupBox Header="Avoidance" Padding="5,3" Margin="0,0,5,0">
+                                <StackPanel>
+                                    <CheckBox
                             Content="{x:Static resources:Localization.UI_EnableAvoidance}"
                             ToolTip="{x:Static resources:Localization.UI_Tooltip_EnableAvoidance}"
                             IsChecked="{Binding BotBase.EnableAvoidance}" />
-                            <CheckBox
+                                    <CheckBox
                             Content="{x:Static resources:Localization.UI_PauseAvoidanceOnBosses}"
                             ToolTip="{x:Static resources:Localization.UI_Tooltip_PauseAvoidanceOnBosses}"
                             IsChecked="{Binding BotBase.PauseAvoidanceOnBosses}"
                             IsEnabled="{Binding BotBase.EnableAvoidance}" />
-                            <Label />
-                            <Label Content="{x:Static resources:Localization.UI_Lbl_FollowMode}"/>
-                            <StackPanel Margin="8,0">
-                                <CheckBox Margin="0,0,0,4" Content="Enable Following" IsChecked="{Binding BotBase.EnableFollowing}" />
-                                <RadioButton Margin="0,2" IsChecked="{Binding Path=BotBase.FollowMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Tank}">Tank</RadioButton>
-                                <RadioButton Margin="0,2" IsChecked="{Binding Path=BotBase.FollowMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=PartyLeader}">Party Leader</RadioButton>
-                                <RadioButton Margin="0,2" IsChecked="{Binding Path=BotBase.FollowMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=TargetedCharacter}">Targeted Character</RadioButton>
-                                <RadioButton Margin="0,2" IsChecked="{Binding Path=BotBase.FollowMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=FixedCharacter}">Fixed Character</RadioButton>
-                                <Label Height="4"></Label>
-                                <TextBlock Text="Character to Follow:" HorizontalAlignment="Left" IsEnabled="{Binding Path=BotBase.FollowMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=FixedCharacter}" Width="130"></TextBlock>
-                                <TextBox IsEnabled="{Binding Path=BotBase.FollowMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=FixedCharacter}" Height="21" Text="{Binding BotBase.FixedCharacterName}" TextAlignment="Center"></TextBox>
-                                <Label Height="4"></Label>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button IsEnabled="{Binding Path=BotBase.FollowMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=FixedCharacter}" Margin="119,0,0,0" Width="80" Content="Set Current" Command="{Binding SetCurrentTarget}"></Button>
-                                    <Button IsEnabled="{Binding Path=BotBase.FollowMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=FixedCharacter}" Margin="5,0,0,0" Width="40" Content="Clear" Command="{Binding ClearSetTarget}"></Button>
                                 </StackPanel>
-                            </StackPanel>
-                            <Label></Label>
+                            </GroupBox>
+
+                            <GroupBox Header="Following" Padding="0,0,3,0" Margin="0,0,5,0">
+                                <StackPanel>
+                                    <CheckBox Margin="5,3,0,0" Content="Enable Following" IsChecked="{Binding BotBase.EnableFollowing}" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Following Distance"  Width="185"/>
+                                        <TextBox MinWidth="40" VerticalContentAlignment="Center" Margin="0,0,0,0"
+                                         HorizontalContentAlignment="Center" Text="{Binding BotBase.FollowDistance}"
+                                         Height="21" />
+                                    </StackPanel>
+                                    <Slider Margin="5,0,0,0" HorizontalAlignment="Stretch" Minimum="0" Maximum="30"
+                                    TickPlacement="BottomRight" IsSnapToTickEnabled="True" TickFrequency="1"
+                                    Value="{Binding BotBase.FollowDistance}" />
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Padding="5,3" Header="{x:Static resources:Localization.UI_Lbl_FollowMode}" Margin="0,0,5,0">
+                                <StackPanel>
+                                    <RadioButton Margin="0,2" IsChecked="{Binding BotBase.FollowMode, ConverterParameter=Tank, Converter={StaticResource enumBooleanConverter}}" Content="Tank"/>
+                                    <RadioButton Margin="0,2" IsChecked="{Binding BotBase.FollowMode, ConverterParameter=PartyLeader, Converter={StaticResource enumBooleanConverter}}" Content="Party Leader"/>
+                                    <RadioButton Margin="0,2" IsChecked="{Binding BotBase.FollowMode, ConverterParameter=TargetedCharacter, Converter={StaticResource enumBooleanConverter}}" Content="Targeted Character"/>
+                                    <RadioButton Margin="0,2" IsChecked="{Binding BotBase.FollowMode, ConverterParameter=FixedCharacter, Converter={StaticResource enumBooleanConverter}}" Content="Fixed Character"/>
+                                    <Label Height="2"/>
+                                    <TextBox Margin="19,0,0,0" IsEnabled="{Binding BotBase.FollowMode, ConverterParameter=FixedCharacter, Converter={StaticResource enumBooleanConverter}}" Height="21" Text="{Binding BotBase.FixedCharacterName}" TextAlignment="Center"/>
+                                    <Label Height="4"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button IsEnabled="{Binding BotBase.FollowMode, ConverterParameter=FixedCharacter, Converter={StaticResource enumBooleanConverter}}" Margin="98,0,0,0" Width="80" Content="Set Current" Command="{Binding SetCurrentTarget}"/>
+                                        <Button IsEnabled="{Binding BotBase.FollowMode, ConverterParameter=FixedCharacter, Converter={StaticResource enumBooleanConverter}}" Margin="5,0,0,0" Width="40" Content="Clear" Command="{Binding ClearSetTarget}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
+                            <Label Height="3"/>
                             <!--<ComboBox ItemsSource="{Binding Source={StaticResource FollowMode}}"
                                       SelectedValue="{Binding BotBase.FollowMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       Margin="0,0,5,0" />-->
-
-                            <Label Content="{x:Static resources:Localization.UI_Lbl_WaypointGenerationMode}" />
-                            <StackPanel Margin="8,0">
-                                <RadioButton Margin="0,2" IsChecked="{Binding Path=BotBase.WaypointGenerationMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=NavGraph}">NavGraph</RadioButton>
-                                <RadioButton Margin="0,2" IsChecked="{Binding Path=BotBase.WaypointGenerationMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Offmesh}">Offmesh</RadioButton>
-                            </StackPanel>
-                            <!--<ComboBox ItemsSource="{Binding Source={StaticResource WaypointGenerationMode}}"
+                            <GroupBox Padding="3" Header="{x:Static resources:Localization.UI_Lbl_WaypointGenerationMode}" Margin="0,0,5,0">
+                                <StackPanel >
+                                    <RadioButton Margin="0,2" IsChecked="{Binding BotBase.WaypointGenerationMode, ConverterParameter=NavGraph, Converter={StaticResource enumBooleanConverter}}" Content="NavGraph"/>
+                                    <RadioButton Margin="0,2" IsChecked="{Binding BotBase.WaypointGenerationMode, ConverterParameter=Offmesh, Converter={StaticResource enumBooleanConverter}}" Content="Offmesh"/>
+                                    <!--<ComboBox ItemsSource="{Binding Source={StaticResource WaypointGenerationMode}}"
                                       SelectedValue="{Binding BotBase.WaypointGenerationMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       Margin="0,0,5,0" />-->
+                                </StackPanel>
+                            </GroupBox>
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Following Distance"  Width="222"/>
-                                <TextBox MinWidth="33" VerticalContentAlignment="Center" Margin="0,0,0,0"
-                                     HorizontalContentAlignment="Center" Text="{Binding BotBase.FollowDistance}"
-                                     Height="21" />
-                            </StackPanel>
-                            <Slider Margin="5" HorizontalAlignment="Stretch" Minimum="0" Maximum="30"
-                                TickPlacement="BottomRight" IsSnapToTickEnabled="True"
-                                Value="{Binding BotBase.FollowDistance}" />
                         </StackPanel>
-
 
                     </StackPanel>
                 </Grid>
@@ -381,7 +381,7 @@
                         <RowDefinition
                             Height="Auto" />
                         <RowDefinition
-                            Height="16" />
+                            Height="Auto" />
                         <RowDefinition
                             Height="*" />
                     </Grid.RowDefinitions>
@@ -430,9 +430,11 @@
                             IsChecked="{Binding BotBase.EnableCombat}" />
                     </StackPanel>
                     <StackPanel
-                        Grid.Row="8"
+                        Grid.Row="6"
                         Orientation="Vertical">
-                        <Button Content="{x:Static resources:Localization.UI_SelectCr}"
+                        <Button Content="Invert All" Width="298.073" HorizontalAlignment="Left" Command="{Binding InvertAll}"></Button>
+                        <Label Height="4"></Label>
+                        <Button Content="{x:Static resources:Localization.UI_SelectCr}" Width="298.073" HorizontalAlignment="Left"
                                 Command="{Binding SelectCombatRoutine}" />
                     </StackPanel>
                 </Grid>
@@ -495,6 +497,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+
             <!--<TabItem
 				Header="{x:Static resources:Localization.UI_Header_About}">
                 <Grid

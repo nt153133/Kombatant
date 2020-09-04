@@ -235,10 +235,9 @@ namespace Kombatant.Forms
                 //    }
                 //};
 
-                StatusOverlay.MouseDoubleClick += async (sender, args) =>
+                StatusOverlay.MouseDoubleClick +=  (sender, args) =>
                 {
-
-                    if (Logic.Convenience.CurrentStatus != RunningStatus.Stopped)
+	                if (Logic.Convenience.CurrentStatus != RunningStatus.Stopped)
                     {
                         BotBase.Instance.IsPaused = !BotBase.Instance.IsPaused;
                     }
