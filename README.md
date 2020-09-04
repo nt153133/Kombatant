@@ -38,13 +38,13 @@ Kombatant comes with tons of features to make your life easier. Below is a short
   
 - [x] __Quick Trade__
   
-  Auto open trade window when you right click on your friend. 
+  Auto open trade window when you right click on your friend (or someone else depend on your setting)
   
-  one click on your bage item to trade whole stack. 
+  one click on your bagslot to trade whole stack. 
   
   auto set gil numeric to it's max value. 
   
-  auto confirm trade window if you don't have any target.
+  auto confirm trade window if you don't have target.
   
 - [x] __Auto Select Yes__
 
