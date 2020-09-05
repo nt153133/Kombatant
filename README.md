@@ -34,7 +34,7 @@ Kombatant comes with tons of features to make your life easier. Below is a short
 
 - [x] __Auto HandOver Quest Items__
 
-  thanks to kayla's work and rb's new api we finally can handover them automaticlly.
+  thanks to kayla's work and rb's new api we finally can handover them automatically.
   
 - [x] __Quick Trade__
   
