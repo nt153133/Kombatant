@@ -214,12 +214,12 @@ namespace Kombatant.Logic
         private void ExecuteAutoEmote()
         {
             if(!WaitHelper.Instance.HasWait(AutoEmoteWaitName))
-                WaitHelper.Instance.AddWait(AutoEmoteWaitName, new TimeSpan(0, 0, 0, BotBase.Instance.AutoEmoteInterval));
+                WaitHelper.Instance.AddWait(AutoEmoteWaitName, new TimeSpan(0, 0, 0, 0, (int)(BotBase.Instance.AutoEmoteInterval * 1000)));
 
             if (WaitHelper.Instance.IsFinished(AutoEmoteWaitName))
             {
                 ChatManager.SendChat(BotBase.Instance.AutoEmoteCommand);
-                WaitHelper.Instance.AddWait(AutoEmoteWaitName, new TimeSpan(0, 0, 0, BotBase.Instance.AutoEmoteInterval));
+                WaitHelper.Instance.AddWait(AutoEmoteWaitName, new TimeSpan(0, 0, 0, 0, (int)(BotBase.Instance.AutoEmoteInterval * 1000)));
             }
         }
 

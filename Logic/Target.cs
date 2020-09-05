@@ -332,8 +332,6 @@ namespace Kombatant.Logic
         {
             //if (WorldManager.InPvP)
             return group.Where(o => !o.IsInvincible());
-
-            return group;
         }
 
         private IEnumerable<BattleCharacter> PostFilterLos(IEnumerable<BattleCharacter> group)
@@ -398,8 +396,8 @@ namespace Kombatant.Logic
             if (string.IsNullOrEmpty(Settings.BotBase.Instance.FixedCharacterName))
                 return null;
 
-            var character = GameObjectManager.GetObjectsOfType<BattleCharacter>().FirstOrDefault(c => c.Name == Settings.BotBase.Instance.FixedCharacterName && c.ObjectId == Settings.BotBase.Instance.FixedCharacterId) ??
-                            GameObjectManager.GetObjectsOfType<BattleCharacter>().FirstOrDefault(c => c.Name == Settings.BotBase.Instance.FixedCharacterName);
+            var character = GameObjectManager.GetObjectsOfType<BattleCharacter>().FirstOrDefault(c => c.ToString() == Settings.BotBase.Instance.FixedCharacterString) ??
+                            GameObjectManager.GetObjectsOfType<BattleCharacter>().FirstOrDefault(c => c.Name == Settings.BotBase.Instance.FixedCharacterName && c.Type == Settings.BotBase.Instance.FixedCharacterType);
 
             // Character is not in the vicinity...
             if (character == null || !character.IsValid)

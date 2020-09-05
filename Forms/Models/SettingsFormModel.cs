@@ -258,8 +258,8 @@ namespace Kombatant.Forms.Models
                 {
                     if (Core.Me.HasTarget)
                     {
-                        BotBase.Instance.FixedCharacterName = Core.Target.Name;
-                        BotBase.Instance.FixedCharacterId = Core.Target.ObjectId;
+                        BotBase.Instance.FixedCharacterName = Core.Target.Name; 
+                        BotBase.Instance.FixedCharacterString = Core.Target.ToString();
                         BotBase.Instance.FixedCharacterType = Core.Target.Type;
                         //BotBase.FollowMode = FollowMode.FixedCharacter;
                     }
@@ -274,7 +274,7 @@ namespace Kombatant.Forms.Models
                 return new RelayCommand(s =>
                 {
                     BotBase.Instance.FixedCharacterName = string.Empty;
-                    BotBase.Instance.FixedCharacterId = 0;
+                    BotBase.Instance.FixedCharacterString = string.Empty;
                     BotBase.Instance.FixedCharacterType = 0;
                 });
             }
