@@ -159,10 +159,31 @@
                         </GroupBox>
                         <GroupBox Header="Auto Emote" Padding="0" Margin="0,0,5,0">
                             <StackPanel>
-                                <Label Content="{x:Static resources:Localization.UI_Lbl_AutoEmoteCommand}"/>
-                                <TextBox Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding BotBase.AutoEmoteCommand}" Height="21" />
+                                <Label ToolTip="Emote to keep up" Content="{x:Static resources:Localization.UI_Lbl_AutoEmoteCommand}"/>
+                                <TextBox  Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding BotBase.AutoEmoteCommand}" Height="21">
+                                    <TextBox.Resources>
+                                        <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Center">
+                                            <VisualBrush.Visual>
+                                                <TextBlock Text="/joy emote"/>
+                                            </VisualBrush.Visual>
+                                        </VisualBrush>
+                                    </TextBox.Resources>
+                                    <TextBox.Style>
+                                        <Style TargetType="TextBox">
+                                            <Style.Triggers>
+                                                <Trigger Property="Text" Value="{x:Null}">
+                                                    <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                                </Trigger>
+                                                <Trigger Property="Text" Value="">
+                                                    <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
+
                                 <StackPanel Orientation="Horizontal">
-                                    <Label Content="{x:Static resources:Localization.UI_Lbl_AutoEmoteInterval}" Width="189"/>
+                                    <Label ToolTip="Seconds between renewing the emote" Content="{x:Static resources:Localization.UI_Lbl_AutoEmoteInterval}" Width="189"/>
                                     <TextBox MinWidth="40" Height="21" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding BotBase.AutoEmoteInterval}" />
                                 </StackPanel>
                             </StackPanel>
@@ -300,7 +321,27 @@
                                     <RadioButton Margin="0,2" IsChecked="{Binding BotBase.FollowMode, ConverterParameter=TargetedCharacter, Converter={StaticResource enumBooleanConverter}}" Content="Targeted Character"/>
                                     <RadioButton Margin="0,2" IsChecked="{Binding BotBase.FollowMode, ConverterParameter=FixedCharacter, Converter={StaticResource enumBooleanConverter}}" Content="Fixed Character"/>
                                     <Label Height="2"/>
-                                    <TextBox Margin="19,0,0,0" IsEnabled="{Binding BotBase.FollowMode, ConverterParameter=FixedCharacter, Converter={StaticResource enumBooleanConverter}}" Height="21" Text="{Binding BotBase.FixedCharacterName}" TextAlignment="Center"/>
+                                    <TextBox Margin="19,0,0,0" IsEnabled="{Binding BotBase.FollowMode, ConverterParameter=FixedCharacter, Converter={StaticResource enumBooleanConverter}}" Height="21" Text="{Binding BotBase.FixedCharacterName}" TextAlignment="Center">
+                                        <TextBox.Resources>
+                                            <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Center">
+                                                <VisualBrush.Visual>
+                                                    <TextBlock Text="{Binding BotBase.MyName, Mode=OneTime}"/>
+                                                </VisualBrush.Visual>
+                                            </VisualBrush>
+                                        </TextBox.Resources>
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox">
+                                                <Style.Triggers>
+                                                    <Trigger Property="Text" Value="{x:Null}">
+                                                        <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="Text" Value="">
+                                                        <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
                                     <Label Height="4"/>
                                     <StackPanel Orientation="Horizontal">
                                         <Button IsEnabled="{Binding BotBase.FollowMode, ConverterParameter=FixedCharacter, Converter={StaticResource enumBooleanConverter}}" Margin="98,0,0,0" Width="80" Content="Set Current" Command="{Binding SetCurrentTarget}"/>

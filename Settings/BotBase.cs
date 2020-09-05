@@ -53,6 +53,8 @@ namespace Kombatant.Settings
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
+		public string MyName => ff14bot.Core.Me.Name;
+
 		#region --- Debugging Stuff
 
 		#region Botbase Settings Window
@@ -269,12 +271,12 @@ namespace Kombatant.Settings
 
 		#region Auto Emote - Interval
 
-		private int _autoEmoteInterval;
+		private double _autoEmoteInterval;
 
 		[DefaultValue(0)]
 		[Description("Seconds between renewing the emote")]
 		[JsonProperty("AutoEmoteInterval")]
-		public int AutoEmoteInterval
+		public double AutoEmoteInterval
 		{
 			get => _autoEmoteInterval;
 			set
@@ -703,28 +705,30 @@ namespace Kombatant.Settings
 
 		#region Auto Move - Follow This Character
 
-		private string _followThisCharacter;
+		private string _fixedCharacterName;
 
 		[Description("Name of the character to follow on FixedCharacter follow mode")]
 		[JsonProperty("FixedCharacterName")]
 		[DefaultValue("")]
 		public string FixedCharacterName
 		{
-			get => _followThisCharacter;
+			get => _fixedCharacterName;
 			set
 			{
-				_followThisCharacter = value;
+				_fixedCharacterName = value;
 				OnPropertyChanged();
 			}
 		}
 
-		private uint _fixedCharacterId;
-		public uint FixedCharacterId
+		private string _fixedCharacterString;
+
+		[DefaultValue("")]
+		public string FixedCharacterString
 		{
-			get => _fixedCharacterId;
+			get => _fixedCharacterString;
 			set
 			{
-				_fixedCharacterId = value;
+				_fixedCharacterString = value;
 				OnPropertyChanged();
 			}
 		}
