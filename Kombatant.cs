@@ -160,6 +160,7 @@ namespace Kombatant
         {
             try { sidestepStatus = PluginManager.Plugins.First(i => i.Plugin.Name == "SideStep").Enabled; }
             catch { }
+
             // Always start paused
             Settings.BotBase.Instance.IsPaused = false;
 
@@ -181,6 +182,7 @@ namespace Kombatant
             {
                 OverlayManager.StartFocusOverlay();
             }
+
         }
 
         private static bool sidestepStatus;

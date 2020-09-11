@@ -7,8 +7,8 @@ namespace Kombatant.Enums
     /// </summary>
     public enum FollowMode
     {
-        //[Description("Do not follow")]
-        //None = 0,
+        [Description("Do not follow")]
+        None = 0,
         [Description("Follow targeted character")]
         TargetedCharacter = 10,
         [Description("Follow specified character")]

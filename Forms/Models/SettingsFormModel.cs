@@ -1,10 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Buddy.Overlay.Commands;
 using ff14bot;
 using ff14bot.Managers;
 using Kombatant.Annotations;
+using Kombatant.Enums;
 using Kombatant.Helpers;
 using Kombatant.Settings;
 using Kombatant.Settings.Models;
@@ -62,6 +64,23 @@ namespace Kombatant.Forms.Models
                 Settings.Hotkeys.Overwrite(value);
                 OnPropertyChanged();
             }
+        }
+
+        public ICommand InvertAll
+        {
+	        get
+	        {
+		        return new RelayCommand(s =>
+		        {
+			        BotBase.Instance.EnableRest = !BotBase.Instance.EnableRest;
+			        BotBase.Instance.EnableHeal = !BotBase.Instance.EnableHeal;
+			        BotBase.Instance.EnablePreCombatBuff = !BotBase.Instance.EnablePreCombatBuff;
+			        BotBase.Instance.EnablePullBuff = !BotBase.Instance.EnablePullBuff;
+			        BotBase.Instance.EnablePull = !BotBase.Instance.EnablePull;
+			        BotBase.Instance.EnableCombatBuff = !BotBase.Instance.EnableCombatBuff;
+			        BotBase.Instance.EnableCombat = !BotBase.Instance.EnableCombat;
+		        });
+	        }
         }
 
         /// <summary>
@@ -151,31 +170,31 @@ namespace Kombatant.Forms.Models
                     {
                         OverlayManager.StopStatusOverlay();
                     }
-                   
+
                     OverlayManager.StatusOverlay.Update(Logic.Convenience.CurrentStatus);
                 });
             }
         }
 
-        public ICommand AutoSelectYesCommand
-        {
-            get
-            {
-                return new RelayCommand(s =>
-                {
-                    if (Settings.BotBase.Instance.AutoSelectYes)
-                    {
-                        Settings.BotBase.Instance.AutoHandoverRequestItems = true;
-                        Settings.BotBase.Instance.AutoAcceptTeleport = true;
-                    }
-                    else
-                    {
-                        Settings.BotBase.Instance.AutoHandoverRequestItems = false;
-                        Settings.BotBase.Instance.AutoAcceptTeleport = false;
-                    }
-                });
-            }
-        }
+        //public ICommand AutoSelectYesCommand
+        //{
+        //    get
+        //    {
+        //        return new RelayCommand(s =>
+        //        {
+        //            if (Settings.BotBase.Instance.AutoSelectYes)
+        //            {
+        //                Settings.BotBase.Instance.AutoHandoverRequestItems = true;
+        //                Settings.BotBase.Instance.AutoAcceptTeleport = true;
+        //            }
+        //            else
+        //            {
+        //                Settings.BotBase.Instance.AutoHandoverRequestItems = false;
+        //                Settings.BotBase.Instance.AutoAcceptTeleport = false;
+        //            }
+        //        });
+        //    }
+        //}
 
         public ICommand AutoTargetCommand
         {
@@ -227,6 +246,36 @@ namespace Kombatant.Forms.Models
                 {
                     HotkeyHelper.Instance.ReloadNonDynamicHotkeys();
                     LogHelper.Instance.Log("Hotkeys reloaded.");
+                });
+            }
+        }
+
+        public ICommand SetCurrentTarget
+        {
+            get
+            {
+                return new RelayCommand(s =>
+                {
+                    if (Core.Me.HasTarget)
+                    {
+                        BotBase.Instance.FixedCharacterName = Core.Target.Name; 
+                        BotBase.Instance.FixedCharacterString = Core.Target.ToString();
+                        BotBase.Instance.FixedCharacterType = Core.Target.Type;
+                        //BotBase.FollowMode = FollowMode.FixedCharacter;
+                    }
+                });
+            }
+        }
+
+        public ICommand ClearSetTarget
+        {
+            get
+            {
+                return new RelayCommand(s =>
+                {
+                    BotBase.Instance.FixedCharacterName = string.Empty;
+                    BotBase.Instance.FixedCharacterString = string.Empty;
+                    BotBase.Instance.FixedCharacterType = 0;
                 });
             }
         }
