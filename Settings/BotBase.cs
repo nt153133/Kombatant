@@ -1,8 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using ff14bot.Enums;
 using ff14bot.Helpers;
+using ff14bot.Managers;
 using Kombatant.Constants;
 using Kombatant.Enums;
 using Kombatant.Extensions;
@@ -96,6 +100,45 @@ namespace Kombatant.Settings
 				OnPropertyChanged();
 			}
 		}
+
+		private bool _autoRegisterDuties;
+		[DefaultValue(false)]
+		public bool AutoRegisterDuties
+		{
+			get => _autoRegisterDuties;
+			set
+			{
+				_autoRegisterDuties = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private string _dutyIDsToRegister;
+		[DefaultValue("")]
+		[Description("Duty IDs you need to auto register, use comma to separate. up to 5.")]
+		public string DutyIDsToRegister
+		{
+			get => _dutyIDsToRegister;
+			set
+			{
+				_dutyIDsToRegister = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _AutoLeaveDuty;
+
+		[DefaultValue(false)]
+		public bool AutoLeaveDuty
+		{
+			get => _AutoLeaveDuty;
+			set
+			{
+				_AutoLeaveDuty = value;
+				OnPropertyChanged();
+			}
+		}
+
 
 		#endregion
 
@@ -1116,6 +1159,8 @@ namespace Kombatant.Settings
 		}
 
 		#endregion
+
+
 
 		#endregion
 	}
