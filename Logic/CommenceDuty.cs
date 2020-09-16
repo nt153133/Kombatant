@@ -9,6 +9,7 @@ using System.Resources;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using ff14bot;
+using ff14bot.Directors;
 using ff14bot.Enums;
 using ff14bot.Managers;
 using ff14bot.Objects;
@@ -113,7 +114,7 @@ namespace Kombatant.Logic
 							.Where(i => i.IsInDutyFinder && idsUints.Contains(i.Id)).ToArray();
 						if (duties.Length != idsUints.Length)
 						{
-							throw new ArgumentException();
+							throw new Exception();
 						}
 
 						return duties;
@@ -121,13 +122,13 @@ namespace Kombatant.Logic
 					catch (Exception e)
 					{
 						LogHelper.Instance.Log("任务搜索器中没有你要申请的全部副本。");
-						LogHelper.Instance.Log(e);
+						//LogHelper.Instance.Log(e);
 					}
 				}
 				catch (Exception e)
 				{
-					LogHelper.Instance.Log("输入的副本ID格式有误。");
-					LogHelper.Instance.Log(e);
+					LogHelper.Instance.Log("输入副本ID的格式有误。");
+					//LogHelper.Instance.Log(e);
 				}
 
 				return new InstanceContentResult[] { };
@@ -144,7 +145,7 @@ namespace Kombatant.Logic
 				return false;
 			if (WaitHelper.Instance.IsWaiting(@"CommenceDuty.AutoLeaveDuty"))
 				return false;
-			return GameObjectManager.GetObjectByName("退出点") is EventObject o && o.IsValid && o.IsVisible && o.IsTargetable && o.Distance() < 30;
+			return DirectorManager.ActiveDirector is InstanceContentDirector icDirector && icDirector.InstanceEnded;
 		}
 
 		private bool ShouldRegisterDuties()

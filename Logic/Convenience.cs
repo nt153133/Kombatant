@@ -15,6 +15,7 @@ using ff14bot.Managers;
 using ff14bot.Objects;
 using ff14bot.RemoteAgents;
 using ff14bot.RemoteWindows;
+using GreyMagic;
 using Kombatant.Extensions;
 using Kombatant.Forms;
 using Kombatant.Helpers;
@@ -364,7 +365,7 @@ namespace Kombatant.Logic
 
         private bool ExecuteAutoAcceptRaise()
         {
-            if (ClientGameUiRevive.ReviveState == ReviveState.Reviving)
+            if (Core.Me.IsDead && Core.Me.HasAura(148))
             {
                 ClientGameUiRevive.Revive();
                 return true;

@@ -243,7 +243,7 @@ namespace Kombatant.Logic
         /// <returns></returns>
         private bool IsTraveling()
         {
-            return MovementManager.IsSwimming || MovementManager.IsFlying || /*MovementManager.IsMoving*/ Core.Me.IsMounted ||
+            return MovementManager.IsSwimming || MovementManager.IsFlying || /*MovementManager.IsMoving*/ Core.Me.IsMounted || Core.Me.HasAura(1420) || Core.Me.HasAura(1520) ||
                    MovementManager.IsOccupied;
         }
 
