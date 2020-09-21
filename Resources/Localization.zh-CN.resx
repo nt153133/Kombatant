@@ -289,7 +289,7 @@
     <value>启用战斗循环的索敌增益行为。</value>
   </data>
   <data name="UI_Pull" xml:space="preserve">
-    <value>拉取</value>
+    <value>索敌</value>
   </data>
   <data name="UI_Tooltip_Pull" xml:space="preserve">
     <value>启用战斗循环的索敌行为。</value>
@@ -569,5 +569,11 @@
   </data>
   <data name="Name_Kombatant" xml:space="preserve">
     <value>Kombatant</value>
+  </data>
+  <data name="UI_DeathBehavior" xml:space="preserve">
+    <value>无法战斗状态</value>
+  </data>
+  <data name="UI_Death" xml:space="preserve">
+    <value>死亡行为</value>
   </data>
 </root>

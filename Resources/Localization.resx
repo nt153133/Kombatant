@@ -268,37 +268,37 @@ Turn away before the cast completes!</value>
     <value>Targeting</value>
   </data>
   <data name="UI_CombatBuff" xml:space="preserve">
-    <value>Combat Buff</value>
+    <value>Combat Buff Behavior</value>
   </data>
   <data name="UI_Tooltip_CombatBuff" xml:space="preserve">
     <value>Enable the combat routine to execute the CombatBuff behavior.</value>
   </data>
   <data name="UI_Combat" xml:space="preserve">
-    <value>Combat</value>
+    <value>Combat Behavior</value>
   </data>
   <data name="UI_Tooltip_Combat" xml:space="preserve">
     <value>Enable the combat routine to execute the Combat behavior.</value>
   </data>
   <data name="UI_Heal" xml:space="preserve">
-    <value>Heal</value>
+    <value>Heal Behavior</value>
   </data>
   <data name="UI_Tooltip_Heal" xml:space="preserve">
     <value>Enable the combat routine to execute the Heal behavior.</value>
   </data>
   <data name="UI_PreCombatBuff" xml:space="preserve">
-    <value>Pre-Combat Buff</value>
+    <value>Pre-Combat Buff Behavior</value>
   </data>
   <data name="UI_Tooltip_PreCombatBuff" xml:space="preserve">
     <value>Enable the combat routine to execute the PreCombatBuff behavior.</value>
   </data>
   <data name="UI_PullBuff" xml:space="preserve">
-    <value>Pull Buff</value>
+    <value>Pull Buff Behavior</value>
   </data>
   <data name="UI_Tooltip_PullBuff" xml:space="preserve">
     <value>Enable the combat routine to execute the PullBuff behavior.</value>
   </data>
   <data name="UI_Pull" xml:space="preserve">
-    <value>Pull</value>
+    <value>Pull Behavior</value>
   </data>
   <data name="UI_Tooltip_Pull" xml:space="preserve">
     <value>Enable the combat routine to execute the Pull behavior.</value>
@@ -310,7 +310,7 @@ Turn away before the cast completes!</value>
     <value>As a non-tank, do not engage enemies before your tank.</value>
   </data>
   <data name="UI_Rest" xml:space="preserve">
-    <value>Rest</value>
+    <value>Rest Behavior</value>
   </data>
   <data name="UI_Tooltip_Rest" xml:space="preserve">
     <value>Enable the combat routine to execute the Rest behavior.</value>
@@ -575,5 +575,11 @@ Turn away before the cast completes!</value>
   </data>
   <data name="UI_CRtip2" xml:space="preserve">
     <value>Usually you want all behaviors to be active.</value>
+  </data>
+  <data name="UI_DeathBehavior" xml:space="preserve">
+    <value>DeathBehavior</value>
+  </data>
+  <data name="UI_Death" xml:space="preserve">
+    <value>Death Behavior</value>
   </data>
 </root>

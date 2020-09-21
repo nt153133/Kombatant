@@ -550,17 +550,32 @@ namespace Kombatant.Settings
 
 		#region Heal
 
-		private bool _enableHeal;
+		private bool _enableHealOutofCombat;
 
 		[DefaultValue(true)]
-		[Description("Enable executing the heal behavior")]
-		[JsonProperty("EnableHeal")]
-		public bool EnableHeal
+		[Description("Enable executing the heal behavior out of combat")]
+		[JsonProperty("EnableHealOutofCombat")]
+		public bool EnableHealOutofCombat
 		{
-			get => _enableHeal;
+			get => _enableHealOutofCombat;
 			set
 			{
-				_enableHeal = value;
+				_enableHealOutofCombat = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _enableHealInCombat;
+
+		[DefaultValue(true)]
+		[Description("Enable executing the heal behavior in combat")]
+		[JsonProperty("EnableHealInCombat")]
+		public bool EnableHealInCombat
+		{
+			get => _enableHealInCombat;
+			set
+			{
+				_enableHealInCombat = value;
 				OnPropertyChanged();
 			}
 		}
@@ -656,6 +671,25 @@ namespace Kombatant.Settings
 			set
 			{
 				_enableRest = value;
+				OnPropertyChanged();
+			}
+		}
+
+		#endregion
+
+		#region Death
+
+		private bool _enableDeath;
+
+		[DefaultValue(true)]
+		[Description("Enable executing the death behavior")]
+		[JsonProperty("EnableDeath")]
+		public bool EnableDeath
+		{
+			get => _enableDeath;
+			set
+			{
+				_enableDeath = value;
 				OnPropertyChanged();
 			}
 		}

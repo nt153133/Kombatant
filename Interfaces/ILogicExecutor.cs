@@ -78,9 +78,23 @@ namespace Kombatant.Interfaces
         /// Determines whether the Heal behavior should be executed.
         /// </summary>
         /// <returns></returns>
-        protected bool ShouldExecuteHeal()
+        protected bool ShouldExecuteHealInCombat()
         {
-            return Settings.BotBase.Instance.EnableHeal && RoutineManager.Current.HealBehavior != null;
+            return Settings.BotBase.Instance.EnableHealInCombat && RoutineManager.Current.HealBehavior != null;
+        }
+
+        protected bool ShouldExecuteHealOutofCombat()
+        {
+	        return Settings.BotBase.Instance.EnableHealOutofCombat && RoutineManager.Current.HealBehavior != null;
+        }
+
+        /// <summary>
+        /// Determines whether the Death behavior should be executed.
+        /// </summary>
+        /// <returns></returns>
+        protected bool ShouldExecuteDeath()
+        {
+	        return Settings.BotBase.Instance.EnableDeath && RoutineManager.Current.DeathBehavior != null;
         }
     }
 }

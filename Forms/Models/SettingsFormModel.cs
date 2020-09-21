@@ -103,13 +103,15 @@ namespace Kombatant.Forms.Models
 			{
 				return new RelayCommand(s =>
 				{
-					BotBase.Instance.EnableRest = !BotBase.Instance.EnableRest;
-					BotBase.Instance.EnableHeal = !BotBase.Instance.EnableHeal;
+					BotBase.Instance.EnableHealInCombat = !BotBase.Instance.EnableHealInCombat;
+					BotBase.Instance.EnableHealOutofCombat = !BotBase.Instance.EnableHealOutofCombat;
 					BotBase.Instance.EnablePreCombatBuff = !BotBase.Instance.EnablePreCombatBuff;
 					BotBase.Instance.EnablePullBuff = !BotBase.Instance.EnablePullBuff;
 					BotBase.Instance.EnablePull = !BotBase.Instance.EnablePull;
 					BotBase.Instance.EnableCombatBuff = !BotBase.Instance.EnableCombatBuff;
 					BotBase.Instance.EnableCombat = !BotBase.Instance.EnableCombat;
+					BotBase.Instance.EnableDeath = !BotBase.Instance.EnableDeath;
+					BotBase.Instance.EnableRest = !BotBase.Instance.EnableRest;
 				});
 			}
 		}

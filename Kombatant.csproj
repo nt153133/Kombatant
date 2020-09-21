@@ -77,6 +77,7 @@
     <Compile Include="Helpers\HotkeyHelper.cs" />
     <Compile Include="Logic\Avoidance.cs" />
     <Compile Include="Logic\Convenience.cs" />
+    <Compile Include="Logic\CRLogic.cs" />
     <Compile Include="Logic\DPS.cs" />
     <Compile Include="Logic\CommenceDuty.cs" />
     <Compile Include="Logic\Healer.cs" />

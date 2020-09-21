@@ -632,7 +632,7 @@ namespace Kombatant.Resources {
         }
         
         /// <summary>
-        ///   查找类似 Combat 的本地化字符串。
+        ///   查找类似 Combat Behavior 的本地化字符串。
         /// </summary>
         public static string UI_Combat {
             get {
@@ -641,7 +641,7 @@ namespace Kombatant.Resources {
         }
         
         /// <summary>
-        ///   查找类似 Combat Buff 的本地化字符串。
+        ///   查找类似 Combat Buff Behavior 的本地化字符串。
         /// </summary>
         public static string UI_CombatBuff {
             get {
@@ -682,6 +682,24 @@ namespace Kombatant.Resources {
         public static string UI_CRtip2 {
             get {
                 return ResourceManager.GetString("UI_CRtip2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Death Behavior 的本地化字符串。
+        /// </summary>
+        public static string UI_Death {
+            get {
+                return ResourceManager.GetString("UI_Death", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DeathBehavior 的本地化字符串。
+        /// </summary>
+        public static string UI_DeathBehavior {
+            get {
+                return ResourceManager.GetString("UI_DeathBehavior", resourceCulture);
             }
         }
         
@@ -848,7 +866,7 @@ namespace Kombatant.Resources {
         }
         
         /// <summary>
-        ///   查找类似 Heal 的本地化字符串。
+        ///   查找类似 Heal Behavior 的本地化字符串。
         /// </summary>
         public static string UI_Heal {
             get {
@@ -1028,7 +1046,7 @@ namespace Kombatant.Resources {
         }
         
         /// <summary>
-        ///   查找类似 Pre-Combat Buff 的本地化字符串。
+        ///   查找类似 Pre-Combat Buff Behavior 的本地化字符串。
         /// </summary>
         public static string UI_PreCombatBuff {
             get {
@@ -1037,7 +1055,7 @@ namespace Kombatant.Resources {
         }
         
         /// <summary>
-        ///   查找类似 Pull 的本地化字符串。
+        ///   查找类似 Pull Behavior 的本地化字符串。
         /// </summary>
         public static string UI_Pull {
             get {
@@ -1046,7 +1064,7 @@ namespace Kombatant.Resources {
         }
         
         /// <summary>
-        ///   查找类似 Pull Buff 的本地化字符串。
+        ///   查找类似 Pull Buff Behavior 的本地化字符串。
         /// </summary>
         public static string UI_PullBuff {
             get {
@@ -1064,7 +1082,7 @@ namespace Kombatant.Resources {
         }
         
         /// <summary>
-        ///   查找类似 Rest 的本地化字符串。
+        ///   查找类似 Rest Behavior 的本地化字符串。
         /// </summary>
         public static string UI_Rest {
             get {
