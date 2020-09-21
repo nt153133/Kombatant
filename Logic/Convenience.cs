@@ -189,6 +189,7 @@ namespace Kombatant.Logic
             return false;
         }
 
+        [Obsolete]
         private bool ExecuteAutoLeaveDuty()
         {
             if (DutyManager.InInstance && DutyManager.CanLeaveActiveDuty)
@@ -320,7 +321,9 @@ namespace Kombatant.Logic
             if (AgentCutScene.Instance.CanSkip && SelectString.IsOpen)
             {
                 SelectString.ClickSlot(0);
-                return true;
+                LogHelper.Instance.Log("Skipping Cutscene...");
+                return true; 
+
             }
 
             // If that is not an option, at least try to forward it as fast as possible...
@@ -335,12 +338,21 @@ namespace Kombatant.Logic
 
         private async Task<bool> ExecuteAutoHandoverRequestItems()
         {
-            if (RaptureAtkUnitManager.GetWindowByName("ShopExchangeItemDialog") != null)
+	        var ShopExchangeDialog = RaptureAtkUnitManager.GetWindowByName("ShopExchangeItemDialog");
+	        if (ShopExchangeDialog != null)
             {
-                RaptureAtkUnitManager.GetWindowByName("ShopExchangeItemDialog").SendAction(1, 3, 0);
+                ShopExchangeDialog.SendAction(1, 3, 0);
                 LogHelper.Instance.Log("Click ShopExchangeItemDialog Yes");
                 return true;
             }
+
+	        var GrandCompanySupplyReward = RaptureAtkUnitManager.GetWindowByName("GrandCompanySupplyReward");
+	        if (GrandCompanySupplyReward != null)
+	        {
+		        GrandCompanySupplyReward.SendAction(1, 3, 0);
+		        LogHelper.Instance.Log("Click GrandCompanySupplyReward Yes");
+		        return true;
+	        }
 
             if (Request.IsOpen)
             {
@@ -353,7 +365,7 @@ namespace Kombatant.Logic
                         return true;
                     }
                 }
-                catch 
+                catch (InvalidOperationException)
                 {
                     LogHelper.Instance.Log("We don't have the required amount of a requested item.");
                     return false;
@@ -368,6 +380,7 @@ namespace Kombatant.Logic
             if (Core.Me.IsDead && Core.Me.HasAura(148))
             {
                 ClientGameUiRevive.Revive();
+		        LogHelper.Instance.Log("Accepting Revive...");
                 return true;
             }
 
@@ -392,6 +405,7 @@ namespace Kombatant.Logic
             if (SelectYesno.IsOpen)
             {
                 SelectYesno.Yes();
+		        LogHelper.Instance.Log("Selecting Yes");
                 return true;
             }
 
@@ -406,14 +420,14 @@ namespace Kombatant.Logic
 
         private bool ExecuteAutoTrade()
         {
-            if (Request.IsOpen && Request.HandOverButtonClickable)
+	        if (TradeOpen)
             {
-                Request.HandOver();
-                return true;
-            }
+	            if (Request.IsOpen && Request.HandOverButtonClickable)
+	            {
+		            Request.HandOver();
+		            return true;
+	            }
 
-            if (TradeOpen)
-            {
                 if (HasValidTradeTarget)
                 {
                     if (InputNumeric.IsOpen)

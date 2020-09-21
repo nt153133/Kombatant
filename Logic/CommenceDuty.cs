@@ -66,7 +66,7 @@ namespace Kombatant.Logic
 
 			if (ShouldRegisterDuties())
 			{
-				DutyManager.Queue(DutiesToRegister);
+				DutyManager.Queue(new InstanceContentResult{Id = BotBase.Instance.DutyToRegister.Id, IsInDutyFinder = true});
 				WaitHelper.Instance.AddWait(@"CommenceDuty.AutoRegister", TimeSpan.FromSeconds(5));
 				return await Task.FromResult(true);
 			}
@@ -91,49 +91,49 @@ namespace Kombatant.Logic
 			return await Task.FromResult(false);
 		}
 
-		private InstanceContentResult[] DutiesToRegister
-		{
-			get
-			{
-				if (string.IsNullOrWhiteSpace(BotBase.Instance.DutyIDsToRegister))
-				{
-					return new InstanceContentResult[] { };
-				}
-				try
-				{
-					string[] idStrings = BotBase.Instance.DutyIDsToRegister.Split(',');
-					uint[] idsUints = new uint[idStrings.Length];
-					for (int i = 0; i < idStrings.Length; i++)
-					{
-						idsUints[i] = uint.Parse(idStrings[i]);
-					}
+		//private InstanceContentResult[] DutiesToRegister
+		//{
+		//	get
+		//	{
+		//		if (string.IsNullOrWhiteSpace(BotBase.Instance.DutyIDsToRegister))
+		//		{
+		//			return new InstanceContentResult[] { };
+		//		}
+		//		try
+		//		{
+		//			string[] idStrings = BotBase.Instance.DutyIDsToRegister.Split(',');
+		//			uint[] idsUints = new uint[idStrings.Length];
+		//			for (int i = 0; i < idStrings.Length; i++)
+		//			{
+		//				idsUints[i] = uint.Parse(idStrings[i]);
+		//			}
 
-					try
-					{
-						var duties = DataManager.InstanceContentResults.Values
-							.Where(i => i.IsInDutyFinder && idsUints.Contains(i.Id)).ToArray();
-						if (duties.Length != idsUints.Length)
-						{
-							throw new Exception();
-						}
+		//			try
+		//			{
+		//				var duties = DataManager.InstanceContentResults.Values
+		//					.Where(i => i.IsInDutyFinder && idsUints.Contains(i.Id)).ToArray();
+		//				if (duties.Length != idsUints.Length)
+		//				{
+		//					throw new Exception();
+		//				}
 
-						return duties;
-					}
-					catch (Exception e)
-					{
-						LogHelper.Instance.Log("任务搜索器中没有你要申请的全部副本。");
-						//LogHelper.Instance.Log(e);
-					}
-				}
-				catch (Exception e)
-				{
-					LogHelper.Instance.Log("输入副本ID的格式有误。");
-					//LogHelper.Instance.Log(e);
-				}
+		//				return duties;
+		//			}
+		//			catch (Exception e)
+		//			{
+		//				LogHelper.Instance.Log("任务搜索器中没有你要申请的全部副本。");
+		//				//LogHelper.Instance.Log(e);
+		//			}
+		//		}
+		//		catch (Exception e)
+		//		{
+		//			LogHelper.Instance.Log("输入副本ID的格式有误。");
+		//			//LogHelper.Instance.Log(e);
+		//		}
 
-				return new InstanceContentResult[] { };
-			}
-		}
+		//		return new InstanceContentResult[] { };
+		//	}
+		//}
 
 		private bool ShouldLeaveDuty()
 		{
@@ -156,8 +156,8 @@ namespace Kombatant.Logic
 				return false;
 			if (DutyManager.QueueState != QueueState.None)
 				return false;
-			if (DutiesToRegister.Length == 0)
-				return false;
+			//if (DutiesToRegister.Length == 0)
+			//	return false;
 
 			return true;
 		}

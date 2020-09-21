@@ -7,9 +7,11 @@ using System.Runtime.CompilerServices;
 using ff14bot.Enums;
 using ff14bot.Helpers;
 using ff14bot.Managers;
+using ff14bot.RemoteAgents;
 using Kombatant.Constants;
 using Kombatant.Enums;
 using Kombatant.Extensions;
+using Kombatant.Forms.Models;
 using Kombatant.Helpers;
 using Kombatant.Settings.Models;
 using Newtonsoft.Json;
@@ -113,15 +115,17 @@ namespace Kombatant.Settings
 			}
 		}
 
-		private string _dutyIDsToRegister;
-		[DefaultValue("")]
-		[Description("Duty IDs you need to auto register, use comma to separate. up to 5.")]
-		public string DutyIDsToRegister
+		private SettingsFormModel.InstanceModel _dutyToRegister;
+		public SettingsFormModel.InstanceModel DutyToRegister
 		{
-			get => _dutyIDsToRegister;
+			get => _dutyToRegister;
 			set
 			{
-				_dutyIDsToRegister = value;
+				if (_dutyToRegister != value && AutoRegisterDuties)
+				{
+					ff14bot.RemoteAgents.AgentContentsFinder.Instance.Toggle();
+				}
+				_dutyToRegister = value;
 				OnPropertyChanged();
 			}
 		}

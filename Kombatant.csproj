@@ -86,7 +86,16 @@
     <Compile Include="Logic\Target.cs" />
     <Compile Include="Resources\AssemblyInfo.cs" />
     <Compile Include="Resources\Controls.Designer.cs" />
-    <Compile Include="Resources\Localization.Designer.cs" />
+    <Compile Include="Resources\Localization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Localization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Localization.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Localization.zh-CN.resx</DependentUpon>
+    </Compile>
     <Compile Include="Settings\BotBase.cs" />
     <Compile Include="Settings\Fleeting.cs" />
     <Compile Include="Settings\Hotkeys.cs" />
@@ -126,6 +135,12 @@
     <EmbeddedResource Include="Resources\Controls.resx" />
     <EmbeddedResource Include="Resources\Localization.resx">
       <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Localization.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.zh-CN.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

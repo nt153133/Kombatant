@@ -117,463 +117,457 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Name_Kombatant" xml:space="preserve">
-    <value>Kombatant</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="Msg_Not30Tps_Log" xml:space="preserve">
-    <value>
-*************************** [ KOMBATANT WARNING! ] ***************************
-*                                                                            *
-* Operating at a tickrate other than 30! Botbase might not work as expected! *
-*    For optimal botbase performance, please set your TPS to exactly 30.     *
-*                                                                            *
-******************************************************************************
-        </value>
+    <value>*******************[ Kombatant警告！]*****************
+*                                                                                               *
+* 以 30 以外的TPS运行！Bot可能无法如预期的那样工作！*
+*     为了获得最佳的Bot性能，请将 TPS 设置为正好 30。   *
+*                                                                                                *
+*********************************************************
+        !</value>
   </data>
   <data name="Msg_Not30Tps" xml:space="preserve">
-    <value>Running at a tickrate other than 30 TPS!
-See RebornBuddy log for more details.</value>
+    <value>以 30 Tps 以外的TPS运行！
+有关详细信息，请参阅 RebornBuddy 日志.</value>
   </data>
   <data name="Msg_AutoFaceTargetOff" xml:space="preserve">
-    <value>Auto Face Target DISABLED</value>
+    <value>自动面对目标已禁用</value>
   </data>
   <data name="Msg_AutoFaceTargetOn" xml:space="preserve">
-    <value>Auto Face Target ENABLED</value>
+    <value>自动面对目标已启用</value>
   </data>
   <data name="Msg_AutonomousOff" xml:space="preserve">
-    <value>Autonomous Mode DISABLED</value>
+    <value>自主模式已禁用</value>
   </data>
   <data name="Msg_AutonomousOn" xml:space="preserve">
-    <value>Autonomous Mode ENABLED</value>
+    <value>自主模式已启用</value>
   </data>
   <data name="Msg_AutoSyncFate" xml:space="preserve">
-    <value>Target is part of FATE "{0}", syncing level...</value>
+    <value>目标是FATE任务的一部分 "{0}"， 等级同步中...</value>
   </data>
   <data name="Msg_AutoTargetOff" xml:space="preserve">
-    <value>Auto Targeting DISABLED</value>
+    <value>自动选择目标已禁用</value>
   </data>
   <data name="Msg_AutoTargetOn" xml:space="preserve">
-    <value>Auto Targeting ENABLED</value>
+    <value>自动选择目标已启用</value>
   </data>
   <data name="Msg_AvoidanceFinished" xml:space="preserve">
-    <value>Avoidance finished, stopping movement...</value>
+    <value>回避结束，停止移动...</value>
   </data>
   <data name="Msg_AvoidanceOff" xml:space="preserve">
-    <value>Avoidance DISABLED</value>
+    <value>禁用回避</value>
   </data>
   <data name="Msg_AvoidanceOn" xml:space="preserve">
-    <value>Avoidance ENABLED</value>
+    <value>启用回避</value>
   </data>
   <data name="Msg_AvoidanceDisabledOnBossStart" xml:space="preserve">
-    <value>Fighting {0}!
-Avoidance will PAUSE</value>
+    <value>战斗{0}！
+暂停回避</value>
   </data>
   <data name="Msg_Log_AvoidanceDisabledOnBossStart" xml:space="preserve">
-    <value>Fighting known boss. Avoidance will temporarily PAUSE.</value>
+    <value>和已知的BOSS战斗，暂停回避</value>
   </data>
   <data name="Msg_AvoidanceDisabledOnBossEnd" xml:space="preserve">
-    <value>Fight is over.
-Avoidance will RESUME</value>
+    <value>战斗结束了
+恢复回避</value>
   </data>
   <data name="Msg_Log_AvoidanceDisabledOnBossEnd" xml:space="preserve">
-    <value>Fight is over. Avoidance will RESUME.</value>
+    <value>战斗结束了，恢复回避</value>
   </data>
   <data name="Msg_DutyReady" xml:space="preserve">
-    <value>Duty is ready!</value>
+    <value>副本准备就绪！</value>
   </data>
   <data name="Msg_DutyConfirm" xml:space="preserve">
-    <value>Confirming Duty...</value>
+    <value>正在确认副本…</value>
   </data>
   <data name="Msg_MechanicWarning_StandStill" xml:space="preserve">
     <value>{0}!
-Stop moving or attacking!</value>
+停止移动或攻击！</value>
   </data>
   <data name="Msg_MechanicWarning_StandStillOnZero" xml:space="preserve">
     <value>{0}!
-Stop all activities before the timer reaches zero!</value>
+在计时器达到零之前停止所有活动！</value>
   </data>
   <data name="Msg_MechanicWarning_Gaze" xml:space="preserve">
     <value>{0}!
-Turn away before the cast completes!</value>
+在咏唱完成之前背对！</value>
   </data>
   <data name="Msg_NewTargetSelected" xml:space="preserve">
-    <value>New target selected: {0} {1}</value>
+    <value>选择新目标： {0} {1}</value>
   </data>
   <data name="Msg_Paused" xml:space="preserve">
-    <value>Kombatant PAUSED</value>
+    <value>Kombatant 暂停</value>
   </data>
   <data name="Msg_Unpaused" xml:space="preserve">
-    <value>Kombatant RESUMED</value>
+    <value>Kombatant 继续</value>
   </data>
   <data name="Msg_PulseFlagDisabled" xml:space="preserve">
-    <value>Disabling {0}</value>
+    <value>正在禁用 {0}</value>
   </data>
   <data name="Msg_PulseFlagEnabled" xml:space="preserve">
-    <value>Enabling {0}</value>
+    <value>正在启用 {0}</value>
   </data>
   <data name="Msg_ReloadedSettings" xml:space="preserve">
-    <value>Settings have been reloaded.</value>
+    <value>已重新加载设置。</value>
   </data>
   <data name="Msg_DutyPsyche0" xml:space="preserve">
-    <value>Let the revels begin!</value>
+    <value>让狂欢开始！</value>
   </data>
   <data name="Msg_DutyPsyche1" xml:space="preserve">
-    <value>Rise, rise to the occasion!</value>
+    <value>站起来， 站起来！</value>
   </data>
   <data name="Msg_DutyPsyche2" xml:space="preserve">
-    <value>10 Gil says someone is not going to accept...</value>
+    <value>我赌10金有人会取消…</value>
   </data>
   <data name="Msg_DutyPsyche3" xml:space="preserve">
-    <value>So excited!</value>
+    <value>好兴奋！</value>
   </data>
   <data name="Msg_DutyPsyche4" xml:space="preserve">
-    <value>And so are we!</value>
+    <value>我们也是！</value>
   </data>
   <data name="Msg_DutyPsyche5" xml:space="preserve">
-    <value>REJOICE!</value>
+    <value>集结！</value>
   </data>
   <data name="Msg_DutyPsyche6" xml:space="preserve">
-    <value>Initiate soul extraction!</value>
+    <value>开始灵魂抽取！</value>
   </data>
   <data name="Msg_DutyPsyche7" xml:space="preserve">
-    <value>Behold, fury given form!</value>
+    <value>看哪， 愤怒给定的形式！！</value>
   </data>
   <data name="Msg_DutyPsyche8" xml:space="preserve">
-    <value>No more games!</value>
-  </data>
-  <data name="Msg_DutyPsyche9" xml:space="preserve">
-    <value>Mechanics are for cars!</value>
-    <comment>@Invariant</comment>
+    <value>我可没时间陪你玩游戏了</value>
   </data>
   <data name="UI_SettingsWindowTitle" xml:space="preserve">
-    <value>Kombatant Settings</value>
+    <value>Kombatant 设置</value>
   </data>
   <data name="UI_Header_About" xml:space="preserve">
-    <value>About</value>
+    <value>关于</value>
   </data>
   <data name="UI_Header_CombatRoutine" xml:space="preserve">
-    <value>CR Logic</value>
+    <value>战斗逻辑</value>
   </data>
   <data name="UI_Header_Convenience" xml:space="preserve">
-    <value>Convenience</value>
+    <value>便利</value>
   </data>
   <data name="UI_Header_Hotkeys" xml:space="preserve">
-    <value>Hotkeys</value>
+    <value>热键</value>
   </data>
   <data name="UI_Header_Movement" xml:space="preserve">
-    <value>Movement</value>
+    <value>移动</value>
   </data>
   <data name="UI_Header_Targeting" xml:space="preserve">
-    <value>Targeting</value>
+    <value>目标</value>
   </data>
   <data name="UI_CombatBuff" xml:space="preserve">
-    <value>Combat Buff</value>
+    <value>战斗时增益</value>
   </data>
   <data name="UI_Tooltip_CombatBuff" xml:space="preserve">
-    <value>Enable the combat routine to execute the CombatBuff behavior.</value>
+    <value>启用战斗循环的战斗时增益行为。</value>
   </data>
   <data name="UI_Combat" xml:space="preserve">
-    <value>Combat</value>
+    <value>战斗</value>
   </data>
   <data name="UI_Tooltip_Combat" xml:space="preserve">
-    <value>Enable the combat routine to execute the Combat behavior.</value>
+    <value>启用战斗循环的战斗行为。</value>
   </data>
   <data name="UI_Heal" xml:space="preserve">
-    <value>Heal</value>
+    <value>治疗</value>
   </data>
   <data name="UI_Tooltip_Heal" xml:space="preserve">
-    <value>Enable the combat routine to execute the Heal behavior.</value>
+    <value>启用战斗循环的治疗行为。</value>
   </data>
   <data name="UI_PreCombatBuff" xml:space="preserve">
-    <value>Pre-Combat Buff</value>
+    <value>战斗前增益</value>
   </data>
   <data name="UI_Tooltip_PreCombatBuff" xml:space="preserve">
-    <value>Enable the combat routine to execute the PreCombatBuff behavior.</value>
+    <value>启用战斗循环的战斗前增益行为。</value>
   </data>
   <data name="UI_PullBuff" xml:space="preserve">
-    <value>Pull Buff</value>
+    <value>索敌时增益</value>
   </data>
   <data name="UI_Tooltip_PullBuff" xml:space="preserve">
-    <value>Enable the combat routine to execute the PullBuff behavior.</value>
+    <value>启用战斗循环的索敌增益行为。</value>
   </data>
   <data name="UI_Pull" xml:space="preserve">
-    <value>Pull</value>
+    <value>拉取</value>
   </data>
   <data name="UI_Tooltip_Pull" xml:space="preserve">
-    <value>Enable the combat routine to execute the Pull behavior.</value>
+    <value>启用战斗循环的索敌行为。</value>
   </data>
   <data name="UI_SmartPull" xml:space="preserve">
-    <value>Smart Pull</value>
+    <value>智能索敌</value>
   </data>
   <data name="UI_Tooltip_SmartPull" xml:space="preserve">
-    <value>As a non-tank, do not engage enemies before your tank.</value>
+    <value>作为非坦克，不要在你的坦克之前与敌人接触。</value>
   </data>
   <data name="UI_Rest" xml:space="preserve">
-    <value>Rest</value>
+    <value>休息</value>
   </data>
   <data name="UI_Tooltip_Rest" xml:space="preserve">
-    <value>Enable the combat routine to execute the Rest behavior.</value>
+    <value>启用战斗循环的休息行为。</value>
   </data>
   <data name="UI_SelectCr" xml:space="preserve">
-    <value>Select Combat Routine</value>
+    <value>选择战斗循环</value>
   </data>
   <data name="UI_AutoAcceptQuests" xml:space="preserve">
-    <value>Auto Accept Quests</value>
+    <value>自动接受任务</value>
   </data>
   <data name="UI_Tooltip_AutoAcceptQuests" xml:space="preserve">
-    <value>Automatically accept/complete quests.</value>
+    <value>自动接受/完成任务</value>
   </data>
   <data name="UI_AutoAcceptDutyFinder" xml:space="preserve">
-    <value>Auto Commence Duty</value>
+    <value>自动确认副本</value>
   </data>
   <data name="UI_Tooltip_AutoAcceptDutyFinder" xml:space="preserve">
-    <value>Automatically commences a duty when it is ready.</value>
+    <value>当副本就绪时自动确认。</value>
   </data>
   <data name="UI_AutoAdvanceDialogue" xml:space="preserve">
-    <value>Auto Advance Dialogue</value>
+    <value>自动跳过对话</value>
   </data>
   <data name="UI_Tooltip_AutoAdvanceDialogue" xml:space="preserve">
-    <value>Automatically skip dialogue.</value>
+    <value>自动跳过NPC对话。</value>
   </data>
   <data name="UI_Lbl_AutoEmoteCommand" xml:space="preserve">
-    <value>Auto Emote Command</value>
+    <value>自动表情命令</value>
   </data>
   <data name="UI_Tooltip_AutoEmoteCommand" xml:space="preserve">
-    <value>Emote which should automatically be kept up, i.e. "/grin motion"</value>
+    <value>应自动发送的表情动作， 如"/ grin motion"</value>
   </data>
   <data name="UI_Lbl_AutoEmoteInterval" xml:space="preserve">
-    <value>Auto Emote Interval</value>
+    <value>自动表情间隔</value>
   </data>
   <data name="UI_Tooltip_AutoEmoteInterval" xml:space="preserve">
-    <value>Resend the emote every x seconds.</value>
+    <value>每 x 秒重新发送一次表情。</value>
   </data>
   <data name="UI_AutoEndActEncounters" xml:space="preserve">
-    <value>Auto End ACT Encounters</value>
+    <value>自动结束ACT日志</value>
   </data>
   <data name="UI_Tooltip_AutoEndActEncounters" xml:space="preserve">
-    <value>Will automatically send "/echo end" to the chat when no enemies are around for longer than 10 seconds.</value>
+    <value>当周围没有敌人超过10秒时，系统会自动将“ / echo end”发送到聊天！</value>
   </data>
   <data name="UI_AutoFaceTarget" xml:space="preserve">
-    <value>Auto Face Target</value>
+    <value>自动面对目标</value>
   </data>
   <data name="UI_Tooltip_AutoFaceTarget" xml:space="preserve">
-    <value>Automatically face the target.</value>
+    <value>自动面对目标</value>
   </data>
   <data name="UI_AutoSkipCutscenes" xml:space="preserve">
-    <value>Auto Skip Cutscenes</value>
+    <value>自动跳过动画</value>
   </data>
   <data name="UI_Tooltip_AutoSkipCutscenes" xml:space="preserve">
-    <value>Automatically skip cutscenes.</value>
+    <value>自动跳过过场动画</value>
   </data>
   <data name="UI_AutoSprint" xml:space="preserve">
-    <value>Auto Sprint</value>
+    <value>自动冲刺</value>
   </data>
   <data name="UI_Tooltip_AutoSprint" xml:space="preserve">
-    <value>Automatically sprint when out of combat.</value>
+    <value>在脱战时自动冲刺。</value>
   </data>
   <data name="UI_AutoSyncFate" xml:space="preserve">
-    <value>Auto Sync to FATE</value>
+    <value>自动等级同步</value>
   </data>
   <data name="UI_Tooltip_AutoSyncFate" xml:space="preserve">
-    <value>Automatically syncs to a FATE when a FATE mob is selected as your target.</value>
+    <value>当你把一个FATE怪物选为目标时，自动等级同步。</value>
   </data>
   <data name="UI_Lbl_DutyFinderWaitTime" xml:space="preserve">
-    <value>Seconds To Auto Commence</value>
+    <value>自动确认等待时间</value>
   </data>
   <data name="UI_IsAutonomous" xml:space="preserve">
-    <value>Enable Autonomous Actions</value>
+    <value>启用自主操作</value>
   </data>
   <data name="UI_Tooltip_IsAutonomous" xml:space="preserve">
-    <value>When enabled, other components will treat this botbase as one without user input. This will cause combat routines to autonmatically move into the correct positions etc.</value>
+    <value>启用后，其他组件将视此 Bot 视为没有用户输入的 Bot。这会使战斗例程自动移动到正确的位置，但你会丧失一些控制权。</value>
   </data>
   <data name="UI_IsPaused" xml:space="preserve">
-    <value>Paused</value>
+    <value>已暂停</value>
   </data>
   <data name="UI_Tooltip_IsPaused" xml:space="preserve">
-    <value>Enable/Disable the combat assist temporarily. Please note that Kombatant will always start paused.</value>
+    <value>暂时启用/禁用战斗辅助。</value>
   </data>
   <data name="UI_DutyFinderNotify" xml:space="preserve">
-    <value>Notify When Ready</value>
+    <value>在副本就绪时提醒</value>
   </data>
   <data name="UI_Tooltip_DutyFinderNotify" xml:space="preserve">
-    <value>Play a random sound effect when the Duty Finder is ready.</value>
+    <value>当任务搜索器准备就绪时，播放随机声音效果。</value>
   </data>
   <data name="UI_MechanicWarnings" xml:space="preserve">
-    <value>Mechanic Warnings</value>
+    <value>机制警告！</value>
   </data>
   <data name="UI_Tooltip_MechanicWarnings" xml:space="preserve">
-    <value>Will take control from the player when certain attacks occur.</value>
+    <value>当某些攻击发生时， 将替代玩家进行控制。</value>
   </data>
   <data name="UI_AutoTarget" xml:space="preserve">
-    <value>Auto Target</value>
+    <value>自动选取目标</value>
   </data>
   <data name="UI_Tooltip_AutoTarget" xml:space="preserve">
-    <value>Enable automatic targeting logic.</value>
+    <value>启用自动目标选取逻辑。</value>
   </data>
   <data name="UI_FateFilter" xml:space="preserve">
-    <value>Enable FATE mob filter</value>
+    <value>启用FATE怪物过滤</value>
   </data>
   <data name="UI_Tooltip_FateFilter" xml:space="preserve">
-    <value>When enabled, targeting strategies will target FATE mobs as long as the player is inside a FATE area.</value>
+    <value>启用后，只要玩家在 FATE 区域内，就只会选取 FATE 怪物为目标。</value>
   </data>
   <data name="UI_Lbl_AutoTargetingMode" xml:space="preserve">
-    <value>Target Selection Strategy</value>
+    <value>目标选择策略</value>
   </data>
   <data name="UI_AutoTargetSwitch" xml:space="preserve">
-    <value>Allow Target Switching</value>
+    <value>允许切换目标</value>
   </data>
   <data name="UI_Tooltip_AutoTargetSwitch" xml:space="preserve">
-    <value>Enables/disables automatic selection of a new target, even when the old one is still alive.</value>
+    <value>启用/禁用自动选择新目标，即使旧目标仍存活。</value>
   </data>
   <data name="UI_Lbl_TargetScanMaxDistance" xml:space="preserve">
-    <value>Max Distance for target scan</value>
+    <value>目标扫描距离</value>
   </data>
   <data name="UI_EnableAvoidance" xml:space="preserve">
-    <value>Enable Avoidance</value>
+    <value>启用回避</value>
   </data>
   <data name="UI_Tooltip_EnableAvoidance" xml:space="preserve">
-    <value>Allow RebornBuddy to avoid telegraphed attacks.</value>
+    <value>允许RebornBuddy回避范围攻击。</value>
   </data>
   <data name="UI_PauseAvoidanceOnBosses" xml:space="preserve">
-    <value>Pause Avoidance on Bosses</value>
+    <value>在与Boss交战时禁用回避</value>
   </data>
   <data name="UI_Tooltip_PauseAvoidanceOnBosses" xml:space="preserve">
-    <value>Will automatically pause avoidance when engaging a known boss.</value>
+    <value>与已知Boss交战时，将自动暂停回避。</value>
   </data>
   <data name="UI_Lbl_WaypointGenerationMode" xml:space="preserve">
-    <value>Waypoint Generation</value>
+    <value>路径点生成模式</value>
   </data>
   <data name="UI_Lbl_FollowMode" xml:space="preserve">
-    <value>Follow Mode</value>
+    <value>跟随模式</value>
   </data>
   <data name="Msg_FollowingOff" xml:space="preserve">
-    <value>Following DISABLED</value>
+    <value>跟随已启用</value>
   </data>
   <data name="Msg_FollowingOn" xml:space="preserve">
-    <value>Following ENABLED</value>
+    <value>跟随已禁用</value>
   </data>
   <data name="UI_CheckLos" xml:space="preserve">
-    <value>Check LOS</value>
+    <value>视线检查</value>
   </data>
   <data name="UI_AutoAcceptRevive" xml:space="preserve">
-    <value>Auto Accept Revive</value>
+    <value>自动接受复活</value>
   </data>
   <data name="UI_AutoSelectYes" xml:space="preserve">
-    <value>Auto Select Yes</value>
+    <value>对话框自动确认</value>
   </data>
   <data name="UI_AutoHandover" xml:space="preserve">
-    <value>Auto Handover</value>
+    <value>自动递交任务物品</value>
   </data>
   <data name="UI_AutoTrade" xml:space="preserve">
-    <value>Quick Trade</value>
+    <value>快速交易</value>
   </data>
   <data name="UI_AutoLeaveDuty" xml:space="preserve">
-    <value>Auto Leave Duty</value>
+    <value>完成后自动离开副本</value>
   </data>
   <data name="UI_AutoRegisterDuty" xml:space="preserve">
-    <value>Auto Register Duty</value>
+    <value>自动申请副本</value>
   </data>
   <data name="UI_DutyNeedsToRegister" xml:space="preserve">
-    <value>Duty needs to Register</value>
+    <value>需要申请的副本</value>
   </data>
   <data name="UI_AutoDeselect" xml:space="preserve">
-    <value>Auto Deselect</value>
+    <value>自动取消目标</value>
   </data>
   <data name="UI_StatusOverlay" xml:space="preserve">
-    <value>Status Overlay</value>
+    <value>运行状态悬浮窗</value>
   </data>
   <data name="UI_FocusOverlay" xml:space="preserve">
-    <value>Focus Overlay</value>
+    <value>被选中数量悬浮窗</value>
   </data>
   <data name="UI_Lock" xml:space="preserve">
-    <value>Clickthrough</value>
+    <value>锁定悬浮窗位置</value>
   </data>
   <data name="UI_EnableFollowing" xml:space="preserve">
-    <value>Enable Following</value>
+    <value>启用跟随</value>
   </data>
   <data name="UI_FollowingDistance" xml:space="preserve">
-    <value>Following Distance</value>
+    <value>跟随距离</value>
   </data>
   <data name="UI_Tank" xml:space="preserve">
-    <value>Tank</value>
+    <value>跟随坦克</value>
   </data>
   <data name="UI_PartyLeader" xml:space="preserve">
-    <value>Party Leader</value>
+    <value>跟随小队队长</value>
   </data>
   <data name="UI_TargetCharacter" xml:space="preserve">
-    <value>Target Character</value>
+    <value>跟随目标角色</value>
   </data>
   <data name="UI_FixedCharacter" xml:space="preserve">
-    <value>Fixed Character</value>
+    <value>跟随固定角色</value>
   </data>
   <data name="UI_SetCurrent" xml:space="preserve">
-    <value>Set Current</value>
+    <value>设定当前目标</value>
   </data>
   <data name="UI_Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>清除</value>
   </data>
   <data name="UI_NavGraph" xml:space="preserve">
-    <value>NavGraph</value>
+    <value>使用导航服务器</value>
   </data>
   <data name="UI_Offmesh" xml:space="preserve">
-    <value>Offmesh</value>
+    <value>直线跟随</value>
   </data>
   <data name="UI_BotStatus" xml:space="preserve">
-    <value>Bot Status</value>
+    <value>运行状态</value>
   </data>
   <data name="UI_Convenience" xml:space="preserve">
-    <value>Convenience</value>
+    <value>便利功能</value>
   </data>
   <data name="UI_Utilities" xml:space="preserve">
-    <value>Utilities</value>
+    <value>实用工具</value>
   </data>
   <data name="UI_Targeting" xml:space="preserve">
-    <value>Targeting</value>
+    <value>目标选择</value>
   </data>
   <data name="UI_Avoidance" xml:space="preserve">
-    <value>Avoidance</value>
+    <value>回避</value>
   </data>
   <data name="UI_Following" xml:space="preserve">
-    <value>Following</value>
+    <value>跟随</value>
   </data>
   <data name="UI_AutoEmote" xml:space="preserve">
-    <value>Auto Emote</value>
+    <value>自动表情</value>
   </data>
   <data name="UI_Main" xml:space="preserve">
-    <value>Main</value>
+    <value>主要设置</value>
   </data>
   <data name="UI_CombatRoutine" xml:space="preserve">
-    <value>Combat Routine</value>
+    <value>战斗循环设置</value>
   </data>
   <data name="UI_Hotkeys" xml:space="preserve">
-    <value>Hotkeys</value>
+    <value>热键设置</value>
   </data>
   <data name="UI_TargetScanFrequency" xml:space="preserve">
-    <value>Target Scan Frequency (ms)</value>
+    <value>目标扫描频率（毫秒）</value>
   </data>
   <data name="UI_DutyFinder" xml:space="preserve">
-    <value>Duty Finder</value>
+    <value>任务搜索器</value>
   </data>
   <data name="UI_FriendsOnly" xml:space="preserve">
-    <value>Friends Only</value>
+    <value>仅限好友</value>
   </data>
   <data name="UI_HandoverHQ" xml:space="preserve">
-    <value>Handover HQ</value>
+    <value>递交HQ物品</value>
   </data>
   <data name="UI_PausedResume" xml:space="preserve">
-    <value>Pause/Resume</value>
+    <value>暂停/继续</value>
   </data>
   <data name="UI_ReloadHotkeys" xml:space="preserve">
-    <value>Reload Hotkeys</value>
+    <value>应用热键设置</value>
   </data>
   <data name="UI_InvertAll" xml:space="preserve">
-    <value>Invert All</value>
+    <value>反选全部</value>
   </data>
   <data name="UI_CRtip1" xml:space="preserve">
-    <value>Choose which combat routine behaviors to execute.</value>
+    <value>选择你要使用的战斗循环行为。</value>
   </data>
   <data name="UI_CRtip2" xml:space="preserve">
-    <value>Usually you want all behaviors to be active.</value>
+    <value>通常你希望所有的行为都被启用。</value>
+  </data>
+  <data name="Name_Kombatant" xml:space="preserve">
+    <value>Kombatant</value>
   </data>
 </root>
