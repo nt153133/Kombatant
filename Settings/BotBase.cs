@@ -142,6 +142,19 @@ namespace Kombatant.Settings
 				OnPropertyChanged();
 			}
 		}
+		
+		private int _SecondsToAutoLeaveDuty;
+
+		[DefaultValue(5)]
+		public int SecondsToAutoLeaveDuty
+		{
+			get => _SecondsToAutoLeaveDuty;
+			set
+			{
+				_SecondsToAutoLeaveDuty = value;
+				OnPropertyChanged();
+			}
+		}
 
 		private bool _AutoVoteMvp;
 
@@ -774,6 +787,20 @@ namespace Kombatant.Settings
 			set
 			{
 				_enableFollowing = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _PauseFollowingOnBosses;
+
+		[DefaultValue(false)]
+		[JsonProperty("PauseFollowingOnBosses")]
+		public bool PauseFollowingOnBosses
+		{
+			get => _PauseFollowingOnBosses;
+			set
+			{
+				_PauseFollowingOnBosses = value;
 				OnPropertyChanged();
 			}
 		}

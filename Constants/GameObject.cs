@@ -409,6 +409,13 @@ namespace Kombatant.Constants
             9041, //宫殿的隐者
             9046, //卢格斯
             9044, //凉南希
+
+            9260, //不明物体
+            9261, //不明物体
+            9263, //克琉普斯
+            9264, //鲁克嘶·蒂母
+
+
         };
         /// <summary>
         /// The NpcIds of all dungeon bosses in Final Fantasy XIV.

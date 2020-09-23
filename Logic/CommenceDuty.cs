@@ -42,6 +42,7 @@ namespace Kombatant.Logic
 		private IEnumerable<DictionaryEntry> _psycheList;
 		private IEnumerable<string> _audioFiles;
 		private readonly Random _random = new Random();
+		private static bool Voted;
 
 		/// <summary>
 		/// Constructor for CommenceDuty.
@@ -64,12 +65,14 @@ namespace Kombatant.Logic
 
 			if (ShouldVoteMvp())
 			{
-				if (await VoteMvp().ExecuteCoroutine()) return true;
+				if (await VoteMvp().ExecuteCoroutine())
+					return await Task.FromResult(true);
 			}
 
 			if (ShouldLeaveDuty())
 			{
-				WaitHelper.Instance.AddWait(@"CommenceDuty.AutoLeaveDuty", TimeSpan.FromSeconds(5));
+				WaitHelper.Instance.RemoveWait(@"CommenceDuty.AutoLeaveDuty");
+				LogHelper.Instance.Log("Leaving Duty...");
 				DutyManager.LeaveActiveDuty();
 				return await Task.FromResult(true);
 			}
@@ -153,9 +156,9 @@ namespace Kombatant.Logic
 				return false;
 			if (!DutyManager.CanLeaveActiveDuty)
 				return false;
-			if (WaitHelper.Instance.IsWaiting(@"CommenceDuty.AutoLeaveDuty"))
-				return false;
-			return DirectorManager.ActiveDirector is InstanceContentDirector icDirector && icDirector.InstanceEnded;
+			if (!(DirectorManager.ActiveDirector is InstanceContentDirector icDirector) ||
+			    !icDirector.InstanceEnded) return false;
+			return WaitHelper.Instance.IsDoneWaiting(@"CommenceDuty.AutoLeaveDuty", TimeSpan.FromSeconds(BotBase.Instance.SecondsToAutoLeaveDuty));
 		}
 
 		private bool ShouldRegisterDuties()
@@ -197,13 +200,11 @@ namespace Kombatant.Logic
 		/// <returns></returns>
 		private bool ShouldAcceptDutyFinder()
 		{
-			if (!BotBase.Instance.AutoAcceptDutyFinder || ContentsFinderReady.IsOpen || Core.Me.IsDead)
-				return false;
-
-			return ContentsFinderConfirm.IsOpen &&
-				   WaitHelper.Instance.IsDoneWaiting(
-					   @"CommenceDuty.AutoAcceptDutyFinder",
-					   TimeSpan.FromSeconds(Settings.BotBase.Instance.DutyFinderWaitTime));
+			if (!BotBase.Instance.AutoAcceptDutyFinder) return false;
+			if (ContentsFinderReady.IsOpen) return false;
+			if (Core.Me.IsDead) return false;
+			if (!ContentsFinderConfirm.IsOpen) return false;
+			return WaitHelper.Instance.IsDoneWaiting(@"CommenceDuty.AutoAcceptDutyFinder", TimeSpan.FromSeconds(BotBase.Instance.DutyFinderWaitTime));
 		}
 
 		/// <summary>
@@ -275,8 +276,11 @@ namespace Kombatant.Logic
 		bool ShouldVoteMvp()
 		{
 			if (!BotBase.Instance.AutoVoteMvp) return false;
-			if (!(DirectorManager.ActiveDirector is InstanceContentDirector icDirector) || !icDirector.InstanceEnded) return false;
-			return RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp") != null;
+			if (!(DirectorManager.ActiveDirector is InstanceContentDirector icDirector)) return false;
+			if (!icDirector.InstanceEnded) return false;
+			if (RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp") == null) return false;
+			if (PartyManager.NumMembers == 1) return false;
+			return true;
 		}
 
 		private Composite VoteMvp()
@@ -307,18 +311,18 @@ namespace Kombatant.Logic
 
 			Composite c = new PrioritySelector(
 				new Sequence(
-						new Action(context => LogHelper.Instance.Log($"{RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp")} is opened! Starting sequence!")),
+						//new Action(context => LogHelper.Instance.Log($"{RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp")} is opened! Starting sequence!")),
 						new Action(context =>
 						{
-							LogHelper.Instance.Log($"Toggling agent {RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface()}...");
+							//LogHelper.Instance.Log($"Toggling agent {RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface()}...");
 							RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface().Toggle();
-							LogHelper.Instance.Log($"Toggling agent {59}...");
+							//LogHelper.Instance.Log($"Toggling agent {59}...");
 							AgentModule.ToggleAgentInterfaceById(59);
-							LogHelper.Instance.Log($"Toggling agent {120}...");
+							//LogHelper.Instance.Log($"Toggling agent {120}...");
 							AgentModule.ToggleAgentInterfaceById(120);
 						}),
-						new Action(context => LogHelper.Instance.Log("Waiting 1500ms for VoteMvp to open...")),
-						new ActionRunCoroutine(o => Coroutine.Wait(1500, () => RaptureAtkUnitManager.GetWindowByName("VoteMvp") != null)),
+						//new Action(context => LogHelper.Instance.Log("Waiting for VoteMvp to open...")),
+						new ActionRunCoroutine(o => Coroutine.Wait(3000, () => RaptureAtkUnitManager.GetWindowByName("VoteMvp") != null)),
 						new Action(context => LogHelper.Instance.Log("VoteMvp opened.")),
 						new Action(context =>
 						{

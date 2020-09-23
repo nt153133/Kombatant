@@ -30,9 +30,9 @@
             Grid.Row="0"
             Width="Auto" Height="Auto">
             <TabItem
-                Header="{x:Static resources:Localization.UI_Main}" Height="21" VerticalAlignment="Bottom">
+                Header="{x:Static resources:Localization.UI_Main}" VerticalAlignment="Bottom">
                 <Grid
-                    Margin="5">
+                    Margin="5,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="240" />
                         <ColumnDefinition Width="5" />
@@ -165,6 +165,12 @@
                                 <CheckBox
                                     Content="{x:Static resources:Localization.UI_AutoLeaveDuty}"
                                     IsChecked="{Binding BotBase.AutoLeaveDuty}"    />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Width="40"  VerticalContentAlignment="Center"
+                                             HorizontalContentAlignment="Center"
+                                             Text="{Binding BotBase.SecondsToAutoLeaveDuty}" Height="21" />
+                                    <Label Content="Seconds to auto leave" />
+                                </StackPanel>
                                 <Separator  Margin="5" Opacity="0.5"/>
                                 <CheckBox 
                                     Content="{x:Static resources:Localization.UI_AutoRegisterDuty}"
@@ -274,6 +280,9 @@
                                 <CheckBox Margin="5,3,0,0"
                                               Content="{x:Static resources:Localization.UI_EnableFollowing}"
                                               IsChecked="{Binding BotBase.EnableFollowing}" />
+                                <CheckBox Margin="5,3,0,0"
+                                          Content="Pause Following On Bosses"
+                                          IsChecked="{Binding BotBase.PauseFollowingOnBosses}" />
                                 <CheckBox Margin="5,3,0,0"
                                               Content="Use NavGraph"
                                               IsChecked="{Binding BotBase.UseNavGraph}" />

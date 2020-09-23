@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using ff14bot;
 using ff14bot.Behavior;
 using ff14bot.Helpers;
@@ -28,6 +29,7 @@ namespace Kombatant.Logic
         #region Singleton
 
         private static Movement _movement;
+        private bool _isFighting;
         internal static Movement Instance => _movement ?? (_movement = new Movement());
 
         #endregion
@@ -83,7 +85,10 @@ namespace Kombatant.Logic
         /// <returns></returns>
         private bool ShouldExecuteAutoMovement()
         {
-	        return BotBase.Instance.EnableFollowing;
+	        if (!BotBase.Instance.EnableFollowing) return false;
+	        return !PauseFollowBecauseBoss();
+
+	        // Pause following because player is fighting a known boss?
         }
 
         /// <summary>
@@ -287,6 +292,38 @@ namespace Kombatant.Logic
             }
 
             return await Task.FromResult(false);
+        }
+        /// <summary>
+        /// Determines whether or not the user wants to disable avoidance during bossfights.
+        /// </summary>
+        /// <returns></returns>
+        private bool PauseFollowBecauseBoss()
+        {
+	        if (BotBase.Instance.PauseFollowingOnBosses &&
+	            GameObjectManager.Attackers.Any(attacker => attacker.IsBoss()))
+	        {
+		        // Fight started
+		        if (!_isFighting)
+		        {
+			        var bossMonster = GameObjectManager.Attackers.FirstOrDefault(attacker => attacker.IsBoss());
+			        var toastMsg = string.Format("Fighting {0}!\tFollow will PAUSE", bossMonster?.Name);
+			        LogHelper.Instance.Log("Fighting known boss. Follow will temporarily PAUSE.");
+			        OverlayHelper.Instance.AddToast(toastMsg, Colors.Coral, Colors.Chocolate, new TimeSpan(0, 0, 0, 5));
+		        }
+
+		        _isFighting = true;
+		        return true;
+	        }
+
+	        // Fight ended
+	        if (_isFighting)
+	        {
+		        LogHelper.Instance.Log("Fight is over. Follow will RESUME.");
+		        OverlayHelper.Instance.AddToast("Fight is over. Follow will RESUME.", Colors.LimeGreen, Colors.DarkGreen, new TimeSpan(0, 0, 0, 5));
+		        _isFighting = false;
+	        }
+
+	        return false;
         }
     }
 }
