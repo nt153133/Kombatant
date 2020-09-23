@@ -7,6 +7,7 @@ using System.Linq;
 using System.Media;
 using System.Resources;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using Buddy.Coroutines;
 using ff14bot;
 using ff14bot.Behavior;
@@ -61,7 +62,7 @@ namespace Kombatant.Logic
 			if (Settings.BotBase.Instance.IsPaused)
 				return await Task.FromResult(false);
 
-			if (BotBase.Instance.AutoVoteMvp)
+			if (ShouldVoteMvp())
 			{
 				if (await VoteMvp().ExecuteCoroutine()) return true;
 			}
@@ -271,35 +272,60 @@ namespace Kombatant.Logic
 			}
 		}
 
+		bool ShouldVoteMvp()
+		{
+			if (!BotBase.Instance.AutoVoteMvp) return false;
+			if (!(DirectorManager.ActiveDirector is InstanceContentDirector icDirector) || !icDirector.InstanceEnded) return false;
+			return RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp") != null;
+		}
+
 		private Composite VoteMvp()
 		{
-			var mvpNote = RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp");
-			var mvpWindow = RaptureAtkUnitManager.GetWindowByName("VoteMvp");
+			//if (DirectorManager.ActiveDirector is InstanceContentDirector icDirector && icDirector.InstanceEnded)
+			//{
+			//	LogHelper.Instance.Log($"Instance ended... Wait for PlayerRecommendation window to appear");
+			//	if (await Coroutine.Wait(3000, () => NotificationMvp != null))
+			//	{
+			//		LogHelper.Instance.Log($"Toggling agent {NotificationMvp.TryFindAgentInterface()}...");
+			//		NotificationMvp.TryFindAgentInterface().Toggle();
+			//		LogHelper.Instance.Log($"Toggling agent {59}...");
+			//		AgentModule.ToggleAgentInterfaceById(59);
+			//		LogHelper.Instance.Log($"Toggling agent {120}...");
+			//		AgentModule.ToggleAgentInterfaceById(120);
+			//		LogHelper.Instance.Log("Waiting -1 for VoteMvp to open...");
 
-			Composite c = new Decorator(context => mvpNote != null,
-				new PrioritySelector(
-					new Sequence(
-						new Action(context => LogHelper.Instance.Log($"{mvpNote} is opened! Starting sequence!")),
+			//		await Coroutine.Wait(-1, () => VoteMvp != null);
+			//		LogHelper.Instance.Log("VoteMvp opened.");
+			//		VoteMvp.SendAction(2, 3, 0, 3, VoteWho);
+			//		LogHelper.Instance.Log($"voted player [{VoteWho}]!");
+			//		return true;
+			//	}
+			//}
+
+			//return false;
+
+
+			Composite c = new PrioritySelector(
+				new Sequence(
+						new Action(context => LogHelper.Instance.Log($"{RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp")} is opened! Starting sequence!")),
 						new Action(context =>
 						{
-							//LogHelper.Instance.Log($"toggleing{mvpNote}'s agent {mvpNote.TryFindAgentInterface()}...");
-							//mvpNote.TryFindAgentInterface().Toggle();
-							//AgentModule.ToggleAgentInterfaceById(59);
-							//LogHelper.Instance.Log($"toggleing agent {59}...");
+							LogHelper.Instance.Log($"Toggling agent {RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface()}...");
+							RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface().Toggle();
+							LogHelper.Instance.Log($"Toggling agent {59}...");
+							AgentModule.ToggleAgentInterfaceById(59);
+							LogHelper.Instance.Log($"Toggling agent {120}...");
 							AgentModule.ToggleAgentInterfaceById(120);
-							LogHelper.Instance.Log($"toggleing agent {120}...");
 						}),
-						new Action(context => LogHelper.Instance.Log($"Waiting for MvpWindow open...")),
-						new ActionRunCoroutine(o => Coroutine.Wait(1500, () => mvpWindow != null)),
-						new Action(context => LogHelper.Instance.Log($"{mvpWindow} opened")),
+						new Action(context => LogHelper.Instance.Log("Waiting 1500ms for VoteMvp to open...")),
+						new ActionRunCoroutine(o => Coroutine.Wait(1500, () => RaptureAtkUnitManager.GetWindowByName("VoteMvp") != null)),
+						new Action(context => LogHelper.Instance.Log("VoteMvp opened.")),
 						new Action(context =>
 						{
-							LogHelper.Instance.Log($"voting player [{VoteWho}]!");
-							mvpWindow.SendAction(2, 3, 0, 3, VoteWho);
-						}),
-						new ActionRunCoroutine(o => Coroutine.Wait(1500, () => mvpWindow == null)),
-						new Action(context => LogHelper.Instance.Log($"sequence ended."))
-						)));
+							RaptureAtkUnitManager.GetWindowByName("VoteMvp").SendAction(2, 3, 0, 3, VoteWho);
+							LogHelper.Instance.Log($"Voted player [{VoteWho}]!");
+						})
+					));
 
 			return c;
 		}

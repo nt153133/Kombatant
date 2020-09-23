@@ -9,7 +9,7 @@ namespace Kombatant.Forms
             InheritanceBehavior = InheritanceBehavior.SkipToThemeNext;
             ResizeMode = ResizeMode.CanMinimize;
             Width = 760;
-            Height = 620;
+            Height = 625;
         }
     }
 }
