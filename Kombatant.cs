@@ -57,6 +57,15 @@ namespace Kombatant
 
 		#endregion
 
+		public override void Pulse()
+		{
+			if (Settings.BotBase.Instance.EnableAnimationSpeedHack && Core.Me != null)
+			{
+				Core.Memory.Write(Core.Me.Pointer + 0xCD4, Settings.BotBase.Instance.AnimationSpeed);
+				Core.Memory.Write(Core.Me.Pointer + 0xCD8, Settings.BotBase.Instance.AnimationSpeed);
+			}
+		}
+
 		/// <summary>
 		/// Called when someone presses "Botbase Settings" in the main window.
 		/// </summary>
@@ -255,7 +264,7 @@ namespace Kombatant
 			// Execute auto movement
 			if (await Movement.Instance.ExecuteLogic())
 				return await Task.FromResult(true);
-			
+
 			//// Execute combat logic
 			if (await CombatLogic.Instance.ExecuteLogic())
 				return await Task.FromResult(true);

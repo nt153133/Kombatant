@@ -121,10 +121,10 @@ namespace Kombatant.Settings
 			get => _dutyToRegister;
 			set
 			{
-				if (_dutyToRegister != value && AutoRegisterDuties)
-				{
-					ff14bot.RemoteAgents.AgentContentsFinder.Instance.Toggle();
-				}
+				//if (_dutyToRegister != value && AutoRegisterDuties)
+				//{
+				//	ff14bot.RemoteAgents.AgentContentsFinder.Instance.Toggle();
+				//}
 				_dutyToRegister = value;
 				OnPropertyChanged();
 			}
@@ -139,6 +139,20 @@ namespace Kombatant.Settings
 			set
 			{
 				_AutoLeaveDuty = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _AutoVoteMvp;
+
+		[DefaultValue(false)]
+		[Description("Automatically vote player when dungeon completed.")]
+		public bool AutoVoteMvp
+		{
+			get => _AutoVoteMvp;
+			set
+			{
+				_AutoVoteMvp = value;
 				OnPropertyChanged();
 			}
 		}
@@ -764,9 +778,40 @@ namespace Kombatant.Settings
 			}
 		}
 
+
+		private bool _randomizeTargetPoint;
+
+		[DefaultValue(false)]
+		[JsonProperty("RandomizeTargetPoint")]
+		public bool RandomizeTargetPoint
+		{
+			get => _randomizeTargetPoint;
+			set
+			{
+				_randomizeTargetPoint = value;
+				OnPropertyChanged();
+			}
+		}
+
 		#endregion
 
 		#region Auto Move - Follow Distance
+
+		//private int _moveToDistance;
+
+		//[DefaultValue(2)]
+		//[JsonProperty("MoveToDistance")]
+		//public int MoveToDistance
+		//{
+		//	get => _moveToDistance;
+		//	set
+		//	{
+		//		_moveToDistance = value;
+		//		if (MoveToDistance > FollowDistance)
+		//			FollowDistance = MoveToDistance;
+		//		OnPropertyChanged();
+		//	}
+		//}
 
 		private int _followDistance;
 
@@ -778,6 +823,8 @@ namespace Kombatant.Settings
 			set
 			{
 				_followDistance = value;
+				//if (FollowDistance < MoveToDistance)
+				//	MoveToDistance = FollowDistance;
 				OnPropertyChanged();
 			}
 		}
@@ -829,17 +876,32 @@ namespace Kombatant.Settings
 
 		#region Auto Move - Navigation Mode
 
-		private WaypointGenerationMode _waypointGenerationMode;
+		//private WaypointGenerationMode _waypointGenerationMode;
+
+		//[Description("Determines how RebornBuddy handles navigation")]
+		//[JsonProperty("WaypointGenerationMode")]
+		//[DefaultValue(WaypointGenerationMode.Offmesh)]
+		//public WaypointGenerationMode WaypointGenerationMode
+		//{
+		//	get => _waypointGenerationMode;
+		//	set
+		//	{
+		//		_waypointGenerationMode = value;
+		//		OnPropertyChanged();
+		//	}
+		//}
+
+		private bool _useNavGraph;
 
 		[Description("Determines how RebornBuddy handles navigation")]
-		[JsonProperty("WaypointGenerationMode")]
-		[DefaultValue(WaypointGenerationMode.Offmesh)]
-		public WaypointGenerationMode WaypointGenerationMode
+		[JsonProperty("UseNavGraph")]
+		[DefaultValue(false)]
+		public bool UseNavGraph
 		{
-			get => _waypointGenerationMode;
+			get => _useNavGraph;
 			set
 			{
-				_waypointGenerationMode = value;
+				_useNavGraph = value;
 				OnPropertyChanged();
 			}
 		}
@@ -1200,6 +1262,33 @@ namespace Kombatant.Settings
 
 
 
+		#endregion
+
+		#region Hack
+		private bool _enableAnimationSpeedHack;
+		[DefaultValue(false)]
+		public bool EnableAnimationSpeedHack
+		{
+			get => _enableAnimationSpeedHack;
+			set
+			{
+				_enableAnimationSpeedHack = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private float _animationSpeed;
+		[DefaultValue(1f)]
+		public float AnimationSpeed
+		{
+			get => _animationSpeed;
+			set
+			{
+				_animationSpeed = value;
+				OnPropertyChanged();
+			}
+		}
+		
 		#endregion
 	}
 }

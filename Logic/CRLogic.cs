@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Clio.Common;
+using Clio.Utilities;
 using ff14bot;
 using ff14bot.Behavior;
 using ff14bot.Managers;
@@ -41,7 +43,7 @@ namespace Kombatant.Logic
 
 			if (Core.Me.InCombat)
 			{
-				if (ShouldExecuteHealInCombat())
+				if (ShouldExecuteInCombatHeal())
 					if (await RoutineManager.Current.HealBehavior.ExecuteCoroutine())
 						return true;
 
@@ -55,8 +57,7 @@ namespace Kombatant.Logic
 			}
 			else
 			{
-
-				if (ShouldExecuteHealOutofCombat())
+				if (ShouldExecuteOutOfCombatHeal())
 					if (await RoutineManager.Current.HealBehavior.ExecuteCoroutine())
 						return true;
 

@@ -37,8 +37,8 @@ namespace Kombatant.Forms.Models
 
 		public List<InstanceModel> InstanceContentResults => DataManager.InstanceContentResults.Values
 			.Where(i => (i.IsInDutyFinder && !string.IsNullOrWhiteSpace(i.CurrentLocaleName) ||
-			             i.ChnName.StartsWith("随机任务")) && !(i.ChnName.StartsWith("陆行鸟竞赛") && i.ContentUICategory == 0)).Select(i => new InstanceModel()
-				{ Name = i.CurrentLocaleName, Id = i.Id })
+						 i.ChnName.StartsWith("随机任务")) && !(i.ChnName.StartsWith("陆行鸟竞赛") && i.ContentUICategory == 0)).Select(i => new InstanceModel()
+						 { Name = i.CurrentLocaleName, Id = i.Id })
 			.OrderBy(i => i.Id).ToList();
 
 		public class InstanceModel
@@ -94,6 +94,32 @@ namespace Kombatant.Forms.Models
 			{
 				Settings.Hotkeys.Overwrite(value);
 				OnPropertyChanged();
+			}
+		}
+
+		public float X => Core.Me == null ? 0 : Core.Me.X;
+		public float Y => Core.Me == null ? 0 : Core.Me.Y;
+		public float Z => Core.Me == null ? 0 : Core.Me.Z;
+
+		public ICommand SetAnimationSpeedDefault
+		{
+			get
+			{
+				return new RelayCommand(s =>
+				{
+					BotBase.Instance.AnimationSpeed = 1f;
+				});
+			}
+		}
+
+		public ICommand SetAnimationSpeedMaximum
+		{
+			get
+			{
+				return new RelayCommand(s =>
+				{
+					BotBase.Instance.AnimationSpeed = float.MaxValue;
+				});
 			}
 		}
 

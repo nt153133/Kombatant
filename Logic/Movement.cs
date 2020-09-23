@@ -12,6 +12,8 @@ using Kombatant.Enums;
 using Kombatant.Extensions;
 using Kombatant.Helpers;
 using Kombatant.Interfaces;
+using Kombatant.Settings;
+using static Kombatant.Settings.BotBase;
 using Action = Kombatant.Constants.Action;
 using GameObject = ff14bot.Objects.GameObject;
 
@@ -39,7 +41,7 @@ namespace Kombatant.Logic
         /// <returns>Returns <c>true</c> if any action was executed, otherwise <c>false</c>.</returns>
         internal new async Task<bool> ExecuteLogic()
         {
-            if (Settings.BotBase.Instance.IsPaused)
+            if (BotBase.Instance.IsPaused)
                 return await Task.FromResult(false);
 
             var result = false;
@@ -49,7 +51,7 @@ namespace Kombatant.Logic
                 if (AvoidanceManager.IsRunningOutOfAvoid)
                     return await Task.FromResult(true);
 
-                switch (Settings.BotBase.Instance.FollowMode)
+                switch (BotBase.Instance.FollowMode)
                 {
                     case FollowMode.None:
                         break;
@@ -81,7 +83,7 @@ namespace Kombatant.Logic
         /// <returns></returns>
         private bool ShouldExecuteAutoMovement()
         {
-	        return Settings.BotBase.Instance.EnableFollowing;
+	        return BotBase.Instance.EnableFollowing;
         }
 
         /// <summary>
@@ -107,7 +109,7 @@ namespace Kombatant.Logic
                 return await Task.FromResult(true);
 
             // Party leader too far away, auto move closer to them.
-            if (characterToFollow.Distance2D() > Settings.BotBase.Instance.FollowDistance + 0.5f)
+            if (characterToFollow.Distance2D() > BotBase.Instance.FollowDistance + 0.5f)
                 if (await PerformNavigation(characterToFollow))
                     return await Task.FromResult(true);
 
@@ -122,13 +124,13 @@ namespace Kombatant.Logic
         /// <returns></returns>
         private async Task<bool> FollowFixedCharacter()
         {
-            if (string.IsNullOrEmpty(Settings.BotBase.Instance.FixedCharacterName))
+            if (string.IsNullOrEmpty(BotBase.Instance.FixedCharacterName))
                 return await Task.FromResult(false);
 
             var fixedCharacter = GameObjectManager.GameObjects
-                .FirstOrDefault(obj => obj.ToString() == Settings.BotBase.Instance.FixedCharacterString) ??
+                .FirstOrDefault(obj => obj.ToString() == BotBase.Instance.FixedCharacterString) ??
                                  GameObjectManager.GameObjects
-                                     .FirstOrDefault(obj => obj.Name == Settings.BotBase.Instance.FixedCharacterName && obj.Type == Settings.BotBase.Instance.FixedCharacterType);
+                                     .FirstOrDefault(obj => obj.Name == BotBase.Instance.FixedCharacterName && obj.Type == BotBase.Instance.FixedCharacterType);
             var target = fixedCharacter.GetBattleCharacter();
             // Character not found?
             if (target == null)
@@ -211,17 +213,17 @@ namespace Kombatant.Logic
         /// <returns></returns>
         private async Task<bool> PerformNavigation(GameObject obj)
         {
-            if (Settings.BotBase.Instance.WaypointGenerationMode == WaypointGenerationMode.Offmesh)
+            if (!BotBase.Instance.UseNavGraph)
             {
                 Navigator.PlayerMover.MoveTowards(obj.Location);
                 return await Task.FromResult(true);
             }
 
-            if (Settings.BotBase.Instance.WaypointGenerationMode == WaypointGenerationMode.NavGraph)
+            if (BotBase.Instance.UseNavGraph)
             {
                 if (!MovementManager.IsFlying && !MovementManager.IsDiving)
                     await CommonBehaviors.MoveAndStop(
-                        r => obj.Location, r => Settings.BotBase.Instance.FollowDistance, true,
+                        r => obj.Location, r => BotBase.Instance.FollowDistance, true,
                         "Following selected target")
                         .ExecuteCoroutine();
                 else
@@ -274,11 +276,11 @@ namespace Kombatant.Logic
                 }
 
                 // Dismount - but only when close to the leader!
-                if (characterToWatch.Distance2D() <= Settings.BotBase.Instance.FollowDistance + 0.5f)
+                if (characterToWatch.Distance2D() <= BotBase.Instance.FollowDistance + 0.5f)
                 {
                     LogHelper.Instance.Log(
                         "[{2}] Dismounting, {0} <= {1}...",
-                        characterToWatch.Distance2D(), Settings.BotBase.Instance.FollowDistance + 0.5f, CallStackHelper.Instance.GetCaller());
+                        characterToWatch.Distance2D(), BotBase.Instance.FollowDistance + 0.5f, CallStackHelper.Instance.GetCaller());
                     await CommonTasks.StopAndDismount();
                     return await Task.FromResult(true);
                 }

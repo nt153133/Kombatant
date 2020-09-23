@@ -9,15 +9,19 @@ using System.Resources;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using ff14bot;
+using ff14bot.Behavior;
 using ff14bot.Directors;
 using ff14bot.Enums;
 using ff14bot.Managers;
 using ff14bot.Objects;
 using ff14bot.RemoteWindows;
 using Kombatant.Constants;
+using Kombatant.Extensions;
 using Kombatant.Helpers;
 using Kombatant.Interfaces;
 using Kombatant.Settings;
+using TreeSharp;
+using Action = TreeSharp.Action;
 
 namespace Kombatant.Logic
 {
@@ -57,6 +61,11 @@ namespace Kombatant.Logic
 			if (Settings.BotBase.Instance.IsPaused)
 				return await Task.FromResult(false);
 
+			if (BotBase.Instance.AutoVoteMvp)
+			{
+				if (await VoteMvp().ExecuteCoroutine()) return true;
+			}
+
 			if (ShouldLeaveDuty())
 			{
 				WaitHelper.Instance.AddWait(@"CommenceDuty.AutoLeaveDuty", TimeSpan.FromSeconds(5));
@@ -66,7 +75,7 @@ namespace Kombatant.Logic
 
 			if (ShouldRegisterDuties())
 			{
-				DutyManager.Queue(new InstanceContentResult{Id = BotBase.Instance.DutyToRegister.Id, IsInDutyFinder = true});
+				DutyManager.Queue(new InstanceContentResult { Id = BotBase.Instance.DutyToRegister.Id, IsInDutyFinder = true });
 				WaitHelper.Instance.AddWait(@"CommenceDuty.AutoRegister", TimeSpan.FromSeconds(5));
 				return await Task.FromResult(true);
 			}
@@ -187,7 +196,7 @@ namespace Kombatant.Logic
 		/// <returns></returns>
 		private bool ShouldAcceptDutyFinder()
 		{
-			if (!Settings.BotBase.Instance.AutoAcceptDutyFinder || ContentsFinderReady.IsOpen || Core.Me.IsDead)
+			if (!BotBase.Instance.AutoAcceptDutyFinder || ContentsFinderReady.IsOpen || Core.Me.IsDead)
 				return false;
 
 			return ContentsFinderConfirm.IsOpen &&
@@ -234,6 +243,65 @@ namespace Kombatant.Logic
 		{
 			if (_audioFiles.Any())
 				new SoundPlayer(_audioFiles.ElementAt(_random.Next(_audioFiles.Count()))).Play();
+		}
+
+		private uint VoteWho
+		{
+			get
+			{
+				switch (PartyManager.NumMembers)
+				{
+					case 4:
+						{
+							if (Core.Me.IsTank()) return 0;
+							if (Core.Me.IsHealer()) return 0;
+							if (Core.Me.IsMeleeDps() || Core.Me.IsRangedDps()) return 2;
+							break;
+						}
+					case 8:
+						{
+							if (Core.Me.IsTank()) return 0;
+							if (Core.Me.IsHealer()) return 2;
+							if (Core.Me.IsMeleeDps() || Core.Me.IsRangedDps()) return (uint)new Random().Next(3, 6);
+							break;
+						}
+				}
+
+				return (uint)new Random().Next(0, (int)PartyManager.NumMembers);
+			}
+		}
+
+		private Composite VoteMvp()
+		{
+			var mvpNote = RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp");
+			var mvpWindow = RaptureAtkUnitManager.GetWindowByName("VoteMvp");
+
+			Composite c = new Decorator(context => mvpNote != null,
+				new PrioritySelector(
+					new Sequence(
+						new Action(context => LogHelper.Instance.Log($"{mvpNote} is opened! Starting sequence!")),
+						new Action(context =>
+						{
+							//LogHelper.Instance.Log($"toggleing{mvpNote}'s agent {mvpNote.TryFindAgentInterface()}...");
+							//mvpNote.TryFindAgentInterface().Toggle();
+							//AgentModule.ToggleAgentInterfaceById(59);
+							//LogHelper.Instance.Log($"toggleing agent {59}...");
+							AgentModule.ToggleAgentInterfaceById(120);
+							LogHelper.Instance.Log($"toggleing agent {120}...");
+						}),
+						new Action(context => LogHelper.Instance.Log($"Waiting for MvpWindow open...")),
+						new ActionRunCoroutine(o => Coroutine.Wait(1500, () => mvpWindow != null)),
+						new Action(context => LogHelper.Instance.Log($"{mvpWindow} opened")),
+						new Action(context =>
+						{
+							LogHelper.Instance.Log($"voting player [{VoteWho}]!");
+							mvpWindow.SendAction(2, 3, 0, 3, VoteWho);
+						}),
+						new ActionRunCoroutine(o => Coroutine.Wait(1500, () => mvpWindow == null)),
+						new Action(context => LogHelper.Instance.Log($"sequence ended."))
+						)));
+
+			return c;
 		}
 	}
 }

@@ -78,12 +78,12 @@ namespace Kombatant.Interfaces
         /// Determines whether the Heal behavior should be executed.
         /// </summary>
         /// <returns></returns>
-        protected bool ShouldExecuteHealInCombat()
+        protected bool ShouldExecuteInCombatHeal()
         {
             return Settings.BotBase.Instance.EnableHealInCombat && RoutineManager.Current.HealBehavior != null;
         }
 
-        protected bool ShouldExecuteHealOutofCombat()
+        protected bool ShouldExecuteOutOfCombatHeal()
         {
 	        return Settings.BotBase.Instance.EnableHealOutofCombat && RoutineManager.Current.HealBehavior != null;
         }
