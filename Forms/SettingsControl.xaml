@@ -30,7 +30,7 @@
             Grid.Row="0"
             Width="Auto" Height="Auto">
             <TabItem
-                Header="{x:Static resources:Localization.UI_Main}" VerticalAlignment="Bottom">
+                Header="{x:Static resources:Localization.UI_Main}">
                 <Grid
                     Margin="5,0">
                     <Grid.ColumnDefinitions>

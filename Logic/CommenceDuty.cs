@@ -155,7 +155,7 @@ namespace Kombatant.Logic
 				return false;
 			if (!DutyManager.CanLeaveActiveDuty)
 				return false;
-			return WaitHelper.Instance.IsDoneWaiting(@"CommenceDuty.AutoLeaveDuty",
+			return BotBase.Instance.SecondsToAutoLeaveDuty == 0 || WaitHelper.Instance.IsDoneWaiting(@"CommenceDuty.AutoLeaveDuty",
 				TimeSpan.FromSeconds(BotBase.Instance.SecondsToAutoLeaveDuty));
 		}
 
@@ -275,7 +275,7 @@ namespace Kombatant.Logic
 		{
 			Composite c = new Sequence(
 				//new Action(context => LogHelper.Instance.Log($"Starting sequence! waiting for _NotificationIcMvp open")),
-				new ActionRunCoroutine(o => Coroutine.Wait(1000, () => RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp") != null)),
+				new ActionRunCoroutine(o => Coroutine.Wait(500, () => RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp") != null)),
 				//new Action(context => LogHelper.Instance.Log($" _NotificationIcMvp opened")),
 				new Action(context =>
 				{
