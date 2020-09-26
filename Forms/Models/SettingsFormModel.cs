@@ -71,13 +71,13 @@ namespace Kombatant.Forms.Models
 		/// Reference for the BotBase settings.
 		/// Placed here, so we only have to deal with one model.
 		/// </summary>
-		public Settings.BotBase BotBase
+		public BotBase BotBase
 		{
-			get => Settings.BotBase.Instance;
+			get => BotBase.Instance;
 
 			set
 			{
-				Settings.BotBase.Overwrite(value);
+				BotBase.Overwrite(value);
 				OnPropertyChanged();
 			}
 		}
@@ -86,13 +86,13 @@ namespace Kombatant.Forms.Models
 		/// Reference for the Hotkeys settings.
 		/// Placed here, so we only have to deal with one model.
 		/// </summary>
-		public Settings.Hotkeys Hotkeys
+		public Hotkeys Hotkeys
 		{
-			get => Settings.Hotkeys.Instance;
+			get => Hotkeys.Instance;
 
 			set
 			{
-				Settings.Hotkeys.Overwrite(value);
+				Hotkeys.Overwrite(value);
 				OnPropertyChanged();
 			}
 		}
@@ -202,7 +202,7 @@ namespace Kombatant.Forms.Models
 			{
 				return new RelayCommand(s =>
 				{
-					if (Settings.BotBase.Instance.UseFocusOverlay)
+					if (BotBase.Instance.UseFocusOverlay)
 					{
 						OverlayManager.StartFocusOverlay();
 					}
@@ -221,7 +221,7 @@ namespace Kombatant.Forms.Models
 			{
 				return new RelayCommand(s =>
 				{
-					if (Settings.BotBase.Instance.UseStatusOverlay)
+					if (BotBase.Instance.UseStatusOverlay)
 					{
 						OverlayManager.StartStatusOverlay();
 					}

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using ff14bot;
 using ff14bot.Behavior;
+using ff14bot.Directors;
 using ff14bot.Helpers;
 using ff14bot.Managers;
 using ff14bot.Navigation;
@@ -86,6 +87,7 @@ namespace Kombatant.Logic
         private bool ShouldExecuteAutoMovement()
         {
 	        if (!BotBase.Instance.EnableFollowing) return false;
+	        if (DirectorManager.ActiveDirector is InstanceContentDirector instanceContentDirector && instanceContentDirector.InstanceEnded) return false;
 	        return !PauseFollowBecauseBoss();
 
 	        // Pause following because player is fighting a known boss?
@@ -265,7 +267,7 @@ namespace Kombatant.Logic
         /// <returns></returns>
         private async Task<bool> PerformMountDismount(BattleCharacter characterToWatch)
         {
-            if (characterToWatch.IsMounted != Core.Me.IsMounted || characterToWatch.IsCasting && characterToWatch.CastingSpellId == Constants.Action.Mount)
+            if (characterToWatch.IsMounted != Core.Me.IsMounted || characterToWatch.IsCasting && characterToWatch.CastingSpellId == Action.Mount)
             {
                 if (!Core.Me.InCombat)
                 {

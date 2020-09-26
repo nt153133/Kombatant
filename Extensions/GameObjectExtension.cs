@@ -155,12 +155,9 @@ namespace Kombatant.Extensions
 
         internal static int BeingTargetedCount(this GameObject o)
         {
-            if (o.IsEnemy())
-            {
-                return GameObjectManager.GetObjectsOfType<BattleCharacter>().Count(i => !i.IsEnemy() && i.Type == GameObjectType.Pc && i.TargetGameObject == o);
-            }
-
-            return GameObjectManager.GetObjectsOfType<BattleCharacter>().Count(i => i.IsEnemy() && i.Type == GameObjectType.Pc && i.TargetGameObject == o);
+	        return o.IsEnemy() 
+		        ? GameObjectManager.GetObjectsOfType<BattleCharacter>().Count(i => !i.IsEnemy() && i.Type == GameObjectType.Pc && i.TargetGameObject == o) 
+		        : GameObjectManager.GetObjectsOfType<BattleCharacter>().Count(i => i.IsEnemy() && i.Type == GameObjectType.Pc && i.TargetGameObject == o);
         }
     }
 }

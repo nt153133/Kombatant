@@ -108,15 +108,15 @@ namespace Kombatant.Forms
                     Clip = new RectangleGeometry(new Rect(new Size(sizeX, sizeY)), round, round),
                     Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)),
                     Background = new SolidColorBrush(Color.FromArgb(64, 0, 0, 0)),
-                    X = Settings.BotBase.Instance.FocusOverlayX,
-                    Y = Settings.BotBase.Instance.FocusOverlayY,
+                    X = BotBase.Instance.FocusOverlayX,
+                    Y = BotBase.Instance.FocusOverlayY,
                     AllowMoving = true
                 };
 
                 FocusOverlay.MouseLeave += (sender, args) =>
                 {
-                    Settings.BotBase.Instance.FocusOverlayX = FocusOverlay.X;
-                    Settings.BotBase.Instance.FocusOverlayY = FocusOverlay.Y;
+                    BotBase.Instance.FocusOverlayX = FocusOverlay.X;
+                    BotBase.Instance.FocusOverlayY = FocusOverlay.Y;
                 };
 
                 FocusOverlay.MouseLeftButtonDown += (sender, args) =>
@@ -208,15 +208,15 @@ namespace Kombatant.Forms
                     Clip = new RectangleGeometry(new Rect(new Size(sizeX, sizeY - 5)), round, round),
                     Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)),
                     Background = new SolidColorBrush(Color.FromArgb(64, 0, 0, 0)),
-                    X = Settings.BotBase.Instance.StatusOverlayX,
-                    Y = Settings.BotBase.Instance.StatusOverlayY,
+                    X = BotBase.Instance.StatusOverlayX,
+                    Y = BotBase.Instance.StatusOverlayY,
                     AllowMoving = true,
                 };
 
                 StatusOverlay.MouseLeave += (sender, args) =>
                 {
-                    Settings.BotBase.Instance.StatusOverlayX = StatusOverlay.X;
-                    Settings.BotBase.Instance.StatusOverlayY = StatusOverlay.Y;
+                    BotBase.Instance.StatusOverlayX = StatusOverlay.X;
+                    BotBase.Instance.StatusOverlayY = StatusOverlay.Y;
                 };
 
                 StatusOverlay.MouseLeftButtonDown += (sender, args) =>

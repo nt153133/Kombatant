@@ -45,7 +45,7 @@ namespace Kombatant.Logic
 
             if (ShouldExecuteAvoidance())
             {
-                if (Settings.BotBase.Instance.IsPaused)
+                if (BotBase.Instance.IsPaused)
                 {
                     return await Task.FromResult(false);
                 }
@@ -91,11 +91,11 @@ namespace Kombatant.Logic
         /// <returns></returns>
         private bool ShouldExecuteAvoidance()
         {
-            if (Settings.BotBase.Instance.IsPaused)
+            if (BotBase.Instance.IsPaused)
                 return false;
 
             // User doesn't want RebornBuddy to avoid.
-            if (!Settings.BotBase.Instance.EnableAvoidance)
+            if (!BotBase.Instance.EnableAvoidance)
                 return false;
 
             // Pause avoidance because player is fighting a known boss?
@@ -111,7 +111,7 @@ namespace Kombatant.Logic
         /// <returns></returns>
         private bool PauseAvoidanceBecauseBoss()
         {
-            if (Settings.BotBase.Instance.PauseAvoidanceOnBosses &&
+            if (BotBase.Instance.PauseAvoidanceOnBosses &&
                 GameObjectManager.Attackers.Any(attacker => attacker.IsBoss()))
             {
                 // Fight started
