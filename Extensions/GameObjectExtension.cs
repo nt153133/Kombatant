@@ -67,7 +67,7 @@ namespace Kombatant.Extensions
                 return false;
 
             var character = obj.GetCharacter();
-            return character.CanAttack || character.StatusFlags == StatusFlags.Hostile;
+            return character.CanAttack /*|| character.StatusFlags == StatusFlags.Hostile*/;
         }
 
         /// <summary>

@@ -238,6 +238,7 @@ Turn away before the cast completes!</value>
   </data>
   <data name="Msg_DutyPsyche7" xml:space="preserve">
     <value>Behold, fury given form!</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="Msg_DutyPsyche8" xml:space="preserve">
     <value>No more games!</value>

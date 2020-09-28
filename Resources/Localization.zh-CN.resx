@@ -231,9 +231,6 @@
   <data name="Msg_DutyPsyche6" xml:space="preserve">
     <value>开始灵魂抽取！</value>
   </data>
-  <data name="Msg_DutyPsyche7" xml:space="preserve">
-    <value>看哪， 愤怒给定的形式！！</value>
-  </data>
   <data name="Msg_DutyPsyche8" xml:space="preserve">
     <value>我可没时间陪你玩游戏了</value>
   </data>
@@ -566,9 +563,6 @@
   </data>
   <data name="UI_CRtip2" xml:space="preserve">
     <value>通常你希望所有的行为都被启用。</value>
-  </data>
-  <data name="Name_Kombatant" xml:space="preserve">
-    <value>Kombatant</value>
   </data>
   <data name="UI_DeathBehavior" xml:space="preserve">
     <value>无法战斗状态</value>

@@ -629,7 +629,7 @@ namespace Kombatant.Logic
         private BattleCharacter TargetMostFocusedEnemy()
         {
             var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-                .Where(o => o.IsEnemy())
+                .Where(o => !o.IsStrikingDummy() && o.IsEnemy())
                 .OrderByDescending(o => o.BeingTargetedCount())
                 .ThenBy(o => o.Distance2D());
 
