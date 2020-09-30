@@ -14,6 +14,7 @@ using ff14bot.Behavior;
 using ff14bot.Directors;
 using ff14bot.Enums;
 using ff14bot.Managers;
+using ff14bot.NeoProfiles;
 using ff14bot.Objects;
 using ff14bot.RemoteWindows;
 using Kombatant.Constants;
@@ -78,8 +79,16 @@ namespace Kombatant.Logic
 
 			if (ShouldRegisterDuties())
 			{
-				DutyManager.Queue(new InstanceContentResult { Id = BotBase.Instance.DutyToRegister.Id, IsInDutyFinder = true });
-				WaitHelper.Instance.AddWait(@"CommenceDuty.AutoRegister", TimeSpan.FromSeconds(5));
+				try
+				{
+					DutyManager.Queue(new InstanceContentResult
+					{ Id = BotBase.Instance.DutyToRegister.Id, IsInDutyFinder = true , ChnName = BotBase.Instance.DutyToRegister.Name , EngName = BotBase.Instance.DutyToRegister.Name});
+					LogHelper.Instance.Log($"Queued duty {BotBase.Instance.DutyToRegister.Name}");
+				}
+				catch (ArgumentException e)
+				{
+					LogHelper.Instance.Log(e.Message);
+				}
 				return await Task.FromResult(true);
 			}
 
@@ -151,23 +160,23 @@ namespace Kombatant.Logic
 		{
 			if (!BotBase.Instance.AutoLeaveDuty)
 				return false;
-			if (!(DirectorManager.ActiveDirector is InstanceContentDirector icDirector) || !icDirector.InstanceEnded)
-				return false;
 			if (!DutyManager.CanLeaveActiveDuty)
 				return false;
-			return BotBase.Instance.SecondsToAutoLeaveDuty == 0 || WaitHelper.Instance.IsDoneWaiting(@"CommenceDuty.AutoLeaveDuty",
-				TimeSpan.FromSeconds(BotBase.Instance.SecondsToAutoLeaveDuty));
+			if (DirectorManager.ActiveDirector is InstanceContentDirector icDirector && icDirector.InstanceEnded)
+			{
+				return BotBase.Instance.SecondsToAutoLeaveDuty == 0 || WaitHelper.Instance.IsDoneWaiting(
+					@"CommenceDuty.AutoLeaveDuty", TimeSpan.FromSeconds(BotBase.Instance.SecondsToAutoLeaveDuty));
+			}
+
+			return false;
 		}
 
 		private bool ShouldRegisterDuties()
 		{
 			if (!BotBase.Instance.AutoRegisterDuties)
 				return false;
-			if (WaitHelper.Instance.IsWaiting(@"CommenceDuty.AutoRegister"))
-				return false;
-			//if (DutiesToRegister.Length == 0)
-			//	return false;
-			return DutyManager.QueueState == QueueState.None;
+			if (DutyManager.QueueState != QueueState.None) return false;
+			return WaitHelper.Instance.IsDoneWaiting(@"CommenceDuty.AutoRegister", new TimeSpan(0, 0, 5), true);
 		}
 
 		/// <summary>

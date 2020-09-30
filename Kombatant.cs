@@ -191,7 +191,6 @@ namespace Kombatant
 			{
 				OverlayManager.StartFocusOverlay();
 			}
-
 		}
 
 		private static bool sidestepStatus;

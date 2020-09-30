@@ -33,13 +33,13 @@ namespace Kombatant.Logic
 			if (Settings.BotBase.Instance.IsPaused)
 				return false;
 
+			if (Core.Me.IsMounted || MovementManager.IsFlying || MovementManager.IsSwimming || MovementManager.IsDiving)
+				return false;
+
 			if (Core.Me.IsDead)
 				if (ShouldExecuteDeath())
 					if (await RoutineManager.Current.DeathBehavior.ExecuteCoroutine())
 						return true;
-
-			if (Core.Me.IsMounted || MovementManager.IsFlying || MovementManager.IsSwimming || MovementManager.IsDiving)
-				return false;
 
 			if (Core.Me.InCombat)
 			{
