@@ -12,6 +12,7 @@ using ff14bot.Helpers;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Pathing.Service_Navigation;
+using GreyMagic;
 using Kombatant.Forms;
 using Kombatant.Forms.Models;
 using Kombatant.Logic;
@@ -162,6 +163,7 @@ namespace Kombatant
 			return null;
 		}
 
+		private static bool sidestepStatus;
 		/// <summary>
 		/// Called when the botbase gets started.
 		/// </summary>
@@ -193,12 +195,31 @@ namespace Kombatant
 			}
 		}
 
-		private static bool sidestepStatus;
+		public static int AgentNotificationId { get; private set; }
+		public static int AgentMvpId { get; private set; }
+
 		public override void Initialize()
 		{
 			if (Settings.BotBase.Instance.UseStatusOverlay)
 			{
 				OverlayManager.StartStatusOverlay();
+			}
+
+			try
+			{
+				var patternFinder = new PatternFinder(Core.Memory);
+				var agentNotificationVTable = patternFinder.Find(
+					"48 8D 05 ? ? ? ? 48 89 03 33 C0 48 89 43 20 48 89 43 28 48 89 43 30 48 89 43 38 48 89 43 40 48 89 43 48 48 8B C3 Add 3 TraceRelative");
+				var agentMvpVTable = patternFinder.Find(
+					"48 8D 05 ? ? ? ? 48 89 03 33 C0 48 89 43 20 89 43 28 48 8B C3 48 83 C4 ? 5B C3 CC CC CC CC CC CC 40 53 Add 3 TraceRelative");
+				AgentNotificationId = AgentModule.FindAgentIdByVtable(agentNotificationVTable);
+				LogHelper.Instance.Log($"Found AgentNotification {AgentNotificationId}");
+				AgentMvpId = AgentModule.FindAgentIdByVtable(agentMvpVTable);
+				LogHelper.Instance.Log($"Found AgentVoteMvp {AgentMvpId}");
+			}
+			catch (Exception e)
+			{
+				LogHelper.Instance.Log("No Mvp RemoteAgent Found..." + e);
 			}
 		}
 

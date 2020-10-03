@@ -392,44 +392,6 @@
                         </GroupBox>
                     </StackPanel>
                     <StackPanel Grid.Column="4" Grid.Row="2">
-                        <!--<GroupBox Header="{x:Static resources:Localization.UI_AutoEmote}" >
-                            <StackPanel>
-                                <Label ToolTip="Emote to keep up"
-                                       Content="{x:Static resources:Localization.UI_Lbl_AutoEmoteCommand}" />
-                                <TextBox Margin="5,0,5,0" VerticalContentAlignment="Center"
-                                         HorizontalContentAlignment="Center" Text="{Binding BotBase.AutoEmoteCommand}"
-                                         Height="21">
-                                    <TextBox.Resources>
-                                        <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.3" Stretch="None"
-                                                     AlignmentX="Center">
-                                            <VisualBrush.Visual>
-                                                <TextBlock Text="/joy motion" />
-                                            </VisualBrush.Visual>
-                                        </VisualBrush>
-                                    </TextBox.Resources>
-                                    <TextBox.Style>
-                                        <Style TargetType="{x:Type TextBox}">
-                                            <Style.Triggers>
-                                                <Trigger Property="Text" Value="{x:Null}">
-                                                    <Setter Property="Background" Value="{StaticResource HintText}" />
-                                                </Trigger>
-                                                <Trigger Property="Text" Value="">
-                                                    <Setter Property="Background" Value="{StaticResource HintText}" />
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBox.Style>
-                                </TextBox>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <Label ToolTip="Seconds between renewing the emote" Width="188"
-                                           Content="{x:Static resources:Localization.UI_Lbl_AutoEmoteInterval}"/>
-                                    <TextBox Width="40" Height="21" VerticalContentAlignment="Center"
-                                             HorizontalContentAlignment="Center"
-                                             Text="{Binding BotBase.AutoEmoteInterval}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </GroupBox>-->
 
                         <StackPanel Orientation="Vertical">
                             <GroupBox Header="{x:Static resources:Localization.UI_Avoidance}" Padding="3">
@@ -443,33 +405,6 @@
                                               ToolTip="{x:Static resources:Localization.UI_Tooltip_PauseAvoidanceOnBosses}"
                                               IsChecked="{Binding BotBase.PauseAvoidanceOnBosses}"
                                               IsEnabled="{Binding BotBase.EnableAvoidance}" />
-                                </StackPanel>
-                            </GroupBox>
-                            <GroupBox Padding="3" Header="Animation speed hack">
-                                <StackPanel>
-                                    <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Enable animation hack" IsChecked="{Binding BotBase.EnableAnimationSpeedHack}"></CheckBox>
-                                    <Label Height="3" />
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="177"></ColumnDefinition>
-                                            <ColumnDefinition Width="3"></ColumnDefinition>
-                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                        </Grid.ColumnDefinitions>
-                                        <Slider Minimum="0" Maximum="5" VerticalAlignment="Center"
-                                                IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}" Value="{Binding BotBase.AnimationSpeed}"></Slider>
-                                        <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}" Text="{Binding BotBase.AnimationSpeed}"></TextBox>
-                                    </Grid>
-                                    <Label Height="3"></Label>
-                                    <Grid >
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="40"></ColumnDefinition>
-                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                            <ColumnDefinition Width="5"></ColumnDefinition>
-                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                        </Grid.ColumnDefinitions>
-                                        <Button Grid.Column="1" Content="Set Default"  Command="{Binding SetAnimationSpeedDefault}" IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}"></Button>
-                                        <Button  Grid.Column="3" Content="Set Maximum"  Command="{Binding SetAnimationSpeedMaximum}" IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}"></Button>
-                                    </Grid>
                                 </StackPanel>
                             </GroupBox>
                             <!--<ComboBox ItemsSource="{Binding Source={StaticResource FollowMode}}"
@@ -491,6 +426,75 @@
                             </GroupBox>-->
 
                         </StackPanel>
+                        <GroupBox Header="{x:Static resources:Localization.UI_AutoEmote}" Padding="3,0">
+                            <StackPanel>
+                                <Label ToolTip="Emote to keep up"
+                                       Content="{x:Static resources:Localization.UI_Lbl_AutoEmoteCommand}" />
+                                <TextBox  VerticalContentAlignment="Center"
+                                         HorizontalContentAlignment="Center" Text="{Binding BotBase.AutoEmoteCommand}"
+                                         Height="21">
+                                    <TextBox.Resources>
+                                        <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.3" Stretch="None"
+                                                     AlignmentX="Center">
+                                            <VisualBrush.Visual>
+                                                <TextBlock Text="/grin motion" />
+                                            </VisualBrush.Visual>
+                                        </VisualBrush>
+                                    </TextBox.Resources>
+                                    <TextBox.Style>
+                                        <Style TargetType="{x:Type TextBox}">
+                                            <Style.Triggers>
+                                                <Trigger Property="Text" Value="{x:Null}">
+                                                    <Setter Property="Background" Value="{StaticResource HintText}" />
+                                                </Trigger>
+                                                <Trigger Property="Text" Value="">
+                                                    <Setter Property="Background" Value="{StaticResource HintText}" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="180"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label ToolTip="Seconds between renewing the emote"
+                                           Content="{x:Static resources:Localization.UI_Lbl_AutoEmoteInterval}"/>
+                                    <TextBox Grid.Column="1" Height="21" VerticalContentAlignment="Center"
+                                             HorizontalContentAlignment="Center"
+                                             Text="{Binding BotBase.AutoEmoteInterval}" />
+                                </Grid>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Padding="3" Header="Animation speed hack">
+                            <StackPanel>
+                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Enable animation hack" IsChecked="{Binding BotBase.EnableAnimationSpeedHack}"/>
+                                <Label Height="3" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="177"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider Minimum="0" Maximum="5" VerticalAlignment="Center"
+                                                IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}" Value="{Binding BotBase.AnimationSpeed}"/>
+                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}" Text="{Binding BotBase.AnimationSpeed}"/>
+                                </Grid>
+                                <Label Height="3"/>
+                                <Grid >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="1" Content="Set Default"  Command="{Binding SetAnimationSpeedDefault}" IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}"/>
+                                    <Button  Grid.Column="3" Content="Set Maximum"  Command="{Binding SetAnimationSpeedMaximum}" IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}"/>
+                                </Grid>
+                            </StackPanel>
+                        </GroupBox>
 
                     </StackPanel>
                 </Grid>

@@ -251,6 +251,7 @@ namespace Kombatant.Logic
 		{
 			if (!BotBase.Instance.AutoVoteMvp) return false;
 			if (PartyManager.NumMembers == 1) return false;
+			if (Kombatant.AgentMvpId == 0 || Kombatant.AgentNotificationId == 0) return false;
 			return DirectorManager.ActiveDirector is InstanceContentDirector icDirector && icDirector.InstanceEnded;
 		}
 
@@ -289,7 +290,7 @@ namespace Kombatant.Logic
 				new Action(context =>
 				{
 					//LogHelper.Instance.Log($"Toggling agent {RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface()}...");
-					RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface().Toggle();
+					//RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface().Toggle();
 					//LogHelper.Instance.Log($"Toggling agent {59}...");
 					AgentModule.ToggleAgentInterfaceById(59);
 					//LogHelper.Instance.Log($"Toggling agent {120}...");
