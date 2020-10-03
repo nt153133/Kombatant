@@ -291,10 +291,10 @@ namespace Kombatant.Logic
 				{
 					//LogHelper.Instance.Log($"Toggling agent {RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface()}...");
 					//RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface().Toggle();
+					AgentModule.ToggleAgentInterfaceById(Kombatant.AgentNotificationId);
 					//LogHelper.Instance.Log($"Toggling agent {59}...");
-					AgentModule.ToggleAgentInterfaceById(59);
+					AgentModule.ToggleAgentInterfaceById(Kombatant.AgentMvpId);
 					//LogHelper.Instance.Log($"Toggling agent {120}...");
-					AgentModule.ToggleAgentInterfaceById(120);
 				}),
 				//new Action(context => LogHelper.Instance.Log("Waiting for VoteMvp to open...")),
 				new ActionRunCoroutine(o => Coroutine.Wait(3000, () => RaptureAtkUnitManager.GetWindowByName("VoteMvp") != null)),
