@@ -70,7 +70,7 @@ namespace Kombatant.Logic
 					return await Task.FromResult(true);
 			}
 
-			if (ShouldLeaveDuty() && !Core.Me.InCombat)
+			if (ShouldLeaveDuty())
 			{
 				LogHelper.Instance.Log("Leaving Duty...");
 				DutyManager.LeaveActiveDuty();
@@ -82,13 +82,26 @@ namespace Kombatant.Logic
 				try
 				{
 					DutyManager.Queue(new InstanceContentResult
-					{ Id = BotBase.Instance.DutyToRegister.Id, IsInDutyFinder = true , ChnName = BotBase.Instance.DutyToRegister.Name , EngName = BotBase.Instance.DutyToRegister.Name});
+					{
+						Id = BotBase.Instance.DutyToRegister.Id,
+						IsInDutyFinder = true,
+						ChnName = BotBase.Instance.DutyToRegister.Name,
+						EngName = BotBase.Instance.DutyToRegister.Name
+					});
 					LogHelper.Instance.Log($"Queued duty {BotBase.Instance.DutyToRegister.Name}");
 				}
 				catch (ArgumentException e)
 				{
 					LogHelper.Instance.Log(e.Message);
 				}
+				catch (NullReferenceException e)
+				{
+					LogHelper.Instance.Log("Please select a duty to register!");
+				}
+				//catch (NullReferenceException e)
+				//{
+				//	LogHelper.Instance.Log();
+				//}
 				return await Task.FromResult(true);
 			}
 
@@ -165,7 +178,7 @@ namespace Kombatant.Logic
 			if (DirectorManager.ActiveDirector is InstanceContentDirector icDirector && icDirector.InstanceEnded)
 			{
 				return BotBase.Instance.SecondsToAutoLeaveDuty == 0 || WaitHelper.Instance.IsDoneWaiting(
-					@"CommenceDuty.AutoLeaveDuty", TimeSpan.FromSeconds(BotBase.Instance.SecondsToAutoLeaveDuty));
+					@"CommenceDuty.AutoLeaveDuty", new TimeSpan(0, 0, BotBase.Instance.SecondsToAutoLeaveDuty));
 			}
 
 			return false;
@@ -173,8 +186,9 @@ namespace Kombatant.Logic
 
 		private bool ShouldRegisterDuties()
 		{
-			if (!BotBase.Instance.AutoRegisterDuties)
-				return false;
+			if (!Core.IsInGame) return false;
+			if (CommonBehaviors.IsLoading) return false;
+			if (!BotBase.Instance.AutoRegisterDuties) return false;
 			if (DutyManager.QueueState != QueueState.None) return false;
 			return WaitHelper.Instance.IsDoneWaiting(@"CommenceDuty.AutoRegister", new TimeSpan(0, 0, 5), true);
 		}

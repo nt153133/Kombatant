@@ -974,7 +974,7 @@ namespace Kombatant.Resources {
         }
         
         /// <summary>
-        ///   查找类似 Clickthrough 的本地化字符串。
+        ///   查找类似 Lock 的本地化字符串。
         /// </summary>
         public static string UI_Lock {
             get {

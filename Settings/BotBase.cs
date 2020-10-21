@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
+using System.Windows.Data;
 using ff14bot.Enums;
 using ff14bot.Helpers;
 using ff14bot.Managers;
@@ -59,7 +61,6 @@ namespace Kombatant.Settings
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		public string MyName => ff14bot.Core.Me.Name;
 
 		#region --- Debugging Stuff
 
@@ -112,6 +113,27 @@ namespace Kombatant.Settings
 			{
 				_autoRegisterDuties = value;
 				OnPropertyChanged();
+			}
+		}
+
+		private InstanceContentType _selectedInstanceContentType;
+		[DefaultValue(Enums.InstanceContentType.Roulette)]
+		public InstanceContentType SelectedInstanceContentType
+		{
+			get => _selectedInstanceContentType;
+			set
+			{
+				if (value != _selectedInstanceContentType)
+				{
+					_selectedInstanceContentType = value;
+					OnPropertyChanged();
+					SettingsFormModel.Instance.OnPropertyChanged("InstanceContentResults");
+					//DutyToRegister = SettingsFormModel.Instance.InstanceContentResults[0];
+					//OnPropertyChanged("DutyToRegister");
+				}
+
+				//Kombatant._window.Content =
+				//	WpfHelper.Instance.LoadWindowContent(Resources.Controls.SettingsControl);
 			}
 		}
 
@@ -875,15 +897,14 @@ namespace Kombatant.Settings
 			}
 		}
 
-		private string _fixedCharacterString;
+		private uint _fixedCharacterId;
 
-		[DefaultValue("")]
-		public string FixedCharacterString
+		public uint FixedCharacterId
 		{
-			get => _fixedCharacterString;
+			get => _fixedCharacterId;
 			set
 			{
-				_fixedCharacterString = value;
+				_fixedCharacterId = value;
 				OnPropertyChanged();
 			}
 		}
@@ -1145,7 +1166,7 @@ namespace Kombatant.Settings
 
 		private TargetingMode _targetingMode;
 
-		[DefaultValue(TargetingMode.None)]
+		[DefaultValue(TargetingMode.Nearest)]
 		[Description("Automatically choose new target")]
 		[JsonProperty("TargetingMode")]
 		public TargetingMode AutoTargetingMode
@@ -1154,6 +1175,57 @@ namespace Kombatant.Settings
 			set
 			{
 				_targetingMode = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _targetPcFirst;
+
+		[DefaultValue(false)]
+		public bool TargetPcFirst
+		{
+			get => _targetPcFirst;
+			set
+			{
+				_targetPcFirst = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _targetWarMachinaFirst;
+
+		[DefaultValue(false)]
+		public bool TargetWarMachinaFirst
+		{
+			get => _targetWarMachinaFirst;
+			set
+			{
+				_targetWarMachinaFirst = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _targetMountedEnemyFirst;
+
+		[DefaultValue(false)]
+		public bool TargetMountedEnemyFirst
+		{
+			get => _targetMountedEnemyFirst;
+			set
+			{
+				_targetMountedEnemyFirst = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _targetTankedOnly;
+
+		[DefaultValue(false)]
+		public bool TargetTankedOnly
+		{
+			get => _targetTankedOnly;
+			set
+			{
+				_targetTankedOnly = value;
 				OnPropertyChanged();
 			}
 		}
@@ -1292,6 +1364,43 @@ namespace Kombatant.Settings
 		#endregion
 
 		#region Hack
+
+		private bool hackpanel;
+		[DefaultValue(false)]
+		public bool Hackpanel
+		{
+			get => hackpanel;
+			set
+			{
+				hackpanel = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _enableAnimationLockHack;
+		[DefaultValue(false)]
+		public bool EnableAnimationLockHack
+		{
+			get => _enableAnimationLockHack;
+			set
+			{
+				_enableAnimationLockHack = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private float _animationLockMaxDelay;
+		[DefaultValue(0)]
+		public float AnimationLockMaxDelay
+		{
+			get => _animationLockMaxDelay;
+			set
+			{
+				_animationLockMaxDelay = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private bool _enableAnimationSpeedHack;
 		[DefaultValue(false)]
 		public bool EnableAnimationSpeedHack

@@ -134,10 +134,8 @@ namespace Kombatant.Logic
             if (string.IsNullOrEmpty(BotBase.Instance.FixedCharacterName))
                 return await Task.FromResult(false);
 
-            var fixedCharacter = GameObjectManager.GameObjects
-                .FirstOrDefault(obj => obj.ToString() == BotBase.Instance.FixedCharacterString) ??
-                                 GameObjectManager.GameObjects
-                                     .FirstOrDefault(obj => obj.Name == BotBase.Instance.FixedCharacterName && obj.Type == BotBase.Instance.FixedCharacterType);
+            var fixedCharacter = GameObjectManager.GetObjectByObjectId(BotBase.Instance.FixedCharacterId) ??
+                                 GameObjectManager.GameObjects.FirstOrDefault(obj => obj.Name == BotBase.Instance.FixedCharacterName && obj.Type == BotBase.Instance.FixedCharacterType);
             var target = fixedCharacter.GetBattleCharacter();
             // Character not found?
             if (target == null)

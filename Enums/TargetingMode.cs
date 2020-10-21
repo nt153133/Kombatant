@@ -7,8 +7,8 @@ namespace Kombatant.Enums
     /// </summary>
     public enum TargetingMode
     {
-        [Description("No auto target selection")]
-        None = 0,
+        //[Description("No auto target selection")]
+        //None = 0,
         [Description("Nearest enemy")]
         Nearest = 10,
         [Description("Assist party leader")]
@@ -31,8 +31,8 @@ namespace Kombatant.Enums
         HighestHealth = 120,
         [Description("Highest health percent")]
         HighestHealthPercent = 130, 
-        [Description("Most focused target")]
-        MostFocused = 140,
+        [Description("Most Targeted enemy")]
+        MostTargeted = 140,
 
     }
 }

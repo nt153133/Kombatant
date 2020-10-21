@@ -488,7 +488,7 @@ Turn away before the cast completes!</value>
     <value>Focus Overlay</value>
   </data>
   <data name="UI_Lock" xml:space="preserve">
-    <value>Clickthrough</value>
+    <value>Lock</value>
   </data>
   <data name="UI_EnableFollowing" xml:space="preserve">
     <value>Enable Following</value>

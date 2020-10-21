@@ -50,6 +50,7 @@
     <Compile Include="Converters\EnumBooleanConverter.cs" />
     <Compile Include="Enums\ClassJobEffectType.cs" />
     <Compile Include="Enums\FollowMode.cs" />
+    <Compile Include="Enums\InstanceContentType.cs" />
     <Compile Include="Enums\WaypointGenerationMode.cs" />
     <Compile Include="Enums\TargetingMode.cs" />
     <Compile Include="Extensions\CharacterExtension.cs" />

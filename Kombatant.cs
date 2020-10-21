@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -18,6 +19,7 @@ using Kombatant.Forms.Models;
 using Kombatant.Logic;
 using Kombatant.Helpers;
 using TreeSharp;
+using BotBase = Kombatant.Settings.BotBase;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Kombatant
@@ -29,6 +31,8 @@ namespace Kombatant
 	// ReSharper disable once UnusedMember.Global
 	public class Kombatant : AsyncBotBase
 	{
+		//private static Kombatant kombatant;
+		//internal static Kombatant Instance => kombatant ?? (kombatant = new Kombatant());
 		#region Botbase Metadata
 
 		public override string Name => Resources.Localization.Name_Kombatant;
@@ -58,15 +62,6 @@ namespace Kombatant
 
 		#endregion
 
-		//public override void Pulse()
-		//{
-		//	if (Settings.BotBase.Instance.EnableAnimationSpeedHack && Core.Me != null)
-		//	{
-		//		Core.Memory.Write(Core.Me.Pointer + 0xCD4, Settings.BotBase.Instance.AnimationSpeed);
-		//		Core.Memory.Write(Core.Me.Pointer + 0xCD8, Settings.BotBase.Instance.AnimationSpeed);
-		//	}
-		//}
-
 		/// <summary>
 		/// Called when someone presses "Botbase Settings" in the main window.
 		/// </summary>
@@ -88,7 +83,7 @@ namespace Kombatant
 						DataContext = SettingsFormModel.Instance,
 						Content = LoadWindowContent(),
 						Title = "Kombatant",
-						WindowStartupLocation = WindowStartupLocation.CenterScreen
+						WindowStartupLocation = WindowStartupLocation.CenterScreen,
 					};
 
 					_window.Loaded += (e, a) =>
@@ -164,13 +159,104 @@ namespace Kombatant
 		}
 
 		private static bool sidestepStatus;
+		private static bool running;
+
+		public override void Pulse()
+		{
+			if (BotBase.Instance.EnableAnimationLockHack && AnimationLockTimer != IntPtr.Zero)
+			{
+				if (BotBase.Instance.AnimationLockMaxDelay == 0 || Core.Memory.NoCacheRead<float>(AnimationLockTimer) > BotBase.Instance.AnimationLockMaxDelay)
+				{
+					Core.Memory.Write(AnimationLockTimer, BotBase.Instance.AnimationLockMaxDelay);
+				}
+			}
+			if (BotBase.Instance.EnableAnimationSpeedHack)
+			{
+				Core.Memory.Write(Core.Me.Pointer + 0xCD4, BotBase.Instance.AnimationSpeed);
+				Core.Memory.Write(Core.Me.Pointer + 0xCD8, BotBase.Instance.AnimationSpeed);
+			}
+		}
+		//static Thread t1 => new Thread(() =>
+		//	{
+		//		LogHelper.Instance.Log("<AnimationHack> Thread Started.");
+		//		while (running)
+		//		{
+		//			if (BotBase.Instance.EnableAnimationLockHack)
+		//			{
+		//				Core.Memory.Write(AnimationLockTimer, BotBase.Instance.AnimationLockMaxDelay);
+		//			}
+		//			if (BotBase.Instance.EnableAnimationSpeedHack)
+		//			{
+		//				Core.Memory.Write(Core.Me.Pointer + 0xCD4, BotBase.Instance.AnimationSpeed);
+		//				Core.Memory.Write(Core.Me.Pointer + 0xCD8, BotBase.Instance.AnimationSpeed);
+		//			}
+
+		//			Thread.SpinWait(10);
+		//		}
+		//		LogHelper.Instance.Log("<AnimationHack> Thread Aborted.");
+		//	});
+
+		public static int AgentNotificationId { get; private set; }
+		public static int AgentMvpId { get; private set; }
+		public static IntPtr AnimationLockTimer { get; private set; }
+
+		public override void Initialize()
+		{
+			if (Settings.BotBase.Instance.UseStatusOverlay)
+			{
+				OverlayManager.StartStatusOverlay();
+			}
+
+			var patternFinder = new PatternFinder(Core.Memory);
+			try
+			{
+				var agentNotificationVTable = patternFinder.Find(
+					"48 8D 05 ? ? ? ? 48 89 03 33 C0 48 89 43 20 48 89 43 28 48 89 43 30 48 89 43 38 48 89 43 40 48 89 43 48 48 8B C3 Add 3 TraceRelative");
+				AgentNotificationId = AgentModule.FindAgentIdByVtable(agentNotificationVTable);
+				LogHelper.Instance.Log($"Found AgentNotification {AgentNotificationId} at {agentNotificationVTable.ToInt64():X16}");
+			}
+			catch (Exception e)
+			{
+				LogHelper.Instance.Log("AgentNotification not found. " + e.Message);
+			}
+
+			try
+			{
+				var agentMvpVTable = patternFinder.Find(
+					"48 8D 05 ? ? ? ? 48 89 03 33 C0 48 89 43 20 89 43 28 48 8B C3 48 83 C4 ? 5B C3 CC CC CC CC CC CC 40 53 Add 3 TraceRelative");
+				AgentMvpId = AgentModule.FindAgentIdByVtable(agentMvpVTable);
+				LogHelper.Instance.Log($"Found AgentVoteMvp {AgentMvpId} at {agentMvpVTable.ToInt64():X16}");
+			}
+			catch (Exception e)
+			{
+				LogHelper.Instance.Log("AgentMvp not found. " + e.Message);
+			}
+
+			try
+			{
+				AnimationLockTimer = patternFinder.Find("48 8D 0D ? ? ? ? E8 ? ? ? ? 8B F8 8B CF Add 3 TraceRelative") + 8;
+				LogHelper.Instance.Log($"Found AnimationLockTimer at {AnimationLockTimer.ToInt64():X16}.");
+			}
+			catch (Exception e)
+			{
+				LogHelper.Instance.Log("AnimationLockTimer not found. " + e.Message);
+			}
+
+			//Settings.BotBase.Instance.AutoRegisterDuties = false;
+		}
+
 		/// <summary>
 		/// Called when the botbase gets started.
 		/// </summary>
 		public override void Start()
 		{
+			running = true;
+
 			try { sidestepStatus = PluginManager.Plugins.First(i => i.Plugin.Name == "SideStep").Enabled; }
 			catch { }
+
+			TreeRoot.TicksPerSecond = 60;
+			LogHelper.Instance.Log($"Set TPS to {TreeRoot.TicksPerSecond}.");
 
 			// Always start paused
 			Settings.BotBase.Instance.IsPaused = false;
@@ -182,12 +268,12 @@ namespace Kombatant
 			// Register the hotkeys
 			HotkeyHelper.Instance.ReloadHotkeys();
 
-			// Less than 30 TPS are a no-no due to the design of this botbase. At least warn the user of this!
-			if (TreeRoot.TicksPerSecond < 30)
-			{
-				LogHelper.Instance.Log(Resources.Localization.Msg_Not30Tps_Log);
-				OverlayHelper.Instance.AddToast(Resources.Localization.Msg_Not30Tps, Colors.Red, Colors.DarkRed, TimeSpan.FromSeconds(10));
-			}
+			//// Less than 30 TPS are a no-no due to the design of this botbase. At least warn the user of this!
+			//if (TreeRoot.TicksPerSecond < 30)
+			//{
+			//	LogHelper.Instance.Log(Resources.Localization.Msg_Not30Tps_Log);
+			//	OverlayHelper.Instance.AddToast(Resources.Localization.Msg_Not30Tps, Colors.Red, Colors.DarkRed, TimeSpan.FromSeconds(10));
+			//}
 
 			if (Settings.BotBase.Instance.UseFocusOverlay)
 			{
@@ -195,39 +281,14 @@ namespace Kombatant
 			}
 		}
 
-		public static int AgentNotificationId { get; private set; }
-		public static int AgentMvpId { get; private set; }
-
-		public override void Initialize()
-		{
-			if (Settings.BotBase.Instance.UseStatusOverlay)
-			{
-				OverlayManager.StartStatusOverlay();
-			}
-
-			try
-			{
-				var patternFinder = new PatternFinder(Core.Memory);
-				var agentNotificationVTable = patternFinder.Find(
-					"48 8D 05 ? ? ? ? 48 89 03 33 C0 48 89 43 20 48 89 43 28 48 89 43 30 48 89 43 38 48 89 43 40 48 89 43 48 48 8B C3 Add 3 TraceRelative");
-				var agentMvpVTable = patternFinder.Find(
-					"48 8D 05 ? ? ? ? 48 89 03 33 C0 48 89 43 20 89 43 28 48 8B C3 48 83 C4 ? 5B C3 CC CC CC CC CC CC 40 53 Add 3 TraceRelative");
-				AgentNotificationId = AgentModule.FindAgentIdByVtable(agentNotificationVTable);
-				LogHelper.Instance.Log($"Found AgentNotification {AgentNotificationId}");
-				AgentMvpId = AgentModule.FindAgentIdByVtable(agentMvpVTable);
-				LogHelper.Instance.Log($"Found AgentVoteMvp {AgentMvpId}");
-			}
-			catch (Exception e)
-			{
-				LogHelper.Instance.Log("No Mvp RemoteAgent Found..." + e);
-			}
-		}
 
 		/// <summary>
 		/// Called when the botbase gets stopped.
 		/// </summary>
 		public override void Stop()
 		{
+			running = false;
+
 			// Destroy the navigator
 			Navigator.PlayerMover = new NullMover();
 			Navigator.NavigationProvider = new NullProvider();
@@ -237,7 +298,8 @@ namespace Kombatant
 
 			// Stop Overlays
 			OverlayManager.StopFocusOverlay();
-			OverlayManager.StatusOverlay.Update(StatusOverlayUiComponent.RunningStatus.Stopped);
+			OverlayManager.StopStatusOverlay();
+			//OverlayManager.StatusOverlay.Update(StatusOverlayUiComponent.RunningStatus.Stopped);
 
 			try { PluginManager.Plugins.First(i => i.Plugin.Name == "SideStep").Enabled = sidestepStatus; }
 			catch { }
@@ -258,9 +320,6 @@ namespace Kombatant
 		/// <returns></returns>
 		private async Task<bool> KombatantLogic()
 		{
-			if (!Core.IsInGame) return await Task.FromResult(false);
-			if (CommonBehaviors.IsLoading) return await Task.FromResult(false);
-
 			// Execute duty commence logic
 			if (await CommenceDuty.Instance.ExecuteLogic())
 				return await Task.FromResult(true);

@@ -59,11 +59,11 @@ namespace Kombatant.Forms
     {
         public FocusOverlayUiComponent() : base(true) { }
 
-        private OverlayControl FocusOverlay;
+        private OverlayControl TargetCountOverlay;
 
         public new void Update()
         {
-            FocusOverlay?.Dispatcher.BeginInvoke((Action<OverlayControl, int, bool>)((overlayControl, i, loc) =>
+            TargetCountOverlay?.Dispatcher.BeginInvoke((Action<OverlayControl, int, bool>)((overlayControl, i, loc) =>
             {
                 if (overlayControl.Content.ToString() != i.ToString())
                 {
@@ -81,19 +81,19 @@ namespace Kombatant.Forms
                 {
                     overlayControl.AllowMoving = !loc;
                 }
-            }), FocusOverlay, Core.Me.BeingTargetedCount(), BotBase.Instance.FocusOverlayEnableClickThrough);
+            }), TargetCountOverlay, Core.Me.BeingTargetedCount(), BotBase.Instance.FocusOverlayEnableClickThrough);
         }
 
         public override OverlayControl Control
         {
             get
             {
-                if (FocusOverlay != null)
-                    return FocusOverlay;
+                if (TargetCountOverlay != null)
+                    return TargetCountOverlay;
                 var sizeX = 64;
                 var sizeY = 100;
                 var round = 20;
-                FocusOverlay = new OverlayControl
+                TargetCountOverlay = new OverlayControl
                 {
                     Name = "TargetCountOverlay",
                     FontSize = 75,
@@ -113,18 +113,18 @@ namespace Kombatant.Forms
                     AllowMoving = true
                 };
 
-                FocusOverlay.MouseLeave += (sender, args) =>
+                TargetCountOverlay.MouseLeave += (sender, args) =>
                 {
-                    BotBase.Instance.FocusOverlayX = FocusOverlay.X;
-                    BotBase.Instance.FocusOverlayY = FocusOverlay.Y;
+                    BotBase.Instance.FocusOverlayX = TargetCountOverlay.X;
+                    BotBase.Instance.FocusOverlayY = TargetCountOverlay.Y;
                 };
 
-                FocusOverlay.MouseLeftButtonDown += (sender, args) =>
+                TargetCountOverlay.MouseLeftButtonDown += (sender, args) =>
                 {
-                    FocusOverlay.DragMove();
+                    TargetCountOverlay.DragMove();
                 };
 
-                return FocusOverlay;
+                return TargetCountOverlay;
             }
         }
     }

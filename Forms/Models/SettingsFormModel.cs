@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using Buddy.Overlay.Commands;
 using ff14bot;
@@ -18,7 +21,7 @@ namespace Kombatant.Forms.Models
 	/// <summary>
 	/// ViewModel for the settings window.
 	/// </summary>
-	public class SettingsFormModel : INotifyPropertyChanged
+	public partial class SettingsFormModel : INotifyPropertyChanged
 	{
 		private static SettingsFormModel _settingsFormModel;
 		internal static SettingsFormModel Instance => _settingsFormModel ?? (_settingsFormModel = new SettingsFormModel());
@@ -26,20 +29,96 @@ namespace Kombatant.Forms.Models
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		private SettingsFormModel()
 		{
-		}
 
-		public List<InstanceModel> InstanceContentResults => DataManager.InstanceContentResults.Values
-			.Where(i => (i.IsInDutyFinder && !string.IsNullOrWhiteSpace(i.CurrentLocaleName) ||
-						 i.ChnName.StartsWith("随机任务")) && !(i.ChnName.StartsWith("陆行鸟竞赛") && i.ContentUICategory == 0)).Select(i => new InstanceModel()
-						 { Name = i.CurrentLocaleName, Id = i.Id })
-			.OrderBy(i => i.Id).ToList();
+		}
+		public string MyName => ff14bot.Core.Me.Name;
+
+		public List<InstanceModel> InstanceContentResults
+		{
+			get
+			{
+				IOrderedEnumerable<InstanceContentResult> current = null;
+				var guildhests = DataManager.InstanceContentResults.Values
+					.Where(i => !string.IsNullOrWhiteSpace(i.CurrentLocaleName))
+					.Where(i => new[] { 0 }.Contains(i.ContentUICategory))
+					.Where(i=>i.IsInDutyFinder && !i.ChnName.Contains("活动挑战") && !i.ChnName.Contains("陆行鸟竞赛"))
+					.OrderBy(res => res.Id);
+				var dungeon = DataManager.InstanceContentResults.Values
+					.Where(i => !string.IsNullOrWhiteSpace(i.CurrentLocaleName))
+					.Where(i => new[] { 6, 7, 30, 31 }.Contains(i.ContentUICategory))
+					.OrderBy(res => res.ContentUICategory);
+				var pvp = DataManager.InstanceContentResults.Values
+					.Where(i => !string.IsNullOrWhiteSpace(i.CurrentLocaleName))
+					.Where(i => new[] { 1, 2, 3, 23, 24, 25, 28}.Contains(i.ContentUICategory))
+					.Where(i => i.ContentUICategory != 1 || i.Id > 1000000)
+					.Where(i => i.ContentUICategory != 2)
+					.OrderBy(res => res.ContentUICategory);
+				var goldSaucer = DataManager.InstanceContentResults.Values
+					.Where(i => !string.IsNullOrWhiteSpace(i.CurrentLocaleName))
+					.Where(i => new[] { 4, 5, 26, 27, 29 }.Contains(i.ContentUICategory))
+					.Where(i => i.ContentUICategory != 5 || !i.ChnName.StartsWith("第"))
+					.OrderBy(res => res.ContentUICategory);
+				var roulette = DataManager.InstanceContentResults.Values
+					.Where(i => !string.IsNullOrWhiteSpace(i.ChnName))
+					.Where(i => new[] { 0, 28 }.Contains(i.ContentUICategory))
+					.Where(i => i.ChnName.StartsWith("随机任务"))
+					.OrderBy(res => res.ContentUICategory);
+				var trial = DataManager.InstanceContentResults.Values
+					.Where(i => !string.IsNullOrWhiteSpace(i.ChnName))
+					.Where(i => new[] { 8, 9, 19, 20, 21, 22, 32, 33 }.Contains(i.ContentUICategory))
+					.OrderBy(res => res.Id);
+				var raid = DataManager.InstanceContentResults.Values
+					.Where(i => !string.IsNullOrWhiteSpace(i.CurrentLocaleName))
+					.Where(i => new[] { 10, 11, 12, 13, 16, 17, 34, 35 }.Contains(i.ContentUICategory))
+					.OrderBy(res => res.RequiredClassJobLevel)
+					.ThenBy(res => res.ChnName.Length);
+				var allianceRaid = DataManager.InstanceContentResults.Values
+					.Where(i => !string.IsNullOrWhiteSpace(i.CurrentLocaleName))
+					.Where(i => new[] { 14, 15, 18, 36 }.Contains(i.ContentUICategory))
+					.OrderBy(res => res.RequiredClassJobLevel);
+
+				switch (BotBase.SelectedInstanceContentType)
+				{
+					case InstanceContentType.Dungeon:
+						current = dungeon;
+						break;
+					case InstanceContentType.GoldSaucer:
+						current = goldSaucer;
+						break;
+					case InstanceContentType.Roulette:
+						current = roulette;
+						break;
+					case InstanceContentType.Trial:
+						current = trial;
+						break;
+					case InstanceContentType.Raid:
+						current = raid;
+						break;
+					case InstanceContentType.AllianceRaid:
+						current = allianceRaid;
+						break;
+					case InstanceContentType.PVP:
+						current = pvp;
+						break;
+					case InstanceContentType.GuildHests:
+						current = guildhests;
+						break;
+					default:
+						throw new ArgumentException();
+				}
+
+				var ret = current.Select(i => new InstanceModel {Id = i.Id, Name = i.CurrentLocaleName}).ToList();
+				//BotBase.DutyToRegister = ret[0];
+				return ret;
+			}
+		}
 
 		public class InstanceModel
 		{
@@ -118,7 +197,7 @@ namespace Kombatant.Forms.Models
 			{
 				return new RelayCommand(s =>
 				{
-					BotBase.Instance.AnimationSpeed = float.MaxValue;
+					BotBase.Instance.AnimationSpeed = 10000;
 				});
 			}
 		}
@@ -318,7 +397,7 @@ namespace Kombatant.Forms.Models
 					if (Core.Me.HasTarget)
 					{
 						BotBase.Instance.FixedCharacterName = Core.Target.Name;
-						BotBase.Instance.FixedCharacterString = Core.Target.ToString();
+						BotBase.Instance.FixedCharacterId = Core.Target.ObjectId;
 						BotBase.Instance.FixedCharacterType = Core.Target.Type;
 						//BotBase.FollowMode = FollowMode.FixedCharacter;
 					}
@@ -333,7 +412,7 @@ namespace Kombatant.Forms.Models
 				return new RelayCommand(s =>
 				{
 					BotBase.Instance.FixedCharacterName = string.Empty;
-					BotBase.Instance.FixedCharacterString = string.Empty;
+					BotBase.Instance.FixedCharacterId = 0;
 					BotBase.Instance.FixedCharacterType = 0;
 				});
 			}
