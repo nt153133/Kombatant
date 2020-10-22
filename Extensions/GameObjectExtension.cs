@@ -102,14 +102,6 @@ namespace Kombatant.Extensions
 			if (!obj.IsCharacter())
 				return false;
 
-			if (Core.Me.ClassLevel < 70 && DataManager.InstanceContentResults.Values
-				.Where(i => i.RequiredClassJobLevel < 70 && i.IsInDutyFinder)
-				.Select(i => i.Id).Contains(WorldManager.ZoneId))
-			{
-				InventoryManager.FilledArmorySlots.FirstOrDefault(i => i.Name == "以太之光耳坠")
-					?.Move(InventoryManager.EquippedItems.ToArray()[(int)EquipmentSlot.Earring]);
-			}
-
 			var character = obj.GetCharacter();
 
 			return character.IsValid && !character.IsMe && character.IsVisible &&
