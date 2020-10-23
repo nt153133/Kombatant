@@ -99,12 +99,7 @@ namespace Kombatant.Extensions
 		/// <returns></returns>
 		internal static bool CheckAliveAndValid(this GameObject obj)
 		{
-			if (!obj.IsCharacter())
-				return false;
-
-			var character = obj.GetCharacter();
-
-			return character.IsValid && !character.IsMe && character.IsVisible &&
+			return obj is Character character && character.IsValid && !character.IsMe && character.IsVisible &&
 				   character.IsAlive && character.IsTargetable;
 		}
 

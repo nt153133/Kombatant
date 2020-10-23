@@ -172,7 +172,7 @@ namespace Kombatant.Logic
 		private static bool IsValidTarget(GameObject o)
 		{
 			if (!(o is BattleCharacter t)) return false;
-
+			if (!t.CheckAliveAndValid() || t.CanAttack || t.IsStrikingDummy()) return false;
 			if (t.CombatDistance() > (BotBase.Instance.TargetScanMaxDistance == 0
 				? RoutineManager.Current.PullRange
 				: BotBase.Instance.TargetScanMaxDistance)) return false;
@@ -274,7 +274,6 @@ namespace Kombatant.Logic
 			var result = group;
 
 			//result = PostFilterDistance(result);
-			result = result.Where(IsValidTarget);
 			result = PostFilterThreatList(result);
 			result = PostFilterFate(result);
 
@@ -467,8 +466,9 @@ namespace Kombatant.Logic
 		/// <returns>Potential BattleCharacter object as the new target or null when no suitable target was found.</returns>
 		private BattleCharacter TargetBestAoeEnemy()
 		{
+
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-				.Where(o => !o.IsStrikingDummy() && o.IsEnemy())
+				.Where(IsValidTarget)
 				.OrderByDescending(o => o.NearbyEnemyCount())
 				.ThenBy(o => o.Distance2D());
 
@@ -484,7 +484,7 @@ namespace Kombatant.Logic
 		private BattleCharacter TargetNearestEnemy()
 		{
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-				.Where(o => !o.IsStrikingDummy() && o.IsEnemy())
+				.Where(IsValidTarget)
 				.OrderBy(o => o.Distance2D());
 
 			var nearestEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
@@ -499,7 +499,8 @@ namespace Kombatant.Logic
 		private BattleCharacter TargetOnlyWhitelistedEnemy()
 		{
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-				.Where(o => !o.IsStrikingDummy() && o.IsEnemy() && IsValidWhitelistTarget(o))
+				.Where(IsValidTarget)
+				.Where(IsValidWhitelistTarget)
 				.OrderBy(o => o.Distance2D());
 
 			var validEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
@@ -514,7 +515,7 @@ namespace Kombatant.Logic
 		private BattleCharacter TargetHighestHpEnemy()
 		{
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-				.Where(o => !o.IsStrikingDummy() && o.IsEnemy())
+				.Where(IsValidTarget)
 				.OrderByDescending(o => o.CurrentHealth)
 				.ThenBy(o => o.Distance2D());
 
@@ -530,7 +531,7 @@ namespace Kombatant.Logic
 		private BattleCharacter TargetHighestHpPercentEnemy()
 		{
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-				.Where(o => !o.IsStrikingDummy() && o.IsEnemy())
+				.Where(IsValidTarget)
 				.OrderByDescending(o => o.CurrentHealthPercent)
 				.ThenBy(o => o.Distance2D());
 
@@ -546,7 +547,7 @@ namespace Kombatant.Logic
 		private BattleCharacter TargetLowestHpEnemy()
 		{
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-				.Where(o => !o.IsStrikingDummy() && o.IsEnemy())
+				.Where(IsValidTarget)
 				.OrderBy(o => o.CurrentHealth)
 				.ThenBy(o => o.Distance2D());
 
@@ -562,7 +563,7 @@ namespace Kombatant.Logic
 		private BattleCharacter TargetLowestHpPercentEnemy()
 		{
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-				.Where(o => !o.IsStrikingDummy() && o.IsEnemy())
+				.Where(IsValidTarget)
 				.OrderBy(o => o.CurrentHealthPercent)
 				.ThenBy(o => o.Distance2D());
 
@@ -574,7 +575,7 @@ namespace Kombatant.Logic
 		private BattleCharacter TargetMostTargetedEnemy()
 		{
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-				.Where(o => !o.IsStrikingDummy() && o.IsEnemy())
+				.Where(IsValidTarget)
 				.OrderByDescending(o => o.BeingTargetedCount())
 				.ThenBy(o => o.Distance2D());
 

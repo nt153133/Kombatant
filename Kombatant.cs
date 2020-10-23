@@ -255,8 +255,6 @@ namespace Kombatant
 			try { sidestepStatus = PluginManager.Plugins.First(i => i.Plugin.Name == "SideStep").Enabled; }
 			catch { }
 
-			TreeRoot.TicksPerSecond = 60;
-			LogHelper.Instance.Log($"Set TPS to {TreeRoot.TicksPerSecond}.");
 
 			// Always start paused
 			Settings.BotBase.Instance.IsPaused = false;
@@ -320,6 +318,22 @@ namespace Kombatant
 		/// <returns></returns>
 		private async Task<bool> KombatantLogic()
 		{
+			if (Core.Me.InCombat || DutyManager.InInstance)
+			{
+				if (TreeRoot.TicksPerSecond!= 60)
+				{
+					TreeRoot.TicksPerSecond = 60;
+					//LogHelper.Instance.Log($"Preparing for combat! Set TPS to {TreeRoot.TicksPerSecond}.");
+				}
+			}
+			else
+			{
+				if (TreeRoot.TicksPerSecond != 30)
+				{
+					TreeRoot.TicksPerSecond = 30;
+					//LogHelper.Instance.Log($"Set TPS back to {TreeRoot.TicksPerSecond}.");
+				}
+			}
 			// Execute duty commence logic
 			if (await CommenceDuty.Instance.ExecuteLogic())
 				return await Task.FromResult(true);

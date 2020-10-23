@@ -68,7 +68,8 @@
                                               Command="{Binding StatusOverlaySwitch}"  />
                                 <StackPanel Orientation="Horizontal" >
                                     <CheckBox Margin="0,1"
-                                                  Content="{x:Static resources:Localization.UI_FocusOverlay}" Width="120"
+                                                  Content="{x:Static resources:Localization.UI_FocusOverlay}" 
+                                                  Width="115"
                                                   IsChecked="{Binding BotBase.UseFocusOverlay}"
                                                   Command="{Binding FocusOverlaySwitch}" />
                                     <CheckBox Margin="0,1"
@@ -119,10 +120,16 @@
                                 <CheckBox Margin="0,1"
                                           Content="{x:Static resources:Localization.UI_AutoAcceptRevive}"
                                           IsChecked="{Binding BotBase.AutoAcceptRevive}" />
-                                <CheckBox Margin="0,1"
-                                          Content="{x:Static resources:Localization.UI_AutoSprint}"
-                                          ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoSprint}"
-                                          IsChecked="{Binding BotBase.AutoSprint}" />
+                                <StackPanel Orientation="Horizontal" >
+                                    <CheckBox Margin="0,1"
+                                              Content="{x:Static resources:Localization.UI_AutoSprint}"
+                                              Width="115"
+                                              ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoSprint}"
+                                              IsChecked="{Binding BotBase.AutoSprint}" />
+                                    <CheckBox Margin="0,1"
+                                              Content="Dungeon Only"
+                                              IsChecked="{Binding BotBase.AutoSprintInDutyOnly}" />
+                                </StackPanel>
                                 <CheckBox Margin="0,1"
                                           Content="{x:Static resources:Localization.UI_AutoEndActEncounters}"
                                           ToolTip="{x:Static resources:Localization.UI_Tooltip_AutoEndActEncounters}"
@@ -134,7 +141,8 @@
                                 <StackPanel Orientation="Horizontal">
                                     <CheckBox Margin="0,1"
                                               Content="{x:Static resources:Localization.UI_AutoHandover}"
-                                              HorizontalAlignment="Left" Width="120"
+                                              HorizontalAlignment="Left" 
+                                              Width="115"
                                               IsChecked="{Binding BotBase.AutoHandoverRequestItems}" />
                                     <CheckBox Margin="0,1"
                                               Content="{x:Static resources:Localization.UI_HandoverHQ}"
@@ -154,7 +162,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <CheckBox Margin="0,1"
                                               Content="{x:Static resources:Localization.UI_AutoTrade}"
-                                              IsChecked="{Binding BotBase.AutoTrade}" HorizontalAlignment="Left" Width="120" />
+                                              IsChecked="{Binding BotBase.AutoTrade}" HorizontalAlignment="Left" Width="115" />
                                     <CheckBox Margin="0,1"
                                               Content="{x:Static resources:Localization.UI_FriendsOnly}"
                                               IsChecked="{Binding BotBase.AutoTradeFriendOnly}"

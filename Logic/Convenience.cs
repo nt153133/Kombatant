@@ -9,6 +9,7 @@ using Clio.Utilities;
 //using DungeonMaster.Managers;
 using ff14bot;
 using ff14bot.Behavior;
+using ff14bot.Directors;
 using ff14bot.Enums;
 using ff14bot.Helpers;
 using ff14bot.Managers;
@@ -88,7 +89,7 @@ namespace Kombatant.Logic
 
 			// Auto skip cutscenes
 			if (BotBase.Instance.AutoSkipCutscenes && QuestLogManager.InCutscene)
-				if (ExecuteSkipCutscene())
+				if (await ExecuteSkipCutscene())
 					return await Task.FromResult(true);
 
 			// Auto advance dialogue
@@ -240,11 +241,9 @@ namespace Kombatant.Logic
 		/// <returns></returns>
 		private bool ExecuteAutoSprint()
 		{
-			if (WorldManager.InPvP/* && DutyManager.InInstance*/)
-			{
-				return false;
-			}
-
+			if (WorldManager.InPvP) return false;
+			if (!DutyManager.InInstance && BotBase.Instance.AutoSprintInDutyOnly) return false;
+			if (DirectorManager.ActiveDirector is InstanceContentDirector icd && (icd.InstanceFlags & 0b00001000) == 0) return false;
 			if (!Core.Me.InCombat && !GameObjectManager.Attackers.Any() && MovementManager.IsMoving)
 			{
 				//if (ActionManager.CanCast(18942, null) && !Core.Me.HasAura("Sprint"))
@@ -252,6 +251,7 @@ namespace Kombatant.Logic
 				//    ActionManager.DoAction(18942, null);
 				//    return true;
 				//}
+
 				if (ActionManager.IsSprintReady/* && !Core.Me.HasAura("Bolt")*/)
 				{
 					ActionManager.Sprint();
@@ -293,7 +293,7 @@ namespace Kombatant.Logic
 		/// Will skip cutscenes by trying to exit out of them or advance the dialogue.
 		/// </summary>
 		/// <returns></returns>
-		private bool ExecuteSkipCutscene()
+		private async Task<bool> ExecuteSkipCutscene()
 		{
 			// Try to skip the cutscene
 			AgentCutScene.Instance.PromptSkip();
@@ -302,12 +302,12 @@ namespace Kombatant.Logic
 			{
 				SelectString.ClickSlot(0);
 				LogHelper.Instance.Log("Skipping Cutscene...");
+				await Coroutine.Wait(3000, () => !QuestLogManager.InCutscene);
 				return true;
-
 			}
 
 			// If that is not an option, at least try to forward it as fast as possible...
-			if (Talk.DialogOpen)
+				if (Talk.DialogOpen)
 			{
 				Talk.Next();
 				return true;

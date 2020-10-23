@@ -458,6 +458,19 @@ namespace Kombatant.Settings
 			}
 		}
 
+		private bool _autoSprintInDutyOnly;
+
+		[DefaultValue(false)]
+		public bool AutoSprintInDutyOnly
+		{
+			get => _autoSprintInDutyOnly;
+			set
+			{
+				_autoSprintInDutyOnly = value;
+				OnPropertyChanged();
+			}
+		}
+
 		#endregion
 
 		#region Auto Sync Fate
