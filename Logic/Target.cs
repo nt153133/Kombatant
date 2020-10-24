@@ -172,7 +172,7 @@ namespace Kombatant.Logic
 		private static bool IsValidTarget(GameObject o)
 		{
 			if (!(o is BattleCharacter t)) return false;
-			if (!t.CheckAliveAndValid() || t.CanAttack || t.IsStrikingDummy()) return false;
+			if (!t.IsValid || !t.IsVisible || !t.IsAlive || !t.IsTargetable || !t.CanAttack || t.IsStrikingDummy() || t.IsMe) return false;
 			if (t.CombatDistance() > (BotBase.Instance.TargetScanMaxDistance == 0
 				? RoutineManager.Current.PullRange
 				: BotBase.Instance.TargetScanMaxDistance)) return false;
@@ -281,27 +281,27 @@ namespace Kombatant.Logic
 			{
 				if (BotBase.Instance.TargetPcFirst) result = result.OrderByDescending(i => i.Type == GameObjectType.Pc);
 				if (BotBase.Instance.TargetWarMachinaFirst) result = result.OrderByDescending(i => i.HasAura(1420)); //Mounted on WarMachina
-				if (BotBase.Instance.TargetMountedEnemyFirst) result = result.OrderByDescending(i => i.IsMounted && !i.HasAura(1394)); //移动速度降低
+				if (BotBase.Instance.TargetMountedEnemyFirst) result = result.OrderByDescending(i => i.IsMounted && !i.HasAura(1394)); //优先选中在坐骑上且没有移动速度降低debuff的敌人
 				result = result.OrderByDescending(i => i.IsCasting && i.HasTarget && i.TargetGameObject.Type == GameObjectType.EventObject); //优先选中正在摸点/捡水的敌人
 			}
 
 
 			if (BotBase.Instance.TargetTankedOnly)
 			{
-				if (!PartyManager.IsInParty)
+				if (!PartyManager.IsInParty || Core.Me.IsTank() || !PartyManager.VisibleMembers.Any(i => i.IsTank() && !i.IsMe))
 				{
 					return result;
 				}
 
-				if (Core.Me.IsTank()/* && !Core.Me.Auras.Select(i=>i.Id).Intersect(new uint[]{79,91,743,1833}).Any()*/)
-				{
-					return result;
-				}
+				//if (Core.Me.IsTank()/* && !Core.Me.Auras.Select(i=>i.Id).Intersect(new uint[]{79,91,743,1833}).Any()*/)
+				//{
+				//	return result;
+				//}
 
-				if (!PartyManager.VisibleMembers.Any(i=>i.IsTank() && !i.IsMe))
-				{
-					return result;
-				}
+				//if (!PartyManager.VisibleMembers.Any(i=>i.IsTank() && !i.IsMe))
+				//{
+				//	return result;
+				//}
 
 				switch (BotBase.Instance.AutoTargetingMode)
 				{
