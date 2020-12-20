@@ -17,7 +17,8 @@ namespace Kombatant.Helpers
 
         internal void Log(object entry, params object[] args)
         {
-            Logging.Write(Colors.Crimson, $@"[{Resources.Localization.Name_Kombatant}] {entry}", args);
+
+            Logging.Write(Colors.Crimson, $@"[{Localization.Localization.Name_Kombatant}] {entry}", args);
         }
     }
 }

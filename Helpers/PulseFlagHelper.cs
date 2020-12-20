@@ -25,7 +25,7 @@ namespace Kombatant.Helpers
             if ((Settings.Fleeting.Instance.BotBasePulseFlags & pulseFlag) == pulseFlag)
                 return false;
 
-            LogHelper.Instance.Log(Resources.Localization.Msg_PulseFlagEnabled, pulseFlag);
+            LogHelper.Instance.Log(Localization.Localization.Msg_PulseFlagEnabled, pulseFlag);
             Settings.Fleeting.Instance.BotBasePulseFlags |= pulseFlag;
             return true;
         }
@@ -40,7 +40,7 @@ namespace Kombatant.Helpers
             if ((Settings.Fleeting.Instance.BotBasePulseFlags & pulseFlag) != pulseFlag)
                 return false;
 
-            LogHelper.Instance.Log(Resources.Localization.Msg_PulseFlagDisabled, pulseFlag);
+            LogHelper.Instance.Log(Localization.Localization.Msg_PulseFlagDisabled, pulseFlag);
             Settings.Fleeting.Instance.BotBasePulseFlags &= ~pulseFlag;
             return true;
         }

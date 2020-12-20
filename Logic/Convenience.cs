@@ -42,7 +42,6 @@ namespace Kombatant.Logic
 
 		#endregion
 
-		internal static RunningStatus CurrentStatus => BotManager.Current.Name == "Kombatant" && TreeRoot.IsRunning ? BotBase.Instance.IsPaused ? RunningStatus.Paused : RunningStatus.Running : RunningStatus.Stopped;
 		private const string AutoEndActWaitName = @"Convenience.AutoEndActEncounters";
 		private const string AutoEmoteWaitName = @"Convenience.AutoEmote";
 
@@ -57,8 +56,6 @@ namespace Kombatant.Logic
 		/// <returns>Returns <c>true</c> if any action was executed, otherwise <c>false</c>.</returns>
 		internal new async Task<bool> ExecuteLogic()
 		{
-			if (BotBase.Instance.UseStatusOverlay) OverlayManager.StatusOverlay.Update(CurrentStatus);
-
 			// Do not execute this logic if the botbase is paused
 			if (BotBase.Instance.IsPaused)
 				return await Task.FromResult(false);
@@ -87,11 +84,6 @@ namespace Kombatant.Logic
 			if (ShouldExecuteAutoEmote())
 				ExecuteAutoEmote();
 
-			// Auto skip cutscenes
-			if (BotBase.Instance.AutoSkipCutscenes && QuestLogManager.InCutscene)
-				if (await ExecuteSkipCutscene())
-					return await Task.FromResult(true);
-
 			// Auto advance dialogue
 			if (BotBase.Instance.AutoAdvanceDialogue)
 				if (ExecuteAutoAdvanceDialogue())
@@ -100,6 +92,11 @@ namespace Kombatant.Logic
 			// Auto accept/complete quests
 			if (BotBase.Instance.AutoAcceptQuests)
 				if (ExecuteAutoAcceptQuests())
+					return await Task.FromResult(true);
+
+			// Auto skip cutscenes
+			if (BotBase.Instance.AutoSkipCutscenes && QuestLogManager.InCutscene)
+				if (await ExecuteSkipCutscene())
 					return await Task.FromResult(true);
 
 			// Auto sprint
@@ -243,7 +240,7 @@ namespace Kombatant.Logic
 		{
 			if (WorldManager.InPvP) return false;
 			if (!DutyManager.InInstance && BotBase.Instance.AutoSprintInDutyOnly) return false;
-			if (DirectorManager.ActiveDirector is InstanceContentDirector icd && (icd.InstanceFlags & 0b00001000) == 0) return false;
+			if (DirectorManager.ActiveDirector is InstanceContentDirector icd && !icd.BarrierDown()) return false;
 			if (!Core.Me.InCombat && !GameObjectManager.Attackers.Any() && MovementManager.IsMoving)
 			{
 				//if (ActionManager.CanCast(18942, null) && !Core.Me.HasAura("Sprint"))
@@ -280,7 +277,7 @@ namespace Kombatant.Logic
 				// Sync us down, Scotty!
 				if (fate != null && fate.Within2D(Core.Me.Location) && Core.Me.ClassLevel > fate.MaxLevel)
 				{
-					LogHelper.Instance.Log(Localization.Msg_AutoSyncFate, fate.Name);
+					LogHelper.Instance.Log(Localization.Localization.Msg_AutoSyncFate, fate.Name);
 					Core.Me.SyncToFate();
 					return true;
 				}
@@ -307,7 +304,7 @@ namespace Kombatant.Logic
 			}
 
 			// If that is not an option, at least try to forward it as fast as possible...
-				if (Talk.DialogOpen)
+			if (Talk.DialogOpen)
 			{
 				Talk.Next();
 				return true;

@@ -72,7 +72,7 @@ namespace Kombatant.Logic
                 // here to prevent unwanted chicken runs.
                 if (!_wasAvoiding) return await Task.FromResult(false);
                 _wasAvoiding = false;
-                LogHelper.Instance.Log(Resources.Localization.Msg_AvoidanceFinished);
+                LogHelper.Instance.Log(Localization.Localization.Msg_AvoidanceFinished);
                 MovementManager.MoveStop();
                 return await Task.FromResult(true);
             }
@@ -118,8 +118,8 @@ namespace Kombatant.Logic
                 if (!_isFighting)
                 {
                     var bossMonster = GameObjectManager.Attackers.FirstOrDefault(attacker => attacker.IsBoss());
-                    var toastMsg = string.Format(Resources.Localization.Msg_AvoidanceDisabledOnBossStart, bossMonster?.Name);
-                    LogHelper.Instance.Log(Resources.Localization.Msg_Log_AvoidanceDisabledOnBossStart);
+                    var toastMsg = string.Format(Localization.Localization.Msg_AvoidanceDisabledOnBossStart, bossMonster?.Name);
+                    LogHelper.Instance.Log(Localization.Localization.Msg_Log_AvoidanceDisabledOnBossStart);
                     OverlayHelper.Instance.AddToast(toastMsg, Colors.Coral, Colors.Chocolate, new TimeSpan(0, 0, 0, 5));
                 }
 
@@ -130,8 +130,8 @@ namespace Kombatant.Logic
             // Fight ended
             if (_isFighting)
             {
-                LogHelper.Instance.Log(Resources.Localization.Msg_Log_AvoidanceDisabledOnBossEnd);
-                OverlayHelper.Instance.AddToast(Resources.Localization.Msg_AvoidanceDisabledOnBossEnd, Colors.LimeGreen, Colors.DarkGreen, new TimeSpan(0, 0, 0, 5));
+                LogHelper.Instance.Log(Localization.Localization.Msg_Log_AvoidanceDisabledOnBossEnd);
+                OverlayHelper.Instance.AddToast(Localization.Localization.Msg_AvoidanceDisabledOnBossEnd, Colors.LimeGreen, Colors.DarkGreen, new TimeSpan(0, 0, 0, 5));
                 _isFighting = false;
             }
 

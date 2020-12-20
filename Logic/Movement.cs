@@ -5,6 +5,7 @@ using System.Windows.Media;
 using ff14bot;
 using ff14bot.Behavior;
 using ff14bot.Directors;
+using ff14bot.Enums;
 using ff14bot.Helpers;
 using ff14bot.Managers;
 using ff14bot.Navigation;
@@ -131,17 +132,17 @@ namespace Kombatant.Logic
         /// <returns></returns>
         private async Task<bool> FollowFixedCharacter()
         {
-            if (string.IsNullOrEmpty(BotBase.Instance.FixedCharacterName))
-                return await Task.FromResult(false);
+            if (string.IsNullOrWhiteSpace(BotBase.Instance.FixedCharacterName)) return await Task.FromResult(false);
 
-            var fixedCharacter = GameObjectManager.GetObjectByObjectId(BotBase.Instance.FixedCharacterId) ??
-                                 GameObjectManager.GameObjects.FirstOrDefault(obj => obj.Name == BotBase.Instance.FixedCharacterName && obj.Type == BotBase.Instance.FixedCharacterType);
-            var target = fixedCharacter.GetBattleCharacter();
+            var following = GameObjectManager.GetObjectByObjectId(BotBase.Instance.FixedCharacterId) 
+                            ?? GameObjectManager.GameObjects.FirstOrDefault(obj => obj.Name == BotBase.Instance.FixedCharacterName && obj.Type == BotBase.Instance.FixedCharacterType) 
+                            ?? GameObjectManager.GameObjects.FirstOrDefault(obj => obj.Name == BotBase.Instance.FixedCharacterName);
+
             // Character not found?
-            if (target == null)
+            if (following.GetBattleCharacter() == null)
                 return await Task.FromResult(false);
 
-            return await PerformFollowLogic(target);
+            return await PerformFollowLogic(following.GetBattleCharacter());
         }
 
         /// <summary>

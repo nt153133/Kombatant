@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define DEBUG
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +20,7 @@ using Kombatant.Forms;
 using Kombatant.Forms.Models;
 using Kombatant.Logic;
 using Kombatant.Helpers;
+using Kombatant.Localization;
 using TreeSharp;
 using BotBase = Kombatant.Settings.BotBase;
 using UserControl = System.Windows.Controls.UserControl;
@@ -35,12 +38,12 @@ namespace Kombatant
 		//internal static Kombatant Instance => kombatant ?? (kombatant = new Kombatant());
 		#region Botbase Metadata
 
-		public override string Name => Resources.Localization.Name_Kombatant;
+		public override string Name => Localization.Localization.Name_Kombatant;
 		public override bool IsAutonomous => Settings.BotBase.Instance.IsAutonomous;
 		public override bool RequiresProfile => false;
 		public override bool WantButton => true;
 		public override PulseFlags PulseFlags => Settings.Fleeting.Instance.BotBasePulseFlags;
-
+		public static float CombatReachAdj { get; internal set; }
 		/// <summary>
 		/// Required dummy composite. Why, though?
 		/// </summary>
@@ -82,6 +85,8 @@ namespace Kombatant
 					{
 						DataContext = SettingsFormModel.Instance,
 						Content = LoadWindowContent(),
+						//Width = LoadWindowContent().Width+5,
+						//Height = LoadWindowContent().Height+30,
 						Title = "Kombatant",
 						WindowStartupLocation = WindowStartupLocation.CenterScreen,
 					};
@@ -98,7 +103,7 @@ namespace Kombatant
 
 						Settings.BotBase.Reload();
 						Settings.Hotkeys.Reload();
-						Logging.Write(Resources.Localization.Msg_ReloadedSettings);
+						Logging.Write(Localization.Localization.Msg_ReloadedSettings);
 					};
 
 					try
@@ -159,22 +164,34 @@ namespace Kombatant
 		}
 
 		private static bool sidestepStatus;
-		private static bool running;
 
+		private static bool _init;
+		public Kombatant()
+		{
+			if (!_init)
+			{
+				Task.Factory.StartNew(() =>
+				{
+					init();
+					_init = true;
+					LogHelper.Instance.Log("Kombatant Initialized.");
+				});
+			}
+		}
+
+		private void init()
+		{
+			_ = Memory.Offsets.Instance;
+			_ = Memory.GroundSpeedHook.Instance;
+			_ = Memory.CombatReachHook.Instance;
+			LocalizationInitializer.Initalize();
+			//Settings.BotBase.Instance.AutoRegisterDuties = false;
+		}
+
+		private static int tickcount;
 		public override void Pulse()
 		{
-			if (BotBase.Instance.EnableAnimationLockHack && AnimationLockTimer != IntPtr.Zero)
-			{
-				if (BotBase.Instance.AnimationLockMaxDelay == 0 || Core.Memory.NoCacheRead<float>(AnimationLockTimer) > BotBase.Instance.AnimationLockMaxDelay)
-				{
-					Core.Memory.Write(AnimationLockTimer, BotBase.Instance.AnimationLockMaxDelay);
-				}
-			}
-			if (BotBase.Instance.EnableAnimationSpeedHack)
-			{
-				Core.Memory.Write(Core.Me.Pointer + 0xCD4, BotBase.Instance.AnimationSpeed);
-				Core.Memory.Write(Core.Me.Pointer + 0xCD8, BotBase.Instance.AnimationSpeed);
-			}
+
 		}
 		//static Thread t1 => new Thread(() =>
 		//	{
@@ -196,65 +213,14 @@ namespace Kombatant
 		//		LogHelper.Instance.Log("<AnimationHack> Thread Aborted.");
 		//	});
 
-		public static int AgentNotificationId { get; private set; }
-		public static int AgentMvpId { get; private set; }
-		public static IntPtr AnimationLockTimer { get; private set; }
-
-		public override void Initialize()
-		{
-			if (Settings.BotBase.Instance.UseStatusOverlay)
-			{
-				OverlayManager.StartStatusOverlay();
-			}
-
-			var patternFinder = new PatternFinder(Core.Memory);
-			try
-			{
-				var agentNotificationVTable = patternFinder.Find(
-					"48 8D 05 ? ? ? ? 48 89 03 33 C0 48 89 43 20 48 89 43 28 48 89 43 30 48 89 43 38 48 89 43 40 48 89 43 48 48 8B C3 Add 3 TraceRelative");
-				AgentNotificationId = AgentModule.FindAgentIdByVtable(agentNotificationVTable);
-				LogHelper.Instance.Log($"Found AgentNotification {AgentNotificationId} at {agentNotificationVTable.ToInt64():X16}");
-			}
-			catch (Exception e)
-			{
-				LogHelper.Instance.Log("AgentNotification not found. " + e.Message);
-			}
-
-			try
-			{
-				var agentMvpVTable = patternFinder.Find(
-					"48 8D 05 ? ? ? ? 48 89 03 33 C0 48 89 43 20 89 43 28 48 8B C3 48 83 C4 ? 5B C3 CC CC CC CC CC CC 40 53 Add 3 TraceRelative");
-				AgentMvpId = AgentModule.FindAgentIdByVtable(agentMvpVTable);
-				LogHelper.Instance.Log($"Found AgentVoteMvp {AgentMvpId} at {agentMvpVTable.ToInt64():X16}");
-			}
-			catch (Exception e)
-			{
-				LogHelper.Instance.Log("AgentMvp not found. " + e.Message);
-			}
-
-			try
-			{
-				AnimationLockTimer = patternFinder.Find("48 8D 0D ? ? ? ? E8 ? ? ? ? 8B F8 8B CF Add 3 TraceRelative") + 8;
-				LogHelper.Instance.Log($"Found AnimationLockTimer at {AnimationLockTimer.ToInt64():X16}.");
-			}
-			catch (Exception e)
-			{
-				LogHelper.Instance.Log("AnimationLockTimer not found. " + e.Message);
-			}
-
-			//Settings.BotBase.Instance.AutoRegisterDuties = false;
-		}
 
 		/// <summary>
 		/// Called when the botbase gets started.
 		/// </summary>
 		public override void Start()
 		{
-			running = true;
-
 			try { sidestepStatus = PluginManager.Plugins.First(i => i.Plugin.Name == "SideStep").Enabled; }
 			catch { }
-
 
 			// Always start paused
 			Settings.BotBase.Instance.IsPaused = false;
@@ -269,14 +235,12 @@ namespace Kombatant
 			//// Less than 30 TPS are a no-no due to the design of this botbase. At least warn the user of this!
 			//if (TreeRoot.TicksPerSecond < 30)
 			//{
-			//	LogHelper.Instance.Log(Resources.Localization.Msg_Not30Tps_Log);
-			//	OverlayHelper.Instance.AddToast(Resources.Localization.Msg_Not30Tps, Colors.Red, Colors.DarkRed, TimeSpan.FromSeconds(10));
+			//	LogHelper.Instance.Log(Localization.Localization.Msg_Not30Tps_Log);
+			//	OverlayHelper.Instance.AddToast(Localization.Localization.Msg_Not30Tps, Colors.Red, Colors.DarkRed, TimeSpan.FromSeconds(10));
 			//}
 
-			if (Settings.BotBase.Instance.UseFocusOverlay)
-			{
-				OverlayManager.StartFocusOverlay();
-			}
+			if (Settings.BotBase.Instance.UseStatusOverlay) OverlayManager.StartStatusOverlay();
+			if (Settings.BotBase.Instance.UseFocusOverlay) OverlayManager.StartFocusOverlay();
 		}
 
 
@@ -285,8 +249,6 @@ namespace Kombatant
 		/// </summary>
 		public override void Stop()
 		{
-			running = false;
-
 			// Destroy the navigator
 			Navigator.PlayerMover = new NullMover();
 			Navigator.NavigationProvider = new NullProvider();
@@ -318,49 +280,121 @@ namespace Kombatant
 		/// <returns></returns>
 		private async Task<bool> KombatantLogic()
 		{
-			if (Core.Me.InCombat || DutyManager.InInstance)
+#if DEBUG
+			using (new PerformanceLogger("RefreshOverlay"))
+#endif
 			{
-				if (TreeRoot.TicksPerSecond!= 60)
-				{
-					TreeRoot.TicksPerSecond = 60;
-					//LogHelper.Instance.Log($"Preparing for combat! Set TPS to {TreeRoot.TicksPerSecond}.");
-				}
+				//invoking UI thread to refresh overlay
+				if (BotBase.Instance.UseFocusOverlay)
+					OverlayManager.FocusOverlay.Update();
+				if (BotBase.Instance.UseStatusOverlay)
+					OverlayManager.StatusOverlay.Update();
 			}
-			else
+#if DEBUG
+			using (new PerformanceLogger("Memory"))
+#endif
 			{
-				if (TreeRoot.TicksPerSecond != 30)
-				{
-					TreeRoot.TicksPerSecond = 30;
-					//LogHelper.Instance.Log($"Set TPS back to {TreeRoot.TicksPerSecond}.");
-				}
+				if (await Hack.Instance.ExecuteLogic())
+					return await Task.FromResult(true);
 			}
-			// Execute duty commence logic
-			if (await CommenceDuty.Instance.ExecuteLogic())
-				return await Task.FromResult(true);
 
-			// Execute mechanics logic (gaze attacks et al)
-			if (await Mechanics.Instance.ExecuteLogic())
-				return await Task.FromResult(true);
+#if DEBUG
+			using (new PerformanceLogger("SetTickRate"))
+#endif
+			{
+				//if (Environment.TickCount > tickcount)
+				//{
+				//	tickcount = Environment.TickCount + 1000;
 
-			// Execute convenience logic (auto sprint etc.)
-			if (await Convenience.Instance.ExecuteLogic())
-				return await Task.FromResult(true);
+				//	if (BotBase.Instance.IsPaused)
+				//	{
+				//		if (TreeRoot.TicksPerSecond > 10) TreeRoot.TicksPerSecond = 10;
+				//	}
+				//	else
+				//	{
+				//		if (Core.Me.InCombat || DutyManager.InInstance)
+				//		{
+				//			if (TreeRoot.TicksPerSecond != 60)
+				//			{
+				//				TreeRoot.TicksPerSecond = 60;
+				//				//LogHelper.Instance.Log($"Preparing for combat! Set TPS to {TreeRoot.TicksPerSecond}.");
+				//			}
+				//		}
+				//		else
+				//		{
+				//			if (TreeRoot.TicksPerSecond != 30)
+				//			{
+				//				TreeRoot.TicksPerSecond = 30;
+				//				//LogHelper.Instance.Log($"Set TPS back to {TreeRoot.TicksPerSecond}.");
+				//			}
+				//		}
+				//	}
+				//}
 
-			// Execute target logic
-			if (await Target.Instance.ExecuteLogic())
-				return await Task.FromResult(true);
+				TreeRoot.TicksPerSecond = BotBase.Instance.IsPaused ? (byte)30 : (byte)255;
+			}
+#if DEBUG
+			using (new PerformanceLogger("CommenceDuty"))
+#endif
+			{
+				// Execute duty commence logic
+				if (await CommenceDuty.Instance.ExecuteLogic())
+					return await Task.FromResult(true);
+			}
 
-			// Execute avoidance logic
-			if (await Avoidance.Instance.ExecuteLogic())
-				return await Task.FromResult(true);
+#if DEBUG
+			using (new PerformanceLogger("Mechanics"))
+#endif
+			{
+				// Execute mechanics logic (gaze attacks et al)
+				if (await Mechanics.Instance.ExecuteLogic())
+					return await Task.FromResult(true);
+			}
 
-			// Execute auto movement
-			if (await Movement.Instance.ExecuteLogic())
-				return await Task.FromResult(true);
+#if DEBUG
+			using (new PerformanceLogger("Convenience"))
+#endif
+			{
+				// Execute convenience logic (auto sprint etc.)
+				if (await Convenience.Instance.ExecuteLogic())
+					return await Task.FromResult(true);
+			}
 
-			//// Execute combat logic
-			if (await CombatLogic.Instance.ExecuteLogic())
-				return await Task.FromResult(true);
+#if DEBUG
+			using (new PerformanceLogger("Target"))
+#endif
+			{
+				// Execute target logic
+				if (await Target.Instance.ExecuteLogic())
+					return await Task.FromResult(true);
+			}
+
+#if DEBUG
+			using (new PerformanceLogger("Avoidance"))
+#endif
+			{
+				// Execute avoidance logic
+				if (await Avoidance.Instance.ExecuteLogic())
+					return await Task.FromResult(true);
+			}
+
+#if DEBUG
+			using (new PerformanceLogger("Movement"))
+#endif
+			{
+				// Execute auto movement
+				if (await Movement.Instance.ExecuteLogic())
+					return await Task.FromResult(true);
+			}
+
+#if DEBUG
+			using (new PerformanceLogger("CombatLogic"))
+#endif
+			{
+				//// Execute combat logic
+				if (await CombatLogic.Instance.ExecuteLogic())
+					return await Task.FromResult(true);
+			}
 
 			//// Execute tank specific logic
 			//if (await Tank.Instance.ExecuteLogic())

@@ -309,7 +309,7 @@ namespace Kombatant.Forms.Models
 						OverlayManager.StopStatusOverlay();
 					}
 
-					OverlayManager.StatusOverlay.Update(Logic.Convenience.CurrentStatus);
+					OverlayManager.StatusOverlay.Update();
 				});
 			}
 		}
@@ -399,7 +399,6 @@ namespace Kombatant.Forms.Models
 						BotBase.Instance.FixedCharacterName = Core.Target.Name;
 						BotBase.Instance.FixedCharacterId = Core.Target.ObjectId;
 						BotBase.Instance.FixedCharacterType = Core.Target.Type;
-						//BotBase.FollowMode = FollowMode.FixedCharacter;
 					}
 				});
 			}

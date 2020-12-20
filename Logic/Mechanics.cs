@@ -151,6 +151,8 @@ namespace Kombatant.Logic
 		/// </summary>
 		private bool ExecuteStandStill()
 		{
+			Core.Me.ClearTarget();
+			ChatManager.SendChat("/battlemode off");
 			// Select the aura that still has the longest time left.
 			var longestAura = Core.Me.Auras
 				.Where(aura => Constants.Aura.ForceStandStill.Contains(aura.Id) && aura.TimeLeft > 0.5)
@@ -169,7 +171,7 @@ namespace Kombatant.Logic
 				return true;
 
 			WaitHelper.Instance.AddWait(@"Mechanics.StandStillMessage", longestAura.TimespanLeft.Add(TimeSpan.FromMilliseconds(StandStillLatencyAdd)));
-			var toastMessage = string.Format(Resources.Localization.Msg_MechanicWarning_StandStill, longestAura.Name);
+			var toastMessage = string.Format(Localization.Localization.Msg_MechanicWarning_StandStill, longestAura.Name);
 			OverlayHelper.Instance.AddToast(toastMessage, ToastFontColor, ToastShadowColor, longestAura.TimespanLeft.Subtract(TimeSpan.FromMilliseconds(100)));
 
 			// Return true because we want to wait the entirety of the aura.
@@ -203,7 +205,7 @@ namespace Kombatant.Logic
 			}
 
 			WaitHelper.Instance.AddWait(@"Mechanics.StandStillMessage", shortestAura.TimespanLeft.Add(TimeSpan.FromMilliseconds(StandStillLatencyAdd)));
-			var toastMessage = string.Format(Resources.Localization.Msg_MechanicWarning_StandStillOnZero, shortestAura.Name);
+			var toastMessage = string.Format(Localization.Localization.Msg_MechanicWarning_StandStillOnZero, shortestAura.Name);
 			OverlayHelper.Instance.AddToast(toastMessage, ToastFontColor, ToastShadowColor, shortestAura.TimespanLeft.Subtract(TimeSpan.FromMilliseconds(100)));
 
 			// Return false because we only want to stop only in the last few moments.

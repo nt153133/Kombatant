@@ -43,7 +43,6 @@ namespace Kombatant.Logic
 		private IEnumerable<DictionaryEntry> _psycheList;
 		private IEnumerable<string> _audioFiles;
 		private readonly Random _random = new Random();
-		private static bool Voted;
 
 		/// <summary>
 		/// Constructor for CommenceDuty.
@@ -116,7 +115,7 @@ namespace Kombatant.Logic
 			// Auto accept Duty Finder
 			if (ShouldAcceptDutyFinder())
 			{
-				LogHelper.Instance.Log(Resources.Localization.Msg_DutyConfirm);
+				LogHelper.Instance.Log(Localization.Localization.Msg_DutyConfirm);
 				ContentsFinderConfirm.Commence();
 				WaitHelper.Instance.RemoveWait(@"CommenceDuty.DutyNotificationSound");
 				return await Task.FromResult(true);
@@ -173,6 +172,8 @@ namespace Kombatant.Logic
 		{
 			if (!BotBase.Instance.AutoLeaveDuty)
 				return false;
+			if (!DutyManager.InInstance)
+				return false;
 			if (!DutyManager.CanLeaveActiveDuty)
 				return false;
 			if (DirectorManager.ActiveDirector is InstanceContentDirector icDirector && icDirector.InstanceEnded)
@@ -226,7 +227,7 @@ namespace Kombatant.Logic
 		/// </summary>
 		private void PopulatePsyches()
 		{
-			ResourceSet resourceSet = Resources.Localization.ResourceManager
+			ResourceSet resourceSet = Localization.Localization.ResourceManager
 				.GetResourceSet(CultureInfo.CurrentCulture, true, true);
 
 			_psycheList = resourceSet.Cast<DictionaryEntry>()
@@ -248,7 +249,7 @@ namespace Kombatant.Logic
 		{
 			// ReSharper disable once RedundantAssignment
 			var psyche = _psycheList.ElementAt(_random.Next(_psycheList.Count())).Value.ToString();
-			LogHelper.Instance.Log($@"{Resources.Localization.Msg_DutyReady} {psyche}");
+			LogHelper.Instance.Log($@"{Localization.Localization.Msg_DutyReady} {psyche}");
 		}
 
 		/// <summary>
@@ -265,7 +266,7 @@ namespace Kombatant.Logic
 		{
 			if (!BotBase.Instance.AutoVoteMvp) return false;
 			if (PartyManager.NumMembers == 1) return false;
-			if (Kombatant.AgentMvpId == 0 || Kombatant.AgentNotificationId == 0) return false;
+			if (Memory.Offsets.Instance.AgentMvpId == 0 || Memory.Offsets.Instance.AgentNotificationId == 0) return false;
 			return DirectorManager.ActiveDirector is InstanceContentDirector icDirector && icDirector.InstanceEnded;
 		}
 
@@ -305,9 +306,9 @@ namespace Kombatant.Logic
 				{
 					//LogHelper.Instance.Log($"Toggling agent {RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface()}...");
 					//RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface().Toggle();
-					AgentModule.ToggleAgentInterfaceById(Kombatant.AgentNotificationId);
+					AgentModule.ToggleAgentInterfaceById(Memory.Offsets.Instance.AgentNotificationId);
 					//LogHelper.Instance.Log($"Toggling agent {59}...");
-					AgentModule.ToggleAgentInterfaceById(Kombatant.AgentMvpId);
+					AgentModule.ToggleAgentInterfaceById(Memory.Offsets.Instance.AgentMvpId);
 					//LogHelper.Instance.Log($"Toggling agent {120}...");
 				}),
 				//new Action(context => LogHelper.Instance.Log("Waiting for VoteMvp to open...")),

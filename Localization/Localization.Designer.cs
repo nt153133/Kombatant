@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Kombatant.Resources {
+namespace Kombatant.Localization {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Kombatant.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kombatant.Resources.Localization", typeof(Localization).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kombatant.Localization.Localization", typeof(Localization).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,60 @@ namespace Kombatant.Resources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 [PVP]Target Mounted Enemy First 的本地化字符串。
+        /// </summary>
+        public static string _PVP_Target_Mounted_Enemy_First {
+            get {
+                return ResourceManager.GetString("[PVP]Target Mounted Enemy First", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 [PVP]Target Pc Or Npc First 的本地化字符串。
+        /// </summary>
+        public static string _PVP_Target_PC_First {
+            get {
+                return ResourceManager.GetString("[PVP]Target PC First", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 [PVP]Target WarMachina First 的本地化字符串。
+        /// </summary>
+        public static string _PVP_Target_WarMachina_First {
+            get {
+                return ResourceManager.GetString("[PVP]Target WarMachina First", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Auto Vote Mvp 的本地化字符串。
+        /// </summary>
+        public static string Auto_Vote_Mvp {
+            get {
+                return ResourceManager.GetString("Auto Vote Mvp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Follow Distance 的本地化字符串。
+        /// </summary>
+        public static string Follow_Distance {
+            get {
+                return ResourceManager.GetString("Follow Distance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Follow Mode 的本地化字符串。
+        /// </summary>
+        public static string Follow_Mode {
+            get {
+                return ResourceManager.GetString("Follow Mode", resourceCulture);
             }
         }
         
@@ -434,6 +488,42 @@ namespace Kombatant.Resources {
         }
         
         /// <summary>
+        ///   查找类似 Only Target Tanked Enemy 的本地化字符串。
+        /// </summary>
+        public static string Only_Target_Tanked_Enemy {
+            get {
+                return ResourceManager.GetString("Only Target Tanked Enemy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Pause Following On Bosses 的本地化字符串。
+        /// </summary>
+        public static string Pause_Following_On_Bosses {
+            get {
+                return ResourceManager.GetString("Pause Following On Bosses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Dungeon Only 的本地化字符串。
+        /// </summary>
+        public static string Sprints_In_Dungeon_Only {
+            get {
+                return ResourceManager.GetString("Sprints In Dungeon Only", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Target Name 的本地化字符串。
+        /// </summary>
+        public static string Target_Name {
+            get {
+                return ResourceManager.GetString("Target Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Auto Commence Duty 的本地化字符串。
         /// </summary>
         public static string UI_AutoAcceptDutyFinder {
@@ -601,6 +691,15 @@ namespace Kombatant.Resources {
         public static string UI_Avoidance {
             get {
                 return ResourceManager.GetString("UI_Avoidance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Bot General 的本地化字符串。
+        /// </summary>
+        public static string UI_BotGeneral {
+            get {
+                return ResourceManager.GetString("UI_BotGeneral", resourceCulture);
             }
         }
         
@@ -1091,6 +1190,15 @@ namespace Kombatant.Resources {
         }
         
         /// <summary>
+        ///   查找类似 Seconds to auto leave 的本地化字符串。
+        /// </summary>
+        public static string UI_SecondsToAutoLeave {
+            get {
+                return ResourceManager.GetString("UI_SecondsToAutoLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Select Combat Routine 的本地化字符串。
         /// </summary>
         public static string UI_SelectCr {
@@ -1163,7 +1271,7 @@ namespace Kombatant.Resources {
         }
         
         /// <summary>
-        ///   查找类似 Target Scan Frequency (ms) 的本地化字符串。
+        ///   查找类似 Target Scan Interval (ms) 的本地化字符串。
         /// </summary>
         public static string UI_TargetScanFrequency {
             get {
@@ -1420,6 +1528,15 @@ namespace Kombatant.Resources {
         public static string UI_Utilities {
             get {
                 return ResourceManager.GetString("UI_Utilities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Use NavGraph 的本地化字符串。
+        /// </summary>
+        public static string Use_NavGraph {
+            get {
+                return ResourceManager.GetString("Use NavGraph", resourceCulture);
             }
         }
     }

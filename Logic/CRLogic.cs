@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Clio.Common;
 using Clio.Utilities;
 using ff14bot;
@@ -6,6 +7,7 @@ using ff14bot.Behavior;
 using ff14bot.Managers;
 using Kombatant.Extensions;
 using Kombatant.Interfaces;
+using Kombatant.Settings;
 
 namespace Kombatant.Logic
 {
@@ -33,50 +35,58 @@ namespace Kombatant.Logic
 			if (Settings.BotBase.Instance.IsPaused)
 				return false;
 
-			if (Core.Me.IsMounted || MovementManager.IsFlying || MovementManager.IsSwimming || MovementManager.IsDiving)
-				return false;
+			if (!WorldManager.InPvP)
+			{
+				if (Core.Me.IsMounted || MovementManager.IsFlying || MovementManager.IsSwimming || MovementManager.IsDiving)
+					return false;
+			}
 
 			if (Core.Me.IsDead)
+			{
 				if (ShouldExecuteDeath())
 					if (await RoutineManager.Current.DeathBehavior.ExecuteCoroutine())
-						return true;
-
-			if (Core.Me.InCombat)
-			{
-				if (ShouldExecuteInCombatHeal())
-					if (await RoutineManager.Current.HealBehavior.ExecuteCoroutine())
-						return true;
-
-				if (ShouldExecuteCombatBuff())
-					if (await RoutineManager.Current.CombatBuffBehavior.ExecuteCoroutine())
-						return true;
-
-				if (ShouldExecuteCombat())
-					if (await RoutineManager.Current.CombatBehavior.ExecuteCoroutine())
 						return true;
 			}
 			else
 			{
-				if (ShouldExecuteOutOfCombatHeal())
-					if (await RoutineManager.Current.HealBehavior.ExecuteCoroutine())
-						return true;
+				if (Core.Me.InCombat)
+				{
+					if (ShouldExecuteInCombatHeal())
+						if (await RoutineManager.Current.HealBehavior.ExecuteCoroutine())
+							return true;
 
-				if (ShouldExecuteRest())
-					if (await RoutineManager.Current.RestBehavior.ExecuteCoroutine())
-						return true;
+					if (ShouldExecuteCombatBuff())
+						if (await RoutineManager.Current.CombatBuffBehavior.ExecuteCoroutine())
+							return true;
 
-				if (ShouldExecutePreCombatBuff())
-					if (await RoutineManager.Current.PreCombatBuffBehavior.ExecuteCoroutine())
-						return true;
+					if (ShouldExecuteCombat())
+						if (await RoutineManager.Current.CombatBehavior.ExecuteCoroutine())
+							return true;
+				}
+				else
+				{
+					if (ShouldExecuteOutOfCombatHeal())
+						if (await RoutineManager.Current.HealBehavior.ExecuteCoroutine())
+							return true;
 
-				if (ShouldExecutePullBuff())
-					if (await RoutineManager.Current.PullBuffBehavior.ExecuteCoroutine())
-						return true;
+					if (ShouldExecuteRest())
+						if (await RoutineManager.Current.RestBehavior.ExecuteCoroutine())
+							return true;
 
-				if (ShouldExecutePull())
-					if (await RoutineManager.Current.PullBehavior.ExecuteCoroutine())
-						return true;
+					if (ShouldExecutePreCombatBuff())
+						if (await RoutineManager.Current.PreCombatBuffBehavior.ExecuteCoroutine())
+							return true;
+
+					if (ShouldExecutePullBuff())
+						if (await RoutineManager.Current.PullBuffBehavior.ExecuteCoroutine())
+							return true;
+
+					if (ShouldExecutePull())
+						if (await RoutineManager.Current.PullBehavior.ExecuteCoroutine())
+							return true;
+				}
 			}
+
 
 			return false;
 		}

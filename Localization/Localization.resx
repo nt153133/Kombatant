@@ -130,6 +130,7 @@
 *                                                                            *
 ******************************************************************************
         </value>
+    <comment>@Invariant</comment>
   </data>
   <data name="Msg_Not30Tps" xml:space="preserve">
     <value>Running at a tickrate other than 30 TPS!
@@ -220,6 +221,7 @@ Turn away before the cast completes!</value>
   </data>
   <data name="Msg_DutyPsyche1" xml:space="preserve">
     <value>Rise, rise to the occasion!</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="Msg_DutyPsyche2" xml:space="preserve">
     <value>10 Gil says someone is not going to accept...</value>
@@ -551,7 +553,7 @@ Turn away before the cast completes!</value>
     <value>Hotkeys</value>
   </data>
   <data name="UI_TargetScanFrequency" xml:space="preserve">
-    <value>Target Scan Frequency (ms)</value>
+    <value>Target Scan Interval (ms)</value>
   </data>
   <data name="UI_DutyFinder" xml:space="preserve">
     <value>Duty Finder</value>
@@ -582,5 +584,44 @@ Turn away before the cast completes!</value>
   </data>
   <data name="UI_Death" xml:space="preserve">
     <value>Death Behavior</value>
+  </data>
+  <data name="UI_SecondsToAutoLeave" xml:space="preserve">
+    <value>Seconds to auto leave</value>
+  </data>
+  <data name="UI_BotGeneral" xml:space="preserve">
+    <value>Bot General</value>
+  </data>
+  <data name="[PVP]Target PC First" xml:space="preserve">
+    <value>[PVP]Target Pc Or Npc First</value>
+  </data>
+  <data name="[PVP]Target WarMachina First" xml:space="preserve">
+    <value>[PVP]Target WarMachina First</value>
+  </data>
+  <data name="[PVP]Target Mounted Enemy First" xml:space="preserve">
+    <value>[PVP]Target Mounted Enemy First</value>
+  </data>
+  <data name="Only Target Tanked Enemy" xml:space="preserve">
+    <value>Only Target Tanked Enemy</value>
+  </data>
+  <data name="Follow Distance" xml:space="preserve">
+    <value>Follow Distance</value>
+  </data>
+  <data name="Follow Mode" xml:space="preserve">
+    <value>Follow Mode</value>
+  </data>
+  <data name="Target Name" xml:space="preserve">
+    <value>Target Name</value>
+  </data>
+  <data name="Pause Following On Bosses" xml:space="preserve">
+    <value>Pause Following On Bosses</value>
+  </data>
+  <data name="Use NavGraph" xml:space="preserve">
+    <value>Use NavGraph</value>
+  </data>
+  <data name="Auto Vote Mvp" xml:space="preserve">
+    <value>Auto Vote Mvp</value>
+  </data>
+  <data name="Sprints In Dungeon Only" xml:space="preserve">
+    <value>Dungeon Only</value>
   </data>
 </root>

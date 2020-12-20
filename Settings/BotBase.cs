@@ -1192,18 +1192,46 @@ namespace Kombatant.Settings
 			}
 		}
 
-		private bool _targetPcFirst;
 
-		[DefaultValue(false)]
-		public bool TargetPcFirst
+		private bool? _targetPcOrNpcFirst;
+
+		[DefaultValue(null)]
+		public bool? TargetPcOrNpcFirst
 		{
-			get => _targetPcFirst;
+			get => _targetPcOrNpcFirst;
 			set
 			{
-				_targetPcFirst = value;
+				_targetPcOrNpcFirst = value;
 				OnPropertyChanged();
 			}
 		}
+
+		private bool _enableTargetingWeight;
+		[DefaultValue(false)]
+		public bool EnableTargetingWeight
+		{
+			get => _enableTargetingWeight;
+			set
+			{
+				_enableTargetingWeight = value;
+				OnPropertyChanged();
+			}
+		}
+
+
+		private int _targetPlayerUnderThisHpPct;
+		[DefaultValue(0)]
+		public int TargetPlayerUnderThisHPPct
+		{
+			get => _targetPlayerUnderThisHpPct;
+			set
+			{
+				_targetPlayerUnderThisHpPct = value;
+				OnPropertyChanged();
+			}
+		}
+
+
 		private bool _targetWarMachinaFirst;
 
 		[DefaultValue(false)]
@@ -1402,9 +1430,9 @@ namespace Kombatant.Settings
 			}
 		}
 
-		private float _animationLockMaxDelay;
-		[DefaultValue(0)]
-		public float AnimationLockMaxDelay
+		private int _animationLockMaxDelay;
+		[DefaultValue(300)]
+		public int AnimationLockMaxDelay
 		{
 			get => _animationLockMaxDelay;
 			set
@@ -1437,7 +1465,100 @@ namespace Kombatant.Settings
 				OnPropertyChanged();
 			}
 		}
-		
+
+		private bool _enableMovementSpeedHack;
+		public bool EnableMovementSpeedHack
+		{
+			get => _enableMovementSpeedHack;
+			set
+			{
+				_enableMovementSpeedHack = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private float _groundSpeedMultiplier;
+		[DefaultValue(1f)]
+		public float GroundSpeedMultiplier
+		{
+			get => _groundSpeedMultiplier;
+			set
+			{
+				_groundSpeedMultiplier = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private float _minGroundSpeed;
+		[DefaultValue(0f)]
+		public float MinGroundSpeed
+		{
+			get => _minGroundSpeed;
+			set
+			{
+				_minGroundSpeed = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _enableCombatReachIncrement;
+		public bool EnableCombatReachIncrement
+		{
+			get => _enableCombatReachIncrement;
+			set
+			{
+				_enableCombatReachIncrement = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private float _combatReachIncrement;
+		[DefaultValue(0f)]
+		public float CombatReachIncrement
+		{
+			get => _combatReachIncrement;
+			set
+			{
+				_combatReachIncrement = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _removeMovementLock;
+
+		public bool RemoveMovementLock
+		{
+			get => _removeMovementLock;
+			set
+			{
+				_removeMovementLock = value;
+				OnPropertyChanged();
+			}
+		}
+
 		#endregion
+
+		private bool performanceLogger;
+		[DefaultValue(false)]
+		public bool PerformanceLogger
+		{
+			get => performanceLogger;
+			set
+			{
+				performanceLogger = value;
+				OnPropertyChanged();
+			}
+		}
+		private int minLogMs;
+		[DefaultValue(5)]
+		public int MinLogMs
+		{
+			get => minLogMs;
+			set
+			{
+				minLogMs = value;
+				OnPropertyChanged();
+			}
+		}
 	}
 }

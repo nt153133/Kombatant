@@ -1,4 +1,5 @@
-﻿using System;
+﻿//#define DEBUG
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,10 +39,6 @@ namespace Kombatant.Logic
 		/// <returns>Returns <c>true</c> if any action was executed, otherwise <c>false</c>.</returns>
 		internal new async Task<bool> ExecuteLogic()
 		{
-			//invoking UI thread to refresh overlay
-			if (Settings.BotBase.Instance.UseFocusOverlay)
-				OverlayManager.FocusOverlay.Update();
-
 			// Do not execute this logic if the botbase is paused.
 			if (Settings.BotBase.Instance.IsPaused || IsTraveling())
 				return await Task.FromResult(false);
@@ -57,83 +54,99 @@ namespace Kombatant.Logic
 			var currentTarget = Core.Me.CurrentTarget as BattleCharacter;
 			var potentialTarget = null as BattleCharacter;
 
-			// Automatically select a target if we do not have one. Uses one of the many colourful selection modes!
-			if (ShouldExecuteAutoTarget())
+#if DEBUG
+			using (new PerformanceLogger("AutoDeseletTarget"))
+#endif
 			{
-				switch (Settings.BotBase.Instance.AutoTargetingMode)
+				if (BotBase.Instance.AutoTarget && BotBase.Instance.AutoDeSelectTarget && currentTarget != null && !IsValidTarget(currentTarget) && !currentTarget.IsStrikingDummy())
 				{
-					//case TargetingMode.None:
-					//	break;
-
-					case TargetingMode.BestAoE:
-						potentialTarget = TargetBestAoeEnemy();
-						break;
-
-					case TargetingMode.OnlyWhitelisted:
-						potentialTarget = TargetOnlyWhitelistedEnemy();
-						break;
-
-					case TargetingMode.Nearest:
-						potentialTarget = TargetNearestEnemy();
-						break;
-
-					case TargetingMode.LowestHealth:
-						potentialTarget = TargetLowestHpEnemy();
-						break;
-
-					case TargetingMode.LowestHealthPercent:
-						potentialTarget = TargetLowestHpPercentEnemy();
-						break;
-
-					case TargetingMode.HighestHealth:
-						potentialTarget = TargetHighestHpEnemy();
-						break;
-
-					case TargetingMode.HighestHealthPercent:
-						potentialTarget = TargetHighestHpPercentEnemy();
-						break;
-
-					case TargetingMode.AssistTank:
-						potentialTarget = TargetAssistTank();
-						break;
-
-					case TargetingMode.AssistLeader:
-						potentialTarget = TargetAssistLeader();
-						break;
-
-					case TargetingMode.AssistFixedCharacter:
-						potentialTarget = TargetAssistFixedCharacter();
-						break;
-
-					case TargetingMode.AssistHighestLvl:
-						potentialTarget = TargetAssistHighestLvlCharacter();
-						break;
-
-					case TargetingMode.MostTargeted:
-						potentialTarget = TargetMostTargetedEnemy();
-						break;
-				}
-
-				// Player target differs from chosen target or is a FATE mob?
-				if (potentialTarget != null && potentialTarget.CheckAliveAndValid() && currentTarget != potentialTarget)
-				{
-					LogHelper.Instance.Log(Resources.Localization.Msg_NewTargetSelected,
-						potentialTarget.Name,
-						$@"0x{potentialTarget.ObjectId:X8}");
-
-					potentialTarget.Target();
-					//if (Settings.BotBase.Instance.MarkTarget)
-					//{
-					//	ChatManager.SendChat(@"/marking bind1 <t>");
-					//}
-					return await Task.FromResult(true);
+					Core.Me.ClearTarget();
+					await Coroutine.Yield();
 				}
 			}
 
-			if (BotBase.Instance.AutoTarget && BotBase.Instance.AutoDeSelectTarget && currentTarget != null && !IsValidTarget(currentTarget))
+			// Automatically select a target if we do not have one. Uses one of the many colourful selection modes!
+			if (ShouldExecuteAutoTarget())
 			{
-				Core.Me.ClearTarget();
-				await Coroutine.Yield();
+#if DEBUG
+				using (new PerformanceLogger("ChoosePotentialTarget"))
+#endif
+				{
+					switch (BotBase.Instance.AutoTargetingMode)
+					{
+						//case TargetingMode.None:
+						//	break;
+
+						case TargetingMode.BestAoE:
+							potentialTarget = TargetBestAoeEnemy();
+							break;
+
+						case TargetingMode.OnlyWhitelisted:
+							potentialTarget = TargetOnlyWhitelistedEnemy();
+							break;
+
+						case TargetingMode.Nearest:
+							potentialTarget = TargetNearestEnemy();
+							break;
+
+						case TargetingMode.LowestHealth:
+							potentialTarget = TargetLowestHpEnemy();
+							break;
+
+						case TargetingMode.LowestHealthPercent:
+							potentialTarget = TargetLowestHpPercentEnemy();
+							break;
+
+						case TargetingMode.HighestHealth:
+							potentialTarget = TargetHighestHpEnemy();
+							break;
+
+						case TargetingMode.HighestHealthPercent:
+							potentialTarget = TargetHighestHpPercentEnemy();
+							break;
+
+						case TargetingMode.AssistTank:
+							potentialTarget = TargetAssistTank();
+							break;
+
+						case TargetingMode.AssistLeader:
+							potentialTarget = TargetAssistLeader();
+							break;
+
+						case TargetingMode.AssistFixedCharacter:
+							potentialTarget = TargetAssistFixedCharacter();
+							break;
+
+						case TargetingMode.AssistHighestLvl:
+							potentialTarget = TargetAssistHighestLvlCharacter();
+							break;
+
+						case TargetingMode.MostTargeted:
+							potentialTarget = TargetMostTargetedEnemy();
+							break;
+					}
+
+#if DEBUG
+					using (new PerformanceLogger("CheckAndTargetPotentialTarget"))
+#endif
+					{
+
+						// Player target differs from chosen target or is a FATE mob?
+						if (potentialTarget != null && potentialTarget.CheckAliveAndValid() && currentTarget != potentialTarget)
+						{
+							LogHelper.Instance.Log(Localization.Localization.Msg_NewTargetSelected,
+								potentialTarget.Name,
+								$@"0x{potentialTarget.ObjectId:X8}");
+
+							potentialTarget.Target();
+							//if (Settings.BotBase.Instance.MarkTarget)
+							//{
+							//	ChatManager.SendChat(@"/marking bind1 <t>");
+							//}
+							return await Task.FromResult(true);
+						}
+					}
+				}
 			}
 
 			// No target? Then the following checks would return false anyway...
@@ -173,12 +186,9 @@ namespace Kombatant.Logic
 		{
 			if (!(o is BattleCharacter t)) return false;
 			if (!t.IsValid || !t.IsVisible || !t.IsAlive || !t.IsTargetable || !t.CanAttack || t.IsStrikingDummy() || t.IsMe) return false;
-			if (t.CombatDistance() > (BotBase.Instance.TargetScanMaxDistance == 0
-				? RoutineManager.Current.PullRange
-				: BotBase.Instance.TargetScanMaxDistance)) return false;
-
+			if (t.CombatDistance() > BotBase.Instance.TargetScanMaxDistance) return false;
+			//if (t.CombatDistance() > (BotBase.Instance.TargetScanMaxDistance == 0 ? RoutineManager.Current.PullRange : BotBase.Instance.TargetScanMaxDistance)) return false;
 			if (t.IsInvincible()) return false;
-
 			if (BotBase.Instance.EnableLosCheck && !t.InLineOfSight()) return false;
 
 			return true;
@@ -222,38 +232,43 @@ namespace Kombatant.Logic
 		/// <returns></returns>
 		private bool ShouldExecuteAutoTarget()
 		{
-			// Target search disabled
-			if (!Settings.BotBase.Instance.AutoTarget/* || Settings.BotBase.Instance.AutoTargetingMode == TargetingMode.None*/)
-				return false;
-
-			if (!Core.Target.CheckAliveAndValid())
+#if DEBUG
+			using (new PerformanceLogger("ShouldExecuteAutoTarget"))
+#endif
 			{
-				return true;
+				// Target search disabled
+				if (!BotBase.Instance.AutoTarget/* || Settings.BotBase.Instance.AutoTargetingMode == TargetingMode.None*/)
+					return false;
+
+				if (!Core.Target.CheckAliveAndValid())
+				{
+					return true;
+				}
+
+				//auto deselect when target is unreachable
+				//         if (Settings.BotBase.Instance.AutoDeSelectTarget && Core.Me.HasTarget && )
+				//         {
+				//	return true;
+				//}
+
+				//don't change target when target has specific aura
+				if (Core.Target.IsBattleCharacter() &&
+					(Core.Me.CurrentTarget.GetBattleCharacter().HasMyAura(1323) ||
+					 Core.Me.CurrentTarget.GetBattleCharacter().HasMyAura(1986)))
+				{
+					return false;
+				}
+
+				// Too soon to select a new target?
+				if (!WaitHelper.Instance.IsDoneWaiting(@"Target.AutoTarget", TimeSpan.FromMilliseconds(BotBase.Instance.TargetScanRate)))
+					return false;
+
+				// Does the player allow us to switch targets?
+				if (BotBase.Instance.AutoTargetSwitch)
+					return true;
+
+				return !Core.Me.HasTarget;
 			}
-
-			//auto deselect when target is unreachable
-			//         if (Settings.BotBase.Instance.AutoDeSelectTarget && Core.Me.HasTarget && )
-			//         {
-			//	return true;
-			//}
-
-			//don't change target when target has specific aura
-			if (Core.Target.IsBattleCharacter() &&
-				(Core.Me.CurrentTarget.GetBattleCharacter().HasMyAura(1323) ||
-				 Core.Me.CurrentTarget.GetBattleCharacter().HasMyAura(1986)))
-			{
-				return false;
-			}
-
-			// Too soon to select a new target?
-			if (!WaitHelper.Instance.IsDoneWaiting(@"Target.AutoTarget", TimeSpan.FromMilliseconds(Settings.BotBase.Instance.TargetScanRate)))
-				return false;
-
-			// Does the player allow us to switch targets?
-			if (Settings.BotBase.Instance.AutoTargetSwitch)
-				return true;
-
-			return !Core.Me.HasTarget;
 		}
 
 		//private static bool IsValidTarget(GameObject t)
@@ -271,71 +286,130 @@ namespace Kombatant.Logic
 		/// <returns></returns>
 		private IEnumerable<BattleCharacter> ApplyPostFilters(IEnumerable<BattleCharacter> group)
 		{
-			var result = group;
-
-			//result = PostFilterDistance(result);
-			result = PostFilterThreatList(result);
-			result = PostFilterFate(result);
-
-			if (WorldManager.InPvP)
+#if DEBUG
+			using (new PerformanceLogger("TargetPostFilter"))
+#endif
 			{
-				if (BotBase.Instance.TargetPcFirst) result = result.OrderByDescending(i => i.Type == GameObjectType.Pc);
-				if (BotBase.Instance.TargetWarMachinaFirst) result = result.OrderByDescending(i => i.HasAura(1420)); //Mounted on WarMachina
-				if (BotBase.Instance.TargetMountedEnemyFirst) result = result.OrderByDescending(i => i.IsMounted && !i.HasAura(1394)); //优先选中在坐骑上且没有移动速度降低debuff的敌人
-				result = result.OrderByDescending(i => i.IsCasting && i.HasTarget && i.TargetGameObject.Type == GameObjectType.EventObject); //优先选中正在摸点/捡水的敌人
-			}
+				var result = group;
 
+				//result = PostFilterDistance(result);
+				result = PostFilterThreatList(result);
+				result = PostFilterFate(result);
 
-			if (BotBase.Instance.TargetTankedOnly)
-			{
-				if (!PartyManager.IsInParty || Core.Me.IsTank() || !PartyManager.VisibleMembers.Any(i => i.IsTank() && !i.IsMe))
+				if (WorldManager.InPvP)
 				{
-					return result;
+					if (BotBase.Instance.TargetWarMachinaFirst)
+						result = result.OrderByDescending(i => i.HiddenGorgeType() == HiddenGorgeType.WarMachina); //优先选中机甲
+
+					//if (BotBase.Instance.TargetPlayerHealthPctUnder != 0) //如果为0则不优先选中玩家或NPC
+					//{
+					//	result = result.OrderBy(TargetingWeights);
+
+					//	float TargetingWeights(GameObject c)
+					//	{
+					//		float res = c.CurrentHealthPercent;
+					//		switch (c.HiddenGorgeType())
+					//		{
+					//			case HiddenGorgeType.Player:
+					//			case HiddenGorgeType.WarMachina:
+					//				if (res < BotBase.Instance.TargetPlayerHealthPctUnder) res -= 100;
+					//				break;
+					//			case HiddenGorgeType.Mammet:
+					//			case HiddenGorgeType.GobTank:
+					//			case HiddenGorgeType.GobMercenary:
+					//				break;
+
+					//			case HiddenGorgeType.Tower:
+					//			case HiddenGorgeType.Core:
+					//			case HiddenGorgeType.Cannon:
+					//			case HiddenGorgeType.CeruleumTank:
+					//			case HiddenGorgeType.undefined:
+					//				res = res + 1000;
+					//				break;
+					//		}
+
+					//		return res;
+					//	}
+					if(BotBase.Instance.TargetPcOrNpcFirst != null)
+					{
+						if ((bool)BotBase.Instance.TargetPcOrNpcFirst) //如果优先选中玩家
+						{
+							result = result.OrderByDescending(i => i.Type == GameObjectType.Pc);
+						}
+						else //优先选中人偶、哥布林坦克、哥布林佣兵
+						{
+							result = result.OrderByDescending(i =>
+								i.HiddenGorgeType() == HiddenGorgeType.Mammet ||
+								i.HiddenGorgeType() == HiddenGorgeType.GobTank ||
+								i.HiddenGorgeType() == HiddenGorgeType.GobMercenary);
+
+							result = result.OrderByDescending(i =>
+								i.Type == GameObjectType.Pc && i.CurrentHealthPercent <
+								BotBase.Instance.TargetPlayerUnderThisHPPct);
+						}
+					}
+
+
+
+					if (BotBase.Instance.TargetMountedEnemyFirst)
+						result = result.OrderByDescending(i => i.IsMounted && !i.HasAura(1394)); //优先选中在坐骑上且没有移动速度降低debuff的敌人
+					result = result.OrderByDescending(i => i.IsCasting && i.HasTarget && i.TargetGameObject.Type == GameObjectType.EventObject); //优先选中正在摸点/捡水的敌人
+				}
+				else
+				{
+					if (BotBase.Instance.TargetTankedOnly)
+					{
+						if (!PartyManager.IsInParty || Core.Me.IsTank() ||
+							!PartyManager.VisibleMembers.Any(i => i.IsTank() && !i.IsMe))
+						{
+							return result;
+						}
+
+						//if (Core.Me.IsTank()/* && !Core.Me.Auras.Select(i=>i.Id).Intersect(new uint[]{79,91,743,1833}).Any()*/)
+						//{
+						//	return result;
+						//}
+
+						//if (!PartyManager.VisibleMembers.Any(i=>i.IsTank() && !i.IsMe))
+						//{
+						//	return result;
+						//}
+
+						switch (BotBase.Instance.AutoTargetingMode)
+						{
+							case TargetingMode.Nearest:
+							case TargetingMode.BestAoE:
+							case TargetingMode.OnlyWhitelisted:
+							case TargetingMode.LowestHealth:
+							case TargetingMode.LowestHealthPercent:
+							case TargetingMode.HighestHealth:
+							case TargetingMode.HighestHealthPercent:
+							case TargetingMode.MostTargeted:
+								result = result.Where(i => i.TargetGameObject is BattleCharacter bc && bc.IsTank());
+								break;
+						}
+					}
 				}
 
-				//if (Core.Me.IsTank()/* && !Core.Me.Auras.Select(i=>i.Id).Intersect(new uint[]{79,91,743,1833}).Any()*/)
-				//{
-				//	return result;
-				//}
-
-				//if (!PartyManager.VisibleMembers.Any(i=>i.IsTank() && !i.IsMe))
-				//{
-				//	return result;
-				//}
-
-				switch (BotBase.Instance.AutoTargetingMode)
-				{
-					case TargetingMode.Nearest:
-					case TargetingMode.BestAoE:
-					case TargetingMode.OnlyWhitelisted:
-					case TargetingMode.LowestHealth:
-					case TargetingMode.LowestHealthPercent:
-					case TargetingMode.HighestHealth:
-					case TargetingMode.HighestHealthPercent:
-					case TargetingMode.MostTargeted:
-						result = result.Where(i => i.TargetGameObject is BattleCharacter bc && bc.IsTank());
-						break;
-				}
+				return result;
 			}
-
-			return result;
 		}
 
 		private IEnumerable<BattleCharacter> PostFilterThreatList(IEnumerable<BattleCharacter> group)
 		{
 			if (Settings.BotBase.Instance.EnableSmartPull && !WorldManager.InPvP)
 				return group.Where(o => o.IsEnemy() && (GameObjectManager.Attackers.Contains(o) || o.HasBeenTaggedByPartyMember()));
-
+			
 			return group;
 		}
 
-		private IEnumerable<BattleCharacter> PostFilterDistance(IEnumerable<BattleCharacter> group)
-		{
-			if (Settings.BotBase.Instance.TargetScanMaxDistance == 0)
-				return group.Where(o => o.IsInPullRange());
+		//private IEnumerable<BattleCharacter> PostFilterDistance(IEnumerable<BattleCharacter> group)
+		//{
+		//	if (Settings.BotBase.Instance.TargetScanMaxDistance == 0)
+		//		return group.Where(o => o.IsInPullRange());
 
-			return group.Where(o => o.CombatDistance() < Settings.BotBase.Instance.TargetScanMaxDistance);
-		}
+		//	return group.Where(o => o.CombatDistance() < Settings.BotBase.Instance.TargetScanMaxDistance);
+		//}
 
 		/// <summary>
 		/// Applies a filter for FATE-only targets to a group of BattleCharacters.
@@ -352,13 +426,13 @@ namespace Kombatant.Logic
 			if (GameObjectManager.Attackers.Any(o => o.TargetCharacter == Core.Me))
 				return GameObjectManager.Attackers
 					.Where(o => o.TargetCharacter == Core.Me)
-					.OrderBy(o => o.Distance2D());
+					.OrderBy(o => o.Distance2DSqr());
 
 			// No external attackers, prioritize FATE mobs.
 			if (FateManager.WithinFate)
 				return group
 					.Where(o => o.IsFate)
-					.OrderBy(o => o.Distance2D());
+					.OrderBy(o => o.Distance2DSqr());
 
 			// Nothing special? Return group as-is.
 			return group;
@@ -377,7 +451,7 @@ namespace Kombatant.Logic
 			var character = GameObjectManager.GetObjectByObjectId(BotBase.Instance.FixedCharacterId).GetBattleCharacter() ??
 							GameObjectManager.GetObjectsOfType<BattleCharacter>()
 								.Where(c => c.Name == BotBase.Instance.FixedCharacterName && c.Type == BotBase.Instance.FixedCharacterType)
-								.OrderBy(i => i.Distance2D()).FirstOrDefault();
+								.OrderBy(i => i.Distance2DSqr()).FirstOrDefault();
 
 			// Character is not in the vicinity...
 			if (character == null || !character.IsValid)
@@ -426,7 +500,7 @@ namespace Kombatant.Logic
 			// Find the closest tank in my party and target whatever they are targeting!
 			var nearestTank = PartyManager.VisibleMembers
 				.Where(member => member.IsTank())
-				.OrderBy(member => member.BattleCharacter.Distance2D())
+				.OrderBy(member => member.BattleCharacter.Distance2DSqr())
 				.FirstOrDefault();
 
 			// No tanksywhirls?
@@ -470,7 +544,7 @@ namespace Kombatant.Logic
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
 				.Where(IsValidTarget)
 				.OrderByDescending(o => o.NearbyEnemyCount())
-				.ThenBy(o => o.Distance2D());
+				.ThenBy(o => o.Distance2DSqr());
 
 			var bestEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
 
@@ -485,7 +559,7 @@ namespace Kombatant.Logic
 		{
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
 				.Where(IsValidTarget)
-				.OrderBy(o => o.Distance2D());
+				.OrderBy(o => o.Distance2DSqr());
 
 			var nearestEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
 
@@ -501,7 +575,7 @@ namespace Kombatant.Logic
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
 				.Where(IsValidTarget)
 				.Where(IsValidWhitelistTarget)
-				.OrderBy(o => o.Distance2D());
+				.OrderBy(o => o.Distance2DSqr());
 
 			var validEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
 
@@ -517,7 +591,7 @@ namespace Kombatant.Logic
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
 				.Where(IsValidTarget)
 				.OrderByDescending(o => o.CurrentHealth)
-				.ThenBy(o => o.Distance2D());
+				.ThenBy(o => o.Distance2DSqr());
 
 			var strongestEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
 
@@ -533,7 +607,7 @@ namespace Kombatant.Logic
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
 				.Where(IsValidTarget)
 				.OrderByDescending(o => o.CurrentHealthPercent)
-				.ThenBy(o => o.Distance2D());
+				.ThenBy(o => o.Distance2DSqr());
 
 			var strongestEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
 
@@ -549,7 +623,7 @@ namespace Kombatant.Logic
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
 				.Where(IsValidTarget)
 				.OrderBy(o => o.CurrentHealth)
-				.ThenBy(o => o.Distance2D());
+				.ThenBy(o => o.Distance2DSqr());
 
 			var weakestEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
 
@@ -565,7 +639,7 @@ namespace Kombatant.Logic
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
 				.Where(IsValidTarget)
 				.OrderBy(o => o.CurrentHealthPercent)
-				.ThenBy(o => o.Distance2D());
+				.ThenBy(o => o.Distance2DSqr());
 
 			var weakestEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
 
@@ -577,7 +651,7 @@ namespace Kombatant.Logic
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
 				.Where(IsValidTarget)
 				.OrderByDescending(o => o.BeingTargetedCount())
-				.ThenBy(o => o.Distance2D());
+				.ThenBy(o => o.Distance2DSqr());
 
 			var mostTargetedEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
 

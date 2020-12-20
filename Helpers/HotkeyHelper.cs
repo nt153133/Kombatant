@@ -7,6 +7,7 @@ using Kombatant.Converters;
 using Kombatant.Enums;
 using Kombatant.Resources;
 using Kombatant.Settings;
+using static Kombatant.Localization.Localization;
 using Hotkey = Kombatant.Constants.Hotkey;
 
 namespace Kombatant.Helpers
@@ -207,7 +208,7 @@ namespace Kombatant.Helpers
 
 				var fontColor = BotBase.Instance.IsPaused ? _fontColorDisable : _fontColorEnable;
 				var shadowColor = BotBase.Instance.IsPaused ? _shadowColorDisable : _shadowColorEnable;
-				var statusMsg = BotBase.Instance.IsPaused ? Localization.Msg_Paused : Localization.Msg_Unpaused;
+				var statusMsg = BotBase.Instance.IsPaused ? Msg_Paused : Msg_Unpaused;
 
 				OverlayHelper.Instance.AddToast(statusMsg, fontColor, shadowColor);
 				LogHelper.Instance.Log(statusMsg);
@@ -225,7 +226,7 @@ namespace Kombatant.Helpers
 
 				var fontColor = BotBase.Instance.AutoFaceTarget ? _fontColorEnable : _fontColorDisable;
 				var shadowColor = BotBase.Instance.AutoFaceTarget ? _shadowColorEnable : _shadowColorDisable;
-				var statusMsg = BotBase.Instance.AutoFaceTarget ? Localization.Msg_AutoFaceTargetOn : Localization.Msg_AutoFaceTargetOff;
+				var statusMsg = BotBase.Instance.AutoFaceTarget ? Msg_AutoFaceTargetOn : Msg_AutoFaceTargetOff;
 
 				if (BotBase.Instance.AutoFaceTarget)
 					WaitHelper.Instance.ResetWait(@"Target.AutoFace");
@@ -246,7 +247,7 @@ namespace Kombatant.Helpers
 
 				var fontColor = BotBase.Instance.AutoTarget ? _fontColorEnable : _fontColorDisable;
 				var shadowColor = BotBase.Instance.AutoTarget ? _shadowColorEnable : _shadowColorDisable;
-				var statusMsg = BotBase.Instance.AutoTarget ? Localization.Msg_AutoTargetOn : Localization.Msg_AutoTargetOff;
+				var statusMsg = BotBase.Instance.AutoTarget ? Msg_AutoTargetOn : Msg_AutoTargetOff;
 
 				if (BotBase.Instance.AutoTarget)
 					WaitHelper.Instance.ResetWait(@"Target.AutoTarget");
@@ -267,7 +268,7 @@ namespace Kombatant.Helpers
 
 				var fontColor = BotBase.Instance.IsAutonomous ? _fontColorEnable : _fontColorDisable;
 				var shadowColor = BotBase.Instance.IsAutonomous ? _shadowColorEnable : _shadowColorDisable;
-				var statusMsg = BotBase.Instance.IsAutonomous ? Localization.Msg_AutonomousOn : Localization.Msg_AutonomousOff;
+				var statusMsg = BotBase.Instance.IsAutonomous ? Msg_AutonomousOn : Msg_AutonomousOff;
 
 				OverlayHelper.Instance.AddToast(statusMsg, fontColor, shadowColor);
 				LogHelper.Instance.Log(statusMsg);
@@ -285,7 +286,7 @@ namespace Kombatant.Helpers
 
 				var fontColor = BotBase.Instance.EnableAvoidance ? _fontColorEnable : _fontColorDisable;
 				var shadowColor = BotBase.Instance.EnableAvoidance ? _shadowColorEnable : _shadowColorDisable;
-				var statusMsg = BotBase.Instance.EnableAvoidance ? Localization.Msg_AvoidanceOn : Localization.Msg_AvoidanceOff;
+				var statusMsg = BotBase.Instance.EnableAvoidance ? Msg_AvoidanceOn : Msg_AvoidanceOff;
 
 				OverlayHelper.Instance.AddToast(statusMsg, fontColor, shadowColor);
 				LogHelper.Instance.Log(statusMsg);
@@ -303,7 +304,7 @@ namespace Kombatant.Helpers
 
 				var fontColor = BotBase.Instance.EnableFollowing ? _fontColorEnable : _fontColorDisable;
 				var shadowColor = BotBase.Instance.EnableFollowing ? _shadowColorEnable : _shadowColorDisable;
-				var statusMsg = BotBase.Instance.EnableFollowing ? Localization.Msg_FollowingOn : Localization.Msg_FollowingOff;
+				var statusMsg = BotBase.Instance.EnableFollowing ? Msg_FollowingOn : Msg_FollowingOff;
 
 				OverlayHelper.Instance.AddToast(statusMsg, fontColor, shadowColor);
 				LogHelper.Instance.Log(statusMsg);

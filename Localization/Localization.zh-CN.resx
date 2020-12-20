@@ -165,14 +165,14 @@
 暂停回避</value>
   </data>
   <data name="Msg_Log_AvoidanceDisabledOnBossStart" xml:space="preserve">
-    <value>和已知的BOSS战斗，暂停回避</value>
+    <value>和已知的BOSS战斗中，暂停回避。</value>
   </data>
   <data name="Msg_AvoidanceDisabledOnBossEnd" xml:space="preserve">
     <value>战斗结束了
 恢复回避</value>
   </data>
   <data name="Msg_Log_AvoidanceDisabledOnBossEnd" xml:space="preserve">
-    <value>战斗结束了，恢复回避</value>
+    <value>战斗结束了，恢复回避。</value>
   </data>
   <data name="Msg_DutyReady" xml:space="preserve">
     <value>副本准备就绪！</value>
@@ -213,9 +213,6 @@
   <data name="Msg_DutyPsyche0" xml:space="preserve">
     <value>让狂欢开始！</value>
   </data>
-  <data name="Msg_DutyPsyche1" xml:space="preserve">
-    <value>站起来， 站起来！</value>
-  </data>
   <data name="Msg_DutyPsyche2" xml:space="preserve">
     <value>我赌10金有人会取消…</value>
   </data>
@@ -241,7 +238,7 @@
     <value>关于</value>
   </data>
   <data name="UI_Header_CombatRoutine" xml:space="preserve">
-    <value>战斗逻辑</value>
+    <value>战斗模块逻辑</value>
   </data>
   <data name="UI_Header_Convenience" xml:space="preserve">
     <value>便利</value>
@@ -259,49 +256,49 @@
     <value>战斗时增益</value>
   </data>
   <data name="UI_Tooltip_CombatBuff" xml:space="preserve">
-    <value>启用战斗循环的战斗时增益行为。</value>
+    <value>启用战斗模块的战斗时增益行为。</value>
   </data>
   <data name="UI_Combat" xml:space="preserve">
     <value>战斗</value>
   </data>
   <data name="UI_Tooltip_Combat" xml:space="preserve">
-    <value>启用战斗循环的战斗行为。</value>
+    <value>启用战斗模块的战斗行为。</value>
   </data>
   <data name="UI_Heal" xml:space="preserve">
     <value>治疗</value>
   </data>
   <data name="UI_Tooltip_Heal" xml:space="preserve">
-    <value>启用战斗循环的治疗行为。</value>
+    <value>启用战斗模块的治疗行为。</value>
   </data>
   <data name="UI_PreCombatBuff" xml:space="preserve">
     <value>战斗前增益</value>
   </data>
   <data name="UI_Tooltip_PreCombatBuff" xml:space="preserve">
-    <value>启用战斗循环的战斗前增益行为。</value>
+    <value>启用战斗模块的战斗前增益行为。</value>
   </data>
   <data name="UI_PullBuff" xml:space="preserve">
     <value>索敌时增益</value>
   </data>
   <data name="UI_Tooltip_PullBuff" xml:space="preserve">
-    <value>启用战斗循环的索敌增益行为。</value>
+    <value>启用战斗模块的索敌增益行为。</value>
   </data>
   <data name="UI_Pull" xml:space="preserve">
     <value>索敌</value>
   </data>
   <data name="UI_Tooltip_Pull" xml:space="preserve">
-    <value>启用战斗循环的索敌行为。</value>
+    <value>启用战斗模块的索敌行为。</value>
   </data>
   <data name="UI_SmartPull" xml:space="preserve">
     <value>智能索敌</value>
   </data>
   <data name="UI_Tooltip_SmartPull" xml:space="preserve">
-    <value>作为非坦克，不要在你的坦克之前与敌人接触。</value>
+    <value>作为非坦克，不要在你的坦克之前与敌人战斗。</value>
   </data>
   <data name="UI_Rest" xml:space="preserve">
     <value>休息</value>
   </data>
   <data name="UI_Tooltip_Rest" xml:space="preserve">
-    <value>启用战斗循环的休息行为。</value>
+    <value>启用战斗模块的休息行为。</value>
   </data>
   <data name="UI_SelectCr" xml:space="preserve">
     <value>选择战斗循环</value>
@@ -328,7 +325,7 @@
     <value>自动表情命令</value>
   </data>
   <data name="UI_Tooltip_AutoEmoteCommand" xml:space="preserve">
-    <value>应自动发送的表情动作， 如"/ grin motion"</value>
+    <value>应自动发送的表情动作， 如"/微笑 motion"</value>
   </data>
   <data name="UI_Lbl_AutoEmoteInterval" xml:space="preserve">
     <value>自动表情间隔</value>
@@ -388,7 +385,7 @@
     <value>当任务搜索器准备就绪时，播放随机声音效果。</value>
   </data>
   <data name="UI_MechanicWarnings" xml:space="preserve">
-    <value>机制警告！</value>
+    <value>机制警戒</value>
   </data>
   <data name="UI_Tooltip_MechanicWarnings" xml:space="preserve">
     <value>当某些攻击发生时， 将替代玩家进行控制。</value>
@@ -514,7 +511,7 @@
     <value>便利功能</value>
   </data>
   <data name="UI_Utilities" xml:space="preserve">
-    <value>实用工具</value>
+    <value>实用功能</value>
   </data>
   <data name="UI_Targeting" xml:space="preserve">
     <value>目标选择</value>
@@ -532,13 +529,13 @@
     <value>主要设置</value>
   </data>
   <data name="UI_CombatRoutine" xml:space="preserve">
-    <value>战斗循环设置</value>
+    <value>战斗模块</value>
   </data>
   <data name="UI_Hotkeys" xml:space="preserve">
     <value>热键设置</value>
   </data>
   <data name="UI_TargetScanFrequency" xml:space="preserve">
-    <value>目标扫描频率（毫秒）</value>
+    <value>目标扫描间隔（毫秒）</value>
   </data>
   <data name="UI_DutyFinder" xml:space="preserve">
     <value>任务搜索器</value>
@@ -569,5 +566,44 @@
   </data>
   <data name="UI_Death" xml:space="preserve">
     <value>死亡行为</value>
+  </data>
+  <data name="UI_SecondsToAutoLeave" xml:space="preserve">
+    <value>秒后自动离开副本</value>
+  </data>
+  <data name="UI_BotGeneral" xml:space="preserve">
+    <value>通用设置</value>
+  </data>
+  <data name="[PVP]Target PC First" xml:space="preserve">
+    <value>[PVP]优先选中玩家</value>
+  </data>
+  <data name="[PVP]Target WarMachina First" xml:space="preserve">
+    <value>[PVP]优先选中机甲</value>
+  </data>
+  <data name="[PVP]Target Mounted Enemy First" xml:space="preserve">
+    <value>[PVP]优先选中坐骑上的敌人</value>
+  </data>
+  <data name="Auto Vote Mvp" xml:space="preserve">
+    <value>自动互赞</value>
+  </data>
+  <data name="Follow Distance" xml:space="preserve">
+    <value>跟随距离</value>
+  </data>
+  <data name="Follow Mode" xml:space="preserve">
+    <value>跟随模式</value>
+  </data>
+  <data name="Only Target Tanked Enemy" xml:space="preserve">
+    <value>只选择坦克已取得仇恨的目标</value>
+  </data>
+  <data name="Pause Following On Bosses" xml:space="preserve">
+    <value>在于Boss战斗时暂停跟随</value>
+  </data>
+  <data name="Sprints In Dungeon Only" xml:space="preserve">
+    <value>仅副本中</value>
+  </data>
+  <data name="Target Name" xml:space="preserve">
+    <value>目标名</value>
+  </data>
+  <data name="Use NavGraph" xml:space="preserve">
+    <value>使用导航服务器</value>
   </data>
 </root>

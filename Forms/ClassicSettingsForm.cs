@@ -43,42 +43,42 @@ namespace Kombatant.Forms
 			var toolTip = new ToolTip { ShowAlways = true };
 
 			// Window title
-			Text = Resources.Localization.UI_SettingsWindowTitle;
+			Text = Localization.Localization.UI_SettingsWindowTitle;
 
 			// Tab headers
-			tbpConvenience.Text = Resources.Localization.UI_Header_Convenience;
-			tbpCrBehavior.Text = Resources.Localization.UI_Header_CombatRoutine;
-			tbpHotkeys.Text = Resources.Localization.UI_Header_Hotkeys;
-			tbpMovement.Text = Resources.Localization.UI_Header_Movement;
-			tbpTargeting.Text = Resources.Localization.UI_Header_Targeting;
+			tbpConvenience.Text = Localization.Localization.UI_Header_Convenience;
+			tbpCrBehavior.Text = Localization.Localization.UI_Header_CombatRoutine;
+			tbpHotkeys.Text = Localization.Localization.UI_Header_Hotkeys;
+			tbpMovement.Text = Localization.Localization.UI_Header_Movement;
+			tbpTargeting.Text = Localization.Localization.UI_Header_Targeting;
 
 			// Convenience tab
-			chkAutoAcceptDutyFinder.Text = Resources.Localization.UI_AutoAcceptDutyFinder;
-			chkAutoAcceptQuests.Text = Resources.Localization.UI_AutoAcceptQuests;
-			chkAutoAdvanceDialogue.Text = Resources.Localization.UI_AutoAdvanceDialogue;
-			chkAutoEndActEncounters.Text = Resources.Localization.UI_AutoEndActEncounters;
-			chkAutoFaceTarget.Text = Resources.Localization.UI_AutoFaceTarget;
-			chkAutoSkipCutscenes.Text = Resources.Localization.UI_AutoSkipCutscenes;
-			chkAutoSprint.Text = Resources.Localization.UI_AutoSprint;
-			chkAutoSyncFate.Text = Resources.Localization.UI_AutoSyncFate;
-			chkDutyFinderNotify.Text = Resources.Localization.UI_DutyFinderNotify;
-			chkIsAutonomous.Text = Resources.Localization.UI_IsAutonomous;
-			chkIsPaused.Text = Resources.Localization.UI_IsPaused;
-			chkMechanicWarnings.Text = Resources.Localization.UI_MechanicWarnings;
-			lblDutyFinderWaitTime.Text = Resources.Localization.UI_Lbl_DutyFinderWaitTime;
+			chkAutoAcceptDutyFinder.Text = Localization.Localization.UI_AutoAcceptDutyFinder;
+			chkAutoAcceptQuests.Text = Localization.Localization.UI_AutoAcceptQuests;
+			chkAutoAdvanceDialogue.Text = Localization.Localization.UI_AutoAdvanceDialogue;
+			chkAutoEndActEncounters.Text = Localization.Localization.UI_AutoEndActEncounters;
+			chkAutoFaceTarget.Text = Localization.Localization.UI_AutoFaceTarget;
+			chkAutoSkipCutscenes.Text = Localization.Localization.UI_AutoSkipCutscenes;
+			chkAutoSprint.Text = Localization.Localization.UI_AutoSprint;
+			chkAutoSyncFate.Text = Localization.Localization.UI_AutoSyncFate;
+			chkDutyFinderNotify.Text = Localization.Localization.UI_DutyFinderNotify;
+			chkIsAutonomous.Text = Localization.Localization.UI_IsAutonomous;
+			chkIsPaused.Text = Localization.Localization.UI_IsPaused;
+			chkMechanicWarnings.Text = Localization.Localization.UI_MechanicWarnings;
+			lblDutyFinderWaitTime.Text = Localization.Localization.UI_Lbl_DutyFinderWaitTime;
 
-			toolTip.SetToolTip(chkAutoAcceptDutyFinder, Resources.Localization.UI_Tooltip_AutoAcceptDutyFinder);
-			toolTip.SetToolTip(chkAutoAcceptQuests, Resources.Localization.UI_Tooltip_AutoAcceptQuests);
-			toolTip.SetToolTip(chkAutoAdvanceDialogue, Resources.Localization.UI_Tooltip_AutoAdvanceDialogue);
-			toolTip.SetToolTip(chkAutoEndActEncounters, Resources.Localization.UI_Tooltip_AutoEndActEncounters);
-			toolTip.SetToolTip(chkAutoFaceTarget, Resources.Localization.UI_Tooltip_AutoFaceTarget);
-			toolTip.SetToolTip(chkAutoSkipCutscenes, Resources.Localization.UI_Tooltip_AutoSkipCutscenes);
-			toolTip.SetToolTip(chkAutoSprint, Resources.Localization.UI_Tooltip_AutoSprint);
-			toolTip.SetToolTip(chkAutoSyncFate, Resources.Localization.UI_Tooltip_AutoSyncFate);
-			toolTip.SetToolTip(chkDutyFinderNotify, Resources.Localization.UI_Tooltip_DutyFinderNotify);
-			toolTip.SetToolTip(chkIsAutonomous, Resources.Localization.UI_Tooltip_IsAutonomous);
-			toolTip.SetToolTip(chkIsPaused, Resources.Localization.UI_Tooltip_IsPaused);
-			toolTip.SetToolTip(chkMechanicWarnings, Resources.Localization.UI_Tooltip_MechanicWarnings);
+			toolTip.SetToolTip(chkAutoAcceptDutyFinder, Localization.Localization.UI_Tooltip_AutoAcceptDutyFinder);
+			toolTip.SetToolTip(chkAutoAcceptQuests, Localization.Localization.UI_Tooltip_AutoAcceptQuests);
+			toolTip.SetToolTip(chkAutoAdvanceDialogue, Localization.Localization.UI_Tooltip_AutoAdvanceDialogue);
+			toolTip.SetToolTip(chkAutoEndActEncounters, Localization.Localization.UI_Tooltip_AutoEndActEncounters);
+			toolTip.SetToolTip(chkAutoFaceTarget, Localization.Localization.UI_Tooltip_AutoFaceTarget);
+			toolTip.SetToolTip(chkAutoSkipCutscenes, Localization.Localization.UI_Tooltip_AutoSkipCutscenes);
+			toolTip.SetToolTip(chkAutoSprint, Localization.Localization.UI_Tooltip_AutoSprint);
+			toolTip.SetToolTip(chkAutoSyncFate, Localization.Localization.UI_Tooltip_AutoSyncFate);
+			toolTip.SetToolTip(chkDutyFinderNotify, Localization.Localization.UI_Tooltip_DutyFinderNotify);
+			toolTip.SetToolTip(chkIsAutonomous, Localization.Localization.UI_Tooltip_IsAutonomous);
+			toolTip.SetToolTip(chkIsPaused, Localization.Localization.UI_Tooltip_IsPaused);
+			toolTip.SetToolTip(chkMechanicWarnings, Localization.Localization.UI_Tooltip_MechanicWarnings);
 		}
 
 		/// <summary>

@@ -8,6 +8,7 @@ using ff14bot.Enums;
 using ff14bot.Helpers;
 using ff14bot.Managers;
 using ff14bot.Objects;
+using Kombatant.Enums;
 
 namespace Kombatant.Extensions
 {
@@ -163,6 +164,75 @@ namespace Kombatant.Extensions
 			if (isAOE)
 				return Core.Me.Distance2D(target) - target.CombatReach;
 			return Core.Me.Distance2D(target) - Core.Me.CombatReach - target.CombatReach;
+		}
+
+		public static float Distance2DSqr(this GameObject target)
+		{
+			float num = target.X - Core.Me.X;
+			float num2 = target.Z - Core.Me.Z;
+			return num * num + num2 * num2;
+		}
+		public static float Distance2DSqr(this GameObject target, ref Vector3 Location)
+		{
+			float num = target.X - Location.X;
+			float num2 = target.Z - Location.Z;
+			return num * num + num2 * num2;
+		}
+		public static float Distance2DSqr(this GameObject target, GameObject gameObject)
+		{
+			float num = target.X - gameObject.X;
+			float num2 = target.Z - gameObject.Z;
+			return num * num + num2 * num2;
+		}
+
+		public static bool MountedOnMachina(this GameObject unit)
+		{
+			return unit.HiddenGorgeType() == Enums.HiddenGorgeType.WarMachina;
+		}
+
+		public static HiddenGorgeType HiddenGorgeType(this GameObject unit)
+		{
+			if (unit is null) return Enums.HiddenGorgeType.undefined;
+
+			switch (unit.NpcId)
+			{
+				case 6857:
+				case 6858:
+					return Enums.HiddenGorgeType.Core;
+				case 6859:
+				case 6860:
+				case 6861:
+				case 6862:
+					return Enums.HiddenGorgeType.Tower;
+				case 6869:
+				case 6870:
+				case 6871:
+				case 6872:
+					return Enums.HiddenGorgeType.Mammet;
+				case 7889:
+				case 7890:
+					return Enums.HiddenGorgeType.GobTank;
+				case 7891:
+				case 7892:
+				case 7906:
+					return Enums.HiddenGorgeType.GobMercenary;
+				case 9031:
+					return Enums.HiddenGorgeType.CeruleumTank;
+				case 9032:
+				case 9033:
+				case 9040:
+				case 9041:
+					return Enums.HiddenGorgeType.Cannon;
+				default:
+					if (unit is BattleCharacter c && c.HasAura(1420)) return Enums.HiddenGorgeType.WarMachina;
+					if (unit.Type == GameObjectType.Pc) return Enums.HiddenGorgeType.Player;
+					return Enums.HiddenGorgeType.undefined;
+			}
+		}
+
+		public static bool IsHiddenGorgeCoreOrTower(this GameObject c)
+		{
+			return new HiddenGorgeType[] { Enums.HiddenGorgeType.Tower, Enums.HiddenGorgeType.Core }.Contains(c.HiddenGorgeType());
 		}
 	}
 }

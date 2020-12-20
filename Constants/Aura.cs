@@ -46,6 +46,7 @@
             690,     // Pyretic
             1049,    // Pyretic
             1133,    // Pyretic
+            1599,    // Pyretic
         };
 
         /// <summary>
@@ -56,6 +57,8 @@
         {
             1072,    // Acceleration Bomb
             1384,    // Acceleration Bomb
+            1132,    // Acceleration Bomb
+            1269,    // Acceleration Bomb
         };
     }
 }
