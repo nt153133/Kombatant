@@ -200,8 +200,8 @@ namespace Kombatant.Logic
 		/// <returns></returns>
 		private bool ShouldPlayDutyReadySound()
 		{
-			if (!BotBase.Instance.AutoAcceptDutyFinder)
-				return false;
+			//if (!BotBase.Instance.AutoAcceptDutyFinder)
+			//	return false;
 			if (!BotBase.Instance.DutyFinderNotify)
 				return false;
 			if (ContentsFinderReady.IsOpen)

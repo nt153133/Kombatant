@@ -47,9 +47,7 @@ namespace Kombatant.Memory
 				InitializeValue(ref MarkingFunc, nameof(MarkingFunc), "48 89 5C 24 10 48 89 6C 24 18 57 48 83 EC ? 8D 42 FF");
 				InitializeValue(ref MarkingParam1, nameof(MarkingParam1), "48 8D 0D ? ? ? ? E8 ? ? ? ? 84 C0 74 ? 45 32 C9 Add 3 TraceRelative");
 				InitializeValue(ref GroundSpeedWriteFunc, nameof(GroundSpeedWriteFunc), "F3 0F 11 73 44 0F 28 74 24 40");
-				//GroundSpeedWriteFunc = Core.Memory.ImageBase + 0x75BB55;
 				InitializeValue(ref CombatReachWriteFunc, nameof(CombatReachWriteFunc), "F3 0F 10 83 C0 00 00 00 48 83 C4 ?");
-				//CombatReachWriteFunc = Core.Memory.ImageBase + 0x6C5676;
 				InitializeValue(ref MovementFlags, nameof(MovementFlags), "48 8D 0D ? ? ? ? 45 33 C0 41 8D 51 69 Add 3 TraceRelative Add 1A");
 
 				AgentNotificationId = AgentModule.FindAgentIdByVtable(AgentNotificationVTable);
@@ -68,7 +66,7 @@ namespace Kombatant.Memory
 			}
 			catch (Exception e)
 			{
-				LogHelper.Instance.Log($"[Offset] {name} not found. " + e.Message);
+				LogHelper.Instance.Log($"[Offset] {name} not found. ");
 			}
 		}
 	}
