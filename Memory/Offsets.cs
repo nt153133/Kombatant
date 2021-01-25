@@ -25,6 +25,7 @@ namespace Kombatant.Memory
 
 		public readonly int AgentNotificationId;
 		public readonly int AgentMvpId;
+		//public readonly int _BRcXRW4UKMinIJUVnAue5gFVjSA;
 
 		public readonly IntPtr AnimationLockTimer;
 		public readonly IntPtr MarkingParam1;
@@ -33,7 +34,9 @@ namespace Kombatant.Memory
 		public readonly IntPtr AgentMvpVTable;
 		public readonly IntPtr GroundSpeedWriteFunc;
 		public readonly IntPtr CombatReachWriteFunc;
-		public readonly IntPtr MovementFlags;
+		public readonly IntPtr Conditions;
+		public readonly IntPtr LootFunc;
+		public readonly IntPtr LootStructs;
 
 
 
@@ -48,7 +51,9 @@ namespace Kombatant.Memory
 				InitializeValue(ref MarkingParam1, nameof(MarkingParam1), "48 8D 0D ? ? ? ? E8 ? ? ? ? 84 C0 74 ? 45 32 C9 Add 3 TraceRelative");
 				InitializeValue(ref GroundSpeedWriteFunc, nameof(GroundSpeedWriteFunc), "F3 0F 11 73 44 0F 28 74 24 40");
 				InitializeValue(ref CombatReachWriteFunc, nameof(CombatReachWriteFunc), "F3 0F 10 83 C0 00 00 00 48 83 C4 ?");
-				InitializeValue(ref MovementFlags, nameof(MovementFlags), "48 8D 0D ? ? ? ? 45 33 C0 41 8D 51 69 Add 3 TraceRelative Add 1A");
+				InitializeValue(ref Conditions, nameof(Conditions), "48 8D 0D ? ? ? ? 45 33 C0 41 8D 51 69 Add 3 TraceRelative Add 1A");
+				InitializeValue(ref LootFunc, nameof(LootFunc), "E8 ? ? ? ? EB 4A 48 8D 4F 10 Add 1 TraceRelative");
+				InitializeValue(ref LootStructs, nameof(LootStructs), "48 8D 0D ? ? ? ? E8 ? ? ? ? 89 44 24 60 Add 3 TraceRelative");
 
 				AgentNotificationId = AgentModule.FindAgentIdByVtable(AgentNotificationVTable);
 				AgentMvpId = AgentModule.FindAgentIdByVtable(AgentMvpVTable);

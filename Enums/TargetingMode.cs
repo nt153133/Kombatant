@@ -23,11 +23,15 @@ namespace Kombatant.Enums
         OnlyWhitelisted = 60,
         [Description("Assist fixed character")]
         AssistFixedCharacter = 70,
-        [Description("Lowest health")]
+        [Description("Lowest Total health")]
+        LowestTotalHealth = 95,
+        [Description("Lowest Current health")]
         LowestHealth = 100,
         [Description("Lowest health percent")]
         LowestHealthPercent = 110,
-        [Description("Highest health")]
+        [Description("Highest Total health")]
+        HighestTotalHealth = 115,
+        [Description("Highest Current health")]
         HighestHealth = 120,
         [Description("Highest health percent")]
         HighestHealthPercent = 130, 

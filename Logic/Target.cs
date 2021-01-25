@@ -1,6 +1,7 @@
-﻿//#define DEBUG
+﻿#define DEBUG
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xaml;
@@ -61,7 +62,7 @@ namespace Kombatant.Logic
 				if (BotBase.Instance.AutoTarget && BotBase.Instance.AutoDeSelectTarget && currentTarget != null && !IsValidTarget(currentTarget) && !currentTarget.IsStrikingDummy())
 				{
 					Core.Me.ClearTarget();
-					await Coroutine.Yield();
+					return await Task.FromResult(true);
 				}
 			}
 
@@ -93,12 +94,20 @@ namespace Kombatant.Logic
 							potentialTarget = TargetLowestHpEnemy();
 							break;
 
+						case TargetingMode.LowestTotalHealth:
+							potentialTarget = TargetLowestTotalHpEnemy();
+							break;
+
 						case TargetingMode.LowestHealthPercent:
 							potentialTarget = TargetLowestHpPercentEnemy();
 							break;
 
 						case TargetingMode.HighestHealth:
 							potentialTarget = TargetHighestHpEnemy();
+							break;
+
+						case TargetingMode.HighestTotalHealth:
+							potentialTarget = TargetHighestTotalHpEnemy();
 							break;
 
 						case TargetingMode.HighestHealthPercent:
@@ -330,7 +339,8 @@ namespace Kombatant.Logic
 
 					//		return res;
 					//	}
-					if(BotBase.Instance.TargetPcOrNpcFirst != null)
+
+					if (BotBase.Instance.TargetPcOrNpcFirst != null)
 					{
 						if ((bool)BotBase.Instance.TargetPcOrNpcFirst) //如果优先选中玩家
 						{
@@ -348,8 +358,6 @@ namespace Kombatant.Logic
 								BotBase.Instance.TargetPlayerUnderThisHPPct);
 						}
 					}
-
-
 
 					if (BotBase.Instance.TargetMountedEnemyFirst)
 						result = result.OrderByDescending(i => i.IsMounted && !i.HasAura(1394)); //优先选中在坐骑上且没有移动速度降低debuff的敌人
@@ -398,8 +406,20 @@ namespace Kombatant.Logic
 		private IEnumerable<BattleCharacter> PostFilterThreatList(IEnumerable<BattleCharacter> group)
 		{
 			if (Settings.BotBase.Instance.EnableSmartPull && !WorldManager.InPvP)
-				return group.Where(o => o.IsEnemy() && (GameObjectManager.Attackers.Contains(o) || o.HasBeenTaggedByPartyMember()));
-			
+			{
+				//if (PartyManager.IsInParty)
+				//{
+				//	return group.Where(o =>
+				//		o.IsEnemy() && o.TaggerObjectId == PartyManager.PartyId &&
+				//		(GameObjectManager.Attackers.Contains(o) || o.HasBeenTaggedByPartyMember()));
+				//}
+				//else
+				{
+					return group.Where(o =>
+						o.IsEnemy() && (GameObjectManager.Attackers.Contains(o) || o.HasBeenTaggedByPartyMember()));
+				}
+			}
+
 			return group;
 		}
 
@@ -425,14 +445,12 @@ namespace Kombatant.Logic
 			// Do we have aggro from something else? Prioritize those targets!
 			if (GameObjectManager.Attackers.Any(o => o.TargetCharacter == Core.Me))
 				return GameObjectManager.Attackers
-					.Where(o => o.TargetCharacter == Core.Me)
-					.OrderBy(o => o.Distance2DSqr());
+					.Where(o => o.TargetCharacter == Core.Me);
 
 			// No external attackers, prioritize FATE mobs.
 			if (FateManager.WithinFate)
 				return group
-					.Where(o => o.IsFate)
-					.OrderBy(o => o.Distance2DSqr());
+					.Where(o => o.IsFate);
 
 			// Nothing special? Return group as-is.
 			return group;
@@ -500,8 +518,9 @@ namespace Kombatant.Logic
 			// Find the closest tank in my party and target whatever they are targeting!
 			var nearestTank = PartyManager.VisibleMembers
 				.Where(member => member.IsTank())
-				.OrderBy(member => member.BattleCharacter.Distance2DSqr())
-				.FirstOrDefault();
+				.MinElement(member => member.BattleCharacter.Distance2DSqr());
+				//.OrderBy(member => member.BattleCharacter.Distance2DSqr())
+				//.FirstOrDefault();
 
 			// No tanksywhirls?
 			if (nearestTank == null)
@@ -541,10 +560,22 @@ namespace Kombatant.Logic
 		private BattleCharacter TargetBestAoeEnemy()
 		{
 
+			float GetDistanceSum(GameObject obj)
+			{
+				return GameObjectManager.GetObjectsOfType<BattleCharacter>(true)
+					.Select(i => i.Distance2DSqr(obj)).Where(i => i < 100).Sum();
+			}
+
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
 				.Where(IsValidTarget)
 				.OrderByDescending(o => o.NearbyEnemyCount())
 				.ThenBy(o => o.Distance2DSqr());
+
+			//var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
+			//	.Where(IsValidTarget);
+			//potentialTargets = potentialTargets
+			//.OrderBy(i => GetDistanceSum(i, potentialTargets))
+			//.ThenBy(o => o.Distance2DSqr());
 
 			var bestEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
 
@@ -599,6 +630,22 @@ namespace Kombatant.Logic
 		}
 
 		/// <summary>
+		/// Target selection: Highest total HP enemy.
+		/// </summary>
+		/// <returns>Potential BattleCharacter object as the new target or null when no suitable target was found.</returns>
+		private BattleCharacter TargetHighestTotalHpEnemy()
+		{
+			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
+				.Where(IsValidTarget)
+				.OrderByDescending(o => o.MaxHealth)
+				.ThenBy(o => o.Distance2DSqr());
+
+			var strongestEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
+
+			return strongestEnemy;
+		}
+
+		/// <summary>
 		/// Target selection: Highest HP percent enemy.
 		/// </summary>
 		/// <returns>Potential BattleCharacter object as the new target or null when no suitable target was found.</returns>
@@ -631,6 +678,22 @@ namespace Kombatant.Logic
 		}
 
 		/// <summary>
+		/// Target selection: Lowest total HP enemy.
+		/// </summary>
+		/// <returns>Potential BattleCharacter object as the new target or null when no suitable target was found.</returns>
+		private BattleCharacter TargetLowestTotalHpEnemy()
+		{
+			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
+				.Where(IsValidTarget)
+				.OrderBy(o => o.MaxHealth)
+				.ThenBy(o => o.Distance2DSqr());
+
+			var weakestEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();
+
+			return weakestEnemy;
+		}
+
+		/// <summary>
 		/// Target selection: Lowest HP percent enemy.
 		/// </summary>
 		/// <returns>Potential BattleCharacter object as the new target or null when no suitable target was found.</returns>
@@ -650,7 +713,7 @@ namespace Kombatant.Logic
 		{
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
 				.Where(IsValidTarget)
-				.OrderByDescending(o => o.BeingTargetedCount())
+				.OrderByDescending(o => o.EnemyBeingTargetedCount(!WorldManager.InPvP))
 				.ThenBy(o => o.Distance2DSqr());
 
 			var mostTargetedEnemy = ApplyPostFilters(potentialTargets).FirstOrDefault();

@@ -79,7 +79,7 @@ namespace Kombatant.Logic
 
 			if (BotBase.Instance.RemoveMovementLock)
 			{
-				Core.Memory.Write(Offsets.Instance.MovementFlags, 0);
+				Core.Memory.Write(Offsets.Instance.Conditions, 0);
 			}
 
 			return false;

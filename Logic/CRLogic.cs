@@ -4,7 +4,9 @@ using Clio.Common;
 using Clio.Utilities;
 using ff14bot;
 using ff14bot.Behavior;
+using ff14bot.Enums;
 using ff14bot.Managers;
+using ff14bot.RemoteWindows;
 using Kombatant.Extensions;
 using Kombatant.Interfaces;
 using Kombatant.Settings;
@@ -39,6 +41,12 @@ namespace Kombatant.Logic
 			{
 				if (Core.Me.IsMounted || MovementManager.IsFlying || MovementManager.IsSwimming || MovementManager.IsDiving)
 					return false;
+			}
+
+			if ((ClientGameUiRevive.ReviveState == ReviveState.Reviving || Core.Me.HasAura(418))
+			    && Core.Me.CurrentHealthPercent < 75) //Transcendent
+			{
+				return true;
 			}
 
 			if (Core.Me.IsDead)

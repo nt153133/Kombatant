@@ -1,4 +1,4 @@
-﻿//#define DEBUG
+﻿#define DEBUG
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +21,7 @@ using Kombatant.Forms.Models;
 using Kombatant.Logic;
 using Kombatant.Helpers;
 using Kombatant.Localization;
+using Kombatant.Memory;
 using TreeSharp;
 using BotBase = Kombatant.Settings.BotBase;
 using UserControl = System.Windows.Controls.UserControl;
@@ -256,6 +257,10 @@ namespace Kombatant
 			// Unregister the hotkeys
 			HotkeyHelper.Instance.UnregisterHotkeys();
 
+			GroundSpeedHook.Instance.SpeedMultiplier = 1;
+			GroundSpeedHook.Instance.GroundMinimumSpeed = 0;
+			CombatReachHook.Instance.CombatReachAdjustment = 0;
+
 			// Stop Overlays
 			OverlayManager.StopFocusOverlay();
 			OverlayManager.StopStatusOverlay();
@@ -280,135 +285,113 @@ namespace Kombatant
 		/// <returns></returns>
 		private async Task<bool> KombatantLogic()
 		{
-#if DEBUG
-			using (new PerformanceLogger("RefreshOverlay"))
-#endif
+			using (new PerformanceLogger("TotalExecutionTime"))
 			{
-				//invoking UI thread to refresh overlay
-				if (BotBase.Instance.UseFocusOverlay)
-					OverlayManager.FocusOverlay.Update();
-				if (BotBase.Instance.UseStatusOverlay)
-					OverlayManager.StatusOverlay.Update();
-			}
 #if DEBUG
-			using (new PerformanceLogger("Memory"))
+				using (new PerformanceLogger("RefreshOverlay"))
 #endif
-			{
-				if (await Hack.Instance.ExecuteLogic())
+				{
+					//invoking UI thread to refresh overlay
+					if (BotBase.Instance.UseFocusOverlay)
+						OverlayManager.FocusOverlay.Update();
+					if (BotBase.Instance.UseStatusOverlay)
+						OverlayManager.StatusOverlay.Update();
+				}
+#if DEBUG
+				using (new PerformanceLogger("Memory"))
+#endif
+				{
+					if (await Hack.Instance.ExecuteLogic())
+						return await Task.FromResult(true);
+				}
+
+				// Execute Loot logic
+				if (await Loot.Instance.ExecuteLogic())
 					return await Task.FromResult(true);
-			}
 
 #if DEBUG
-			using (new PerformanceLogger("SetTickRate"))
+				using (new PerformanceLogger("SetTickRate"))
 #endif
-			{
-				//if (Environment.TickCount > tickcount)
-				//{
-				//	tickcount = Environment.TickCount + 1000;
-
-				//	if (BotBase.Instance.IsPaused)
-				//	{
-				//		if (TreeRoot.TicksPerSecond > 10) TreeRoot.TicksPerSecond = 10;
-				//	}
-				//	else
-				//	{
-				//		if (Core.Me.InCombat || DutyManager.InInstance)
-				//		{
-				//			if (TreeRoot.TicksPerSecond != 60)
-				//			{
-				//				TreeRoot.TicksPerSecond = 60;
-				//				//LogHelper.Instance.Log($"Preparing for combat! Set TPS to {TreeRoot.TicksPerSecond}.");
-				//			}
-				//		}
-				//		else
-				//		{
-				//			if (TreeRoot.TicksPerSecond != 30)
-				//			{
-				//				TreeRoot.TicksPerSecond = 30;
-				//				//LogHelper.Instance.Log($"Set TPS back to {TreeRoot.TicksPerSecond}.");
-				//			}
-				//		}
-				//	}
-				//}
-
-				TreeRoot.TicksPerSecond = BotBase.Instance.IsPaused ? (byte)30 : (byte)255;
-			}
+				{
+					TreeRoot.TicksPerSecond = BotBase.Instance.IsPaused ? (byte)30 : (byte)255;
+				}
 #if DEBUG
-			using (new PerformanceLogger("CommenceDuty"))
+				using (new PerformanceLogger("CommenceDuty"))
 #endif
-			{
-				// Execute duty commence logic
-				if (await CommenceDuty.Instance.ExecuteLogic())
-					return await Task.FromResult(true);
-			}
+				{
+					// Execute duty commence logic
+					if (await CommenceDuty.Instance.ExecuteLogic())
+						return await Task.FromResult(true);
+				}
 
 #if DEBUG
-			using (new PerformanceLogger("Mechanics"))
+				using (new PerformanceLogger("Mechanics"))
 #endif
-			{
-				// Execute mechanics logic (gaze attacks et al)
-				if (await Mechanics.Instance.ExecuteLogic())
-					return await Task.FromResult(true);
-			}
+				{
+					// Execute mechanics logic (gaze attacks et al)
+					if (await Mechanics.Instance.ExecuteLogic())
+						return await Task.FromResult(true);
+				}
 
 #if DEBUG
-			using (new PerformanceLogger("Convenience"))
+				using (new PerformanceLogger("Convenience"))
 #endif
-			{
-				// Execute convenience logic (auto sprint etc.)
-				if (await Convenience.Instance.ExecuteLogic())
-					return await Task.FromResult(true);
-			}
+				{
+					// Execute convenience logic (auto sprint etc.)
+					if (await Convenience.Instance.ExecuteLogic())
+						return await Task.FromResult(true);
+				}
 
 #if DEBUG
-			using (new PerformanceLogger("Target"))
+				using (new PerformanceLogger("Target"))
 #endif
-			{
-				// Execute target logic
-				if (await Target.Instance.ExecuteLogic())
-					return await Task.FromResult(true);
-			}
+				{
+					// Execute target logic
+					if (await Target.Instance.ExecuteLogic())
+						return await Task.FromResult(true);
+				}
 
 #if DEBUG
-			using (new PerformanceLogger("Avoidance"))
+				using (new PerformanceLogger("Avoidance"))
 #endif
-			{
-				// Execute avoidance logic
-				if (await Avoidance.Instance.ExecuteLogic())
-					return await Task.FromResult(true);
-			}
+				{
+					// Execute avoidance logic
+					if (await Avoidance.Instance.ExecuteLogic())
+						return await Task.FromResult(true);
+				}
 
 #if DEBUG
-			using (new PerformanceLogger("Movement"))
+				using (new PerformanceLogger("Movement"))
 #endif
-			{
-				// Execute auto movement
-				if (await Movement.Instance.ExecuteLogic())
-					return await Task.FromResult(true);
-			}
+				{
+					// Execute auto movement
+					if (await Movement.Instance.ExecuteLogic())
+						return await Task.FromResult(true);
+				}
 
 #if DEBUG
-			using (new PerformanceLogger("CombatLogic"))
+				using (new PerformanceLogger("CombatLogic"))
 #endif
-			{
-				//// Execute combat logic
-				if (await CombatLogic.Instance.ExecuteLogic())
-					return await Task.FromResult(true);
+				{
+					//// Execute combat logic
+					if (await CombatLogic.Instance.ExecuteLogic())
+						return await Task.FromResult(true);
+				}
+
+				//// Execute tank specific logic
+				//if (await Tank.Instance.ExecuteLogic())
+				//	return await Task.FromResult(true);
+
+				//// Execute healer specific logic
+				//if (await Healer.Instance.ExecuteLogic())
+				//	return await Task.FromResult(true);
+
+				//// Execute DPS specific logic
+				//if (await DPS.Instance.ExecuteLogic())
+				//	return await Task.FromResult(true);
+
+				return await Task.FromResult(false);
 			}
-
-			//// Execute tank specific logic
-			//if (await Tank.Instance.ExecuteLogic())
-			//	return await Task.FromResult(true);
-
-			//// Execute healer specific logic
-			//if (await Healer.Instance.ExecuteLogic())
-			//	return await Task.FromResult(true);
-
-			//// Execute DPS specific logic
-			//if (await DPS.Instance.ExecuteLogic())
-			//	return await Task.FromResult(true);
-
-			return await Task.FromResult(false);
 		}
 	}
 }

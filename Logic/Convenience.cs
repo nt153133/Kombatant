@@ -119,7 +119,6 @@ namespace Kombatant.Logic
 			if (BotBase.Instance.AutoHandoverRequestItems)
 				return await ExecuteAutoHandoverRequestItems();
 
-
 			return await Task.FromResult(false);
 		}
 
@@ -194,12 +193,12 @@ namespace Kombatant.Logic
 		private void ExecuteAutoEmote()
 		{
 			if (!WaitHelper.Instance.HasWait(AutoEmoteWaitName))
-				WaitHelper.Instance.AddWait(AutoEmoteWaitName, new TimeSpan(0, 0, 0, 0, (int)(BotBase.Instance.AutoEmoteInterval * 1000)));
+				WaitHelper.Instance.AddWait(AutoEmoteWaitName, new TimeSpan(0, 0, (int)(BotBase.Instance.AutoEmoteInterval * 1000)));
 
 			if (WaitHelper.Instance.IsFinished(AutoEmoteWaitName))
 			{
 				ChatManager.SendChat(BotBase.Instance.AutoEmoteCommand);
-				WaitHelper.Instance.AddWait(AutoEmoteWaitName, new TimeSpan(0, 0, 0, 0, (int)(BotBase.Instance.AutoEmoteInterval * 1000)));
+				WaitHelper.Instance.AddWait(AutoEmoteWaitName, new TimeSpan(0, 0, (int)(BotBase.Instance.AutoEmoteInterval * 1000)));
 			}
 		}
 
@@ -239,22 +238,20 @@ namespace Kombatant.Logic
 		private bool ExecuteAutoSprint()
 		{
 			if (WorldManager.InPvP) return false;
-			if (!DutyManager.InInstance && BotBase.Instance.AutoSprintInDutyOnly) return false;
-			if (DirectorManager.ActiveDirector is InstanceContentDirector icd && !icd.BarrierDown()) return false;
-			if (!Core.Me.InCombat && !GameObjectManager.Attackers.Any() && MovementManager.IsMoving)
+			if (Core.Me.InCombat || GameObjectManager.Attackers.Any() || !MovementManager.IsMoving) return false;
+			if (!ActionManager.IsSprintReady) return false;
+			if (BotBase.Instance.AutoSprintInDutyOnly)
 			{
-				//if (ActionManager.CanCast(18942, null) && !Core.Me.HasAura("Sprint"))
-				//{
-				//    ActionManager.DoAction(18942, null);
-				//    return true;
-				//}
-
-				if (ActionManager.IsSprintReady/* && !Core.Me.HasAura("Bolt")*/)
+				if (DirectorManager.ActiveDirector is InstanceContentDirector icd && icd.BarrierDown())
 				{
 					ActionManager.Sprint();
 					return true;
 				}
-
+			}
+			else
+			{
+				ActionManager.Sprint();
+				return true;
 			}
 
 			return false;
@@ -293,13 +290,15 @@ namespace Kombatant.Logic
 		private async Task<bool> ExecuteSkipCutscene()
 		{
 			// Try to skip the cutscene
-			AgentCutScene.Instance.PromptSkip();
+			if (WaitHelper.Instance.IsDoneWaiting("SkipCutscene", new TimeSpan(0, 0, 1), true))
+			{
+				AgentCutScene.Instance.PromptSkip();
+			}
 
 			if (AgentCutScene.Instance.CanSkip && SelectString.IsOpen)
 			{
 				SelectString.ClickSlot(0);
 				LogHelper.Instance.Log("Skipping Cutscene...");
-				await Coroutine.Wait(3000, () => !QuestLogManager.InCutscene);
 				return true;
 			}
 
@@ -354,11 +353,17 @@ namespace Kombatant.Logic
 
 		private bool ExecuteAutoAcceptRaise()
 		{
-			if (Core.Me.IsDead && Core.Me.HasAura(148) && WaitHelper.Instance.IsDoneWaiting("Revive", new TimeSpan(0, 0, 1)))
+			if (ClientGameUiRevive.ReviveState == ReviveState.Dead)
 			{
-				ClientGameUiRevive.Revive();
-				LogHelper.Instance.Log("Accepting Revive...");
-				return true;
+				if (Core.Me.HasAura(148))
+				{
+					if (SelectYesno.___Elements[5].TrimmedData != 0)
+					{
+						ClientGameUiRevive.Revive();
+						LogHelper.Instance.Log("Accepting Revive...");
+						return true;
+					}
+				}
 			}
 
 			return false;

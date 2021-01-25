@@ -26,7 +26,7 @@ namespace Kombatant.Extensions
 		internal static int NearbyEnemyCount(this GameObject obj)
 		{
 			return GameObjectManager.GameObjects
-				.Count(g => g.IsEnemy() && g.Distance2D(obj.Location) - g.CombatReach <= 5.5f);
+				.Count(g => g.IsEnemy() && g.Distance2D(obj.Location) - g.CombatReach < 5.5f);
 		}
 
 		/// <summary>
@@ -151,11 +151,26 @@ namespace Kombatant.Extensions
 			return single < (float)(Math.PI / 4);
 		}
 
-		internal static int BeingTargetedCount(this GameObject o)
+		internal static int EnemyBeingTargetedCount(this GameObject o, bool onlyCountPartMember = false)
 		{
-			return o.IsEnemy()
-				? GameObjectManager.GetObjectsOfType<BattleCharacter>().Count(i => !i.IsEnemy() && i.Type == GameObjectType.Pc && i.TargetGameObject == o)
-				: GameObjectManager.GetObjectsOfType<BattleCharacter>().Count(i => i.IsEnemy() && i.Type == GameObjectType.Pc && i.TargetGameObject == o);
+
+			if (onlyCountPartMember)
+			{
+				return GameObjectManager.GetObjectsOfType<BattleCharacter>().Count(i =>
+					!i.IsEnemy() && i.Type == GameObjectType.Pc && i.IsInMyParty() && i.TargetGameObject == o);
+			}
+			else
+			{
+				return GameObjectManager.GetObjectsOfType<BattleCharacter>().Count(i =>
+					!i.IsEnemy() && i.Type == GameObjectType.Pc && i.TargetGameObject == o);
+			}
+
+		}
+
+		internal static int AllyBeingTargetedCount(this GameObject o)
+		{
+			return GameObjectManager.GetObjectsOfType<BattleCharacter>().Count(i =>
+				i.IsEnemy() && i.Type == GameObjectType.Pc && i.TargetGameObject == o);
 		}
 
 		public static float CombatDistance(this GameObject target, bool isAOE = false)

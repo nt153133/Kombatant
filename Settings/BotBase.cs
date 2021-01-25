@@ -1549,6 +1549,7 @@ namespace Kombatant.Settings
 				OnPropertyChanged();
 			}
 		}
+
 		private int minLogMs;
 		[DefaultValue(5)]
 		public int MinLogMs
@@ -1560,5 +1561,21 @@ namespace Kombatant.Settings
 				OnPropertyChanged();
 			}
 		}
+
+		#region Loot
+
+		private LootMode lootMode;
+		[DefaultValue(LootMode.DontLoot)]
+		public LootMode LootMode
+		{
+			get => lootMode;
+			set
+			{
+				lootMode = value;
+				OnPropertyChanged();
+			}
+		}
+
+		#endregion
 	}
 }

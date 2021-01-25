@@ -11,7 +11,7 @@ namespace Kombatant.Extensions
 	{
 		public static bool BarrierDown(this InstanceContentDirector instanceContentDirector)
 		{
-			return (instanceContentDirector.InstanceFlags & 0b00001000) == 1;
+			return (instanceContentDirector.InstanceFlags & 0b0000_1000) == 0b0000_1000;
 		}
 
 

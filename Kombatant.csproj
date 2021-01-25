@@ -58,9 +58,13 @@
     <Compile Include="Enums\FollowMode.cs" />
     <Compile Include="Enums\HiddenGorgeType.cs" />
     <Compile Include="Enums\InstanceContentType.cs" />
+    <Compile Include="Enums\LootMode.cs" />
+    <Compile Include="Enums\RollOption.cs" />
+    <Compile Include="Enums\RollState.cs" />
     <Compile Include="Enums\WaypointGenerationMode.cs" />
     <Compile Include="Enums\TargetingMode.cs" />
     <Compile Include="Extensions\CharacterExtension.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\InstanceContentDirectorExtension.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\GameObjectExtension.cs" />
@@ -99,10 +103,12 @@
     <Compile Include="Logic\CommenceDuty.cs" />
     <Compile Include="Logic\Hack.cs" />
     <Compile Include="Logic\Healer.cs" />
+    <Compile Include="Logic\Loot.cs" />
     <Compile Include="Logic\Mechanics.cs" />
     <Compile Include="Logic\Movement.cs" />
     <Compile Include="Logic\Tank.cs" />
     <Compile Include="Logic\Target.cs" />
+    <Compile Include="Managers\LootManager.cs" />
     <Compile Include="Memory\Hook.cs" />
     <Compile Include="Memory\Offsets.cs" />
     <Compile Include="Resources\AssemblyInfo.cs" />

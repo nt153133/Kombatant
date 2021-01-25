@@ -81,7 +81,7 @@ namespace Kombatant.Forms
 				{
 					overlayControl.AllowMoving = !loc;
 				}
-			}), TargetCountOverlay, Core.Me.BeingTargetedCount(), BotBase.Instance.FocusOverlayEnableClickThrough);
+			}), TargetCountOverlay, Core.Me.AllyBeingTargetedCount(), BotBase.Instance.FocusOverlayEnableClickThrough);
 		}
 
 		public override OverlayControl Control

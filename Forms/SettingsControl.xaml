@@ -339,17 +339,19 @@
                                         Value="{Binding BotBase.TargetScanRate}" />-->
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="{x:Static L:Localization.UI_Avoidance}" Padding="3">
+                        <GroupBox Header="Loot Mode" Padding="3">
                             <StackPanel>
-                                <CheckBox Margin="0,1"
-                                          Content="{x:Static L:Localization.UI_EnableAvoidance}"
-                                          ToolTip="{x:Static L:Localization.UI_Tooltip_EnableAvoidance}"
-                                          IsChecked="{Binding BotBase.EnableAvoidance}" />
-                                <CheckBox Margin="0,1"
-                                          Content="{x:Static L:Localization.UI_PauseAvoidanceOnBosses}"
-                                          ToolTip="{x:Static L:Localization.UI_Tooltip_PauseAvoidanceOnBosses}"
-                                          IsChecked="{Binding BotBase.PauseAvoidanceOnBosses}"
-                                          IsEnabled="{Binding BotBase.EnableAvoidance}" />
+                                <RadioButton Margin="0,2" IsChecked="{Binding BotBase.LootMode, ConverterParameter=DontLoot, Converter={StaticResource enumBooleanConverter}}"
+                                             Content="No auto loot" />
+                                <RadioButton Margin="0,2" IsChecked="{Binding BotBase.LootMode, ConverterParameter=NeedAndGreed, Converter={StaticResource enumBooleanConverter}}"
+                                             Content="Need and greed" />
+                                <RadioButton Margin="0,2" IsChecked="{Binding BotBase.LootMode, ConverterParameter=GreedAll, Converter={StaticResource enumBooleanConverter}}"
+                                             Content="Greed all" />
+                                <RadioButton Margin="0,2" IsChecked="{Binding BotBase.LootMode, ConverterParameter=PassAll, Converter={StaticResource enumBooleanConverter}}"
+                                             Content="Pass all" />
+                                <Label Height="2" />
+
+
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Header="{x:Static L:Localization.UI_AutoEmote}" Padding="3,0">
@@ -395,10 +397,24 @@
                             </StackPanel>
                         </GroupBox>
 
+
                         <ToggleButton Height="15" Width="15" HorizontalAlignment="Right" Opacity="0" IsChecked="{Binding BotBase.Hackpanel}"/>
 
                     </StackPanel>
                     <StackPanel Grid.Column="4" Grid.Row="2">
+                        <GroupBox Header="{x:Static L:Localization.UI_Avoidance}" Padding="3">
+                            <StackPanel>
+                                <CheckBox Margin="0,1"
+                                          Content="{x:Static L:Localization.UI_EnableAvoidance}"
+                                          ToolTip="{x:Static L:Localization.UI_Tooltip_EnableAvoidance}"
+                                          IsChecked="{Binding BotBase.EnableAvoidance}" />
+                                <CheckBox Margin="0,1"
+                                          Content="{x:Static L:Localization.UI_PauseAvoidanceOnBosses}"
+                                          ToolTip="{x:Static L:Localization.UI_Tooltip_PauseAvoidanceOnBosses}"
+                                          IsChecked="{Binding BotBase.PauseAvoidanceOnBosses}"
+                                          IsEnabled="{Binding BotBase.EnableAvoidance}" />
+                            </StackPanel>
+                        </GroupBox>
                         <GroupBox Header="{x:Static L:Localization.UI_Following}" Padding="3">
                             <StackPanel>
                                 <CheckBox  Margin="0,1"
@@ -508,117 +524,13 @@
 
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Padding="3" Header="Hack" Visibility="{Binding BotBase.Hackpanel, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <StackPanel>
-                                <Grid Column="3">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="130"></ColumnDefinition>
-                                        <ColumnDefinition></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-                                    <CheckBox Grid.Column="0" Margin="0,1" VerticalAlignment="Center"  Content="Animation speed" IsChecked="{Binding BotBase.EnableAnimationSpeedHack}"/>
-                                    <Button  Grid.Column="1" Content="Set Maximum"  Command="{Binding SetAnimationSpeedMaximum}" IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}"/>
-                                </Grid>
-                                <Label Height="3" />
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="177"/>
-                                        <ColumnDefinition Width="3"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Slider Minimum="0" Maximum="5" VerticalAlignment="Center"
-                                            IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}" Value="{Binding BotBase.AnimationSpeed}"/>
-                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}" Text="{Binding BotBase.AnimationSpeed}"/>
-                                </Grid>
-                                <Separator Margin="5" Opacity="0.5"/>
 
-                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Reduce ability animation" IsChecked="{Binding BotBase.EnableAnimationLockHack}"/>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="177"/>
-                                        <ColumnDefinition Width="3"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Slider Minimum="0" Maximum="600" VerticalAlignment="Center" TickFrequency="50" IsSnapToTickEnabled="True" 
-                                            IsEnabled="{Binding BotBase.EnableAnimationLockHack}" Value="{Binding BotBase.AnimationLockMaxDelay}"/>
-                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableAnimationLockHack}" Text="{Binding BotBase.AnimationLockMaxDelay}"/>
-                                </Grid>
-                                <Grid >
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="40"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="5"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <!--<Button Grid.Column="1" Content="Set Default"  Command="{Binding SetAnimationSpeedDefault}" IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}"/>-->
-                                </Grid>
-                                <Separator Margin="5" Opacity="0.5"/>
-                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Increase CombatReach" 
-                                          IsChecked="{Binding BotBase.EnableCombatReachIncrement}"/>
-                                <Label Height="3" />
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="177"/>
-                                        <ColumnDefinition Width="3"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Slider Minimum="0" Maximum="5" TickFrequency="0.1" IsSnapToTickEnabled="True" VerticalAlignment="Center"
-                                            IsEnabled="{Binding BotBase.EnableCombatReachIncrement}" Value="{Binding BotBase.CombatReachIncrement}"/>
-                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableCombatReachIncrement}" Text="{Binding BotBase.CombatReachIncrement}"/>
-                                </Grid>
-                                <Separator Margin="5" Opacity="0.5"/>
-                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Movement speed Hack" IsChecked="{Binding BotBase.EnableMovementSpeedHack}"/>
-                                <Label Height="3" />
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="177"/>
-                                        <ColumnDefinition Width="3"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Slider Minimum="0" Maximum="3" TickFrequency="0.1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ToolTip="Speed Multiplier"
-                                            IsEnabled="{Binding BotBase.EnableMovementSpeedHack}" Value="{Binding BotBase.GroundSpeedMultiplier}"/>
-                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableMovementSpeedHack}" Text="{Binding BotBase.GroundSpeedMultiplier}"/>
-                                </Grid>
-                                <Label Height="3" />
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="177"/>
-                                        <ColumnDefinition Width="3"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Slider Minimum="0" Maximum="30" TickFrequency="0.5" IsSnapToTickEnabled="True" VerticalAlignment="Center" ToolTip="Minimum Speed"
-                                            IsEnabled="{Binding BotBase.EnableMovementSpeedHack}" Value="{Binding BotBase.MinGroundSpeed}"/>
-                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableMovementSpeedHack}" Text="{Binding BotBase.MinGroundSpeed}"/>
-                                </Grid>
-                                <Separator Margin="5" Opacity="0.5"/>
-                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Remove Movement lock" IsChecked="{Binding BotBase.RemoveMovementLock}"/>
-                            </StackPanel>
-                        </GroupBox>
 
 
                     </StackPanel>
-
-                    <!--<StackPanel Grid.Column="6" Grid.Row="2">
-                        <GroupBox Padding="3" Header="Debug" Visibility="{Binding BotBase.Hackpanel, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <StackPanel>
-                                <CheckBox Margin="0,1" VerticalAlignment="Center" Content="Performance Logger" IsChecked="{Binding BotBase.PerformanceLogger}"/>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="177"/>
-                                        <ColumnDefinition Width="3"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Label Content="MinLogMs"></Label>
-                                    <TextBox Grid.Column="2"  Height="21" IsEnabled="{Binding BotBase.PerformanceLogger}" Text="{Binding BotBase.MinLogMs}"/>
-                                </Grid>
-
-
-                            </StackPanel>
-                        </GroupBox>
-
-
-                    </StackPanel>-->
                 </Grid>
             </TabItem>
+
             <!--<TabItem
                 Header="Targeting">
                 <Grid
@@ -855,6 +767,134 @@
                             Command="{Binding ReloadHotkeys}" />
                 </Grid>
             </TabItem>
+            <TabItem
+                Header="Hacks" Visibility="{Binding BotBase.Hackpanel, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid
+                    Margin="5,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="240" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="240" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="240" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="auto" />
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" >
+                        <GroupBox Padding="3" Header="Hack" >
+                            <StackPanel>
+                                <Grid Column="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="130"></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Column="0" Margin="0,1" VerticalAlignment="Center"  Content="Animation speed" IsChecked="{Binding BotBase.EnableAnimationSpeedHack}"/>
+                                    <Button  Grid.Column="1" Content="Set Maximum"  Command="{Binding SetAnimationSpeedMaximum}" IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}"/>
+                                </Grid>
+                                <Label Height="3" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="177"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider Minimum="0" Maximum="5" VerticalAlignment="Center"
+                                            IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}" Value="{Binding BotBase.AnimationSpeed}"/>
+                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}" Text="{Binding BotBase.AnimationSpeed}"/>
+                                </Grid>
+                                <Separator Margin="5" Opacity="0.5"/>
+
+                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Reduce ability animation" IsChecked="{Binding BotBase.EnableAnimationLockHack}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="177"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider Minimum="0" Maximum="600" VerticalAlignment="Center" TickFrequency="50" IsSnapToTickEnabled="True" 
+                                            IsEnabled="{Binding BotBase.EnableAnimationLockHack}" Value="{Binding BotBase.AnimationLockMaxDelay}"/>
+                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableAnimationLockHack}" Text="{Binding BotBase.AnimationLockMaxDelay}"/>
+                                </Grid>
+                                <Grid >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <!--<Button Grid.Column="1" Content="Set Default"  Command="{Binding SetAnimationSpeedDefault}" IsEnabled="{Binding BotBase.EnableAnimationSpeedHack}"/>-->
+                                </Grid>
+                                <Separator Margin="5" Opacity="0.5"/>
+                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Increase CombatReach" 
+                                          IsChecked="{Binding BotBase.EnableCombatReachIncrement}"/>
+                                <Label Height="3" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="177"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider Minimum="0" Maximum="5" TickFrequency="0.1" IsSnapToTickEnabled="True" VerticalAlignment="Center"
+                                            IsEnabled="{Binding BotBase.EnableCombatReachIncrement}" Value="{Binding BotBase.CombatReachIncrement}"/>
+                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableCombatReachIncrement}" Text="{Binding BotBase.CombatReachIncrement}"/>
+                                </Grid>
+                                <Separator Margin="5" Opacity="0.5"/>
+                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Movement speed Hack" IsChecked="{Binding BotBase.EnableMovementSpeedHack}"/>
+                                <Label Height="3" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="177"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider Minimum="0" Maximum="3" TickFrequency="0.1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ToolTip="Speed Multiplier"
+                                            IsEnabled="{Binding BotBase.EnableMovementSpeedHack}" Value="{Binding BotBase.GroundSpeedMultiplier}"/>
+                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableMovementSpeedHack}" Text="{Binding BotBase.GroundSpeedMultiplier}"/>
+                                </Grid>
+                                <Label Height="3" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="177"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider Minimum="0" Maximum="30" TickFrequency="0.5" IsSnapToTickEnabled="True" VerticalAlignment="Center" ToolTip="Minimum Speed"
+                                            IsEnabled="{Binding BotBase.EnableMovementSpeedHack}" Value="{Binding BotBase.MinGroundSpeed}"/>
+                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableMovementSpeedHack}" Text="{Binding BotBase.MinGroundSpeed}"/>
+                                </Grid>
+                                <Separator Margin="5" Opacity="0.5"/>
+                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Remove Movement lock" IsChecked="{Binding BotBase.RemoveMovementLock}"/>
+                            </StackPanel>
+                        </GroupBox>
+
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical">
+                        <GroupBox Padding="3" Header="Debug" Visibility="{Binding BotBase.Hackpanel, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel>
+                                <CheckBox Margin="0,1" VerticalAlignment="Center" Content="Performance Logger" IsChecked="{Binding BotBase.PerformanceLogger}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="177"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="Minimum log time"></Label>
+                                    <TextBox Grid.Column="2"  Height="21" IsEnabled="{Binding BotBase.PerformanceLogger}" Text="{Binding BotBase.MinLogMs}" TextAlignment="Center"/>
+                                </Grid>
+                            </StackPanel>
+                        </GroupBox>
+
+                    </StackPanel>
+
+                </Grid>
+            </TabItem>
+
             <!--<TabItem Header="Hack">
                 <Grid Margin="5">
                     <Grid.RowDefinitions>

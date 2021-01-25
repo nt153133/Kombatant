@@ -233,8 +233,12 @@ namespace Kombatant.Logic
                         "Following selected target")
                         .ExecuteCoroutine();
                 else
-                    Flightor.MoveTo(obj.Location);
-
+                {
+	                if (WaitHelper.Instance.IsDoneWaiting("FlightorWaitingTimer", TimeSpan.FromMilliseconds(500), true))
+	                {
+		                Flightor.MoveTo(obj.Location);
+	                }
+                }
                 return await Task.FromResult(true);
             }
 
