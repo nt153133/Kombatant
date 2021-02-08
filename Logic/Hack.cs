@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ff14bot;
 using ff14bot.Behavior;
 using ff14bot.Managers;
+using GreyMagic;
 using Kombatant.Interfaces;
 using Kombatant.Memory;
 using Kombatant.Settings;
@@ -32,32 +33,46 @@ namespace Kombatant.Logic
 		/// </summary>
 		/// <returns>Returns <c>true</c> if any action was executed, otherwise <c>false</c>.</returns>
 		[SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
-		internal new async Task<bool> ExecuteLogic()
+		internal new void ExecuteLogic()
 		{
 			// Do not execute this logic if the botbase is paused.
-
-			if (BotBase.Instance.EnableMovementSpeedHack && !Settings.BotBase.Instance.IsPaused)
+			if (Settings.BotBase.Instance.IsPaused)
 			{
+				Core.Memory.Patches["GroundSpeedHook"].Remove();
+				Core.Memory.Patches["CombatReachHook"].Remove();
+				Core.Memory.Patches["NoKnockbackPatch"].Remove();
+				return;
+			}
+
+			if (BotBase.Instance.EnableMovementSpeedHack)
+			{
+				Core.Memory.Patches["GroundSpeedHook"].Apply();
 				GroundSpeedHook.Instance.SpeedMultiplier = BotBase.Instance.GroundSpeedMultiplier;
 				GroundSpeedHook.Instance.GroundMinimumSpeed = BotBase.Instance.MinGroundSpeed;
 			}
 			else
 			{
-				GroundSpeedHook.Instance.SpeedMultiplier = 1;
-				GroundSpeedHook.Instance.GroundMinimumSpeed = 0;
+				Core.Memory.Patches["GroundSpeedHook"].Remove();
 			}
 
-			if (BotBase.Instance.EnableCombatReachIncrement && !Settings.BotBase.Instance.IsPaused)
+			if (BotBase.Instance.EnableCombatReachIncrement)
 			{
+				Core.Memory.Patches["CombatReachHook"].Apply();
 				CombatReachHook.Instance.CombatReachAdjustment = BotBase.Instance.CombatReachIncrement;
 			}
 			else
 			{
-				CombatReachHook.Instance.CombatReachAdjustment = 0;
+				Core.Memory.Patches["CombatReachHook"].Remove();
 			}
 
-			if (Settings.BotBase.Instance.IsPaused)
-				return false;
+			if (BotBase.Instance.NoKnockback)
+			{
+				Core.Memory.Patches["NoKnockbackPatch"].Apply();
+			}
+			else
+			{
+				Core.Memory.Patches["NoKnockbackPatch"].Remove();
+			}
 
 			if (BotBase.Instance.EnableAnimationLockHack && Memory.Offsets.Instance.AnimationLockTimer != IntPtr.Zero)
 			{
@@ -79,10 +94,9 @@ namespace Kombatant.Logic
 
 			if (BotBase.Instance.RemoveMovementLock)
 			{
-				Core.Memory.Write(Offsets.Instance.Conditions, 0);
+				Core.Memory.Write(Offsets.Instance.Conditions + 0x1A, 0);
+				Core.Memory.Write(Offsets.Instance.Conditions + 0x48, (byte)0);
 			}
-
-			return false;
 		}
 	}
 }

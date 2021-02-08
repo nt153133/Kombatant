@@ -36,8 +36,8 @@ namespace Kombatant.Memory
 				Core.Memory.Write(SpeedMultiplierPtr, 1f);
 				Core.Memory.Write(MinSpeedPtr, 0f);
 				LogHelper.Instance.Log($"[Hook] GroundSpeedHook allocated at {detour.ToInt64():X}");
-				LogHelper.Instance.Log($"[Hook] SpeedMultiPtr: {SpeedMultiplierPtr.ToInt64():X}");
-				LogHelper.Instance.Log($"[Hook] MinimumSpeedPtr: {MinSpeedPtr.ToInt64():X}");
+				//LogHelper.Instance.Log($"[Hook] SpeedMultiPtr: {SpeedMultiplierPtr.ToInt64():X}");
+				//LogHelper.Instance.Log($"[Hook] MinimumSpeedPtr: {MinSpeedPtr.ToInt64():X}");
 
 				var asm = Core.Memory.Asm;
 				asm.Clear();
@@ -53,7 +53,7 @@ namespace Kombatant.Memory
 				asm.Clear();
 				asm.AddLine($"call {detour}");
 
-				Core.Memory.Patches.CreateAndApply(hookPtr, asm.Assemble(hookPtr), "GroundSpeedHook");
+				Core.Memory.Patches.Create(hookPtr, asm.Assemble(hookPtr), "GroundSpeedHook");
 			}
 			catch (Exception e)
 			{
@@ -88,7 +88,7 @@ namespace Kombatant.Memory
 				CombatReachAdjustPtr = detour + 0x38;
 				//Core.Memory.Write(CombatReachTunePtr, 0f);
 				LogHelper.Instance.Log($"[Hook] CombatReachHook allocated at {detour.ToInt64():X}");
-				LogHelper.Instance.Log($"[Hook] CombatReachAdjustPtr: {CombatReachAdjustPtr.ToInt64():X}");
+				//LogHelper.Instance.Log($"[Hook] CombatReachAdjustPtr: {CombatReachAdjustPtr.ToInt64():X}");
 
 				var asm = Core.Memory.Asm;
 				asm.Clear();
@@ -103,7 +103,7 @@ namespace Kombatant.Memory
 				asm.AddLine($"nop");
 				asm.AddLine($"nop");
 
-				Core.Memory.Patches.CreateAndApply(hookPtr, asm.Assemble(hookPtr), "CombatReachHook");
+				Core.Memory.Patches.Create(hookPtr, asm.Assemble(hookPtr), "CombatReachHook");
 			}
 			catch (Exception e)
 			{

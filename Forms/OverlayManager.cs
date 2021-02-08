@@ -152,16 +152,15 @@ namespace Kombatant.Forms
 				case Status.Running:
 					control.Content = "Kombatant Running";
 					control.Background = new SolidColorBrush(Color.FromArgb(96, 220, 20, 60));
-
 					break;
 				case Status.Paused:
 					control.Content = "Kombatant Paused";
 					control.Background = new SolidColorBrush(Color.FromArgb(96, 220, 220, 60));
 					break;
-				case Status.Stopped:
-					control.Content = "Kombatant Stopped";
-					control.Background = new SolidColorBrush(Color.FromArgb(64, 0, 0, 0));
-					break;
+				//case Status.Stopped:
+				//	control.Content = "Kombatant Stopped";
+				//	control.Background = new SolidColorBrush(Color.FromArgb(64, 0, 0, 0));
+				//	break;
 			}
 		}
 

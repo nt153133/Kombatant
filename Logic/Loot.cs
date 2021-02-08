@@ -21,13 +21,13 @@ namespace Kombatant.Logic
 	{
 		#region Singleton
 
-		private static Loot _combatLogic;
-		internal static Loot Instance => _combatLogic ?? (_combatLogic = new Loot());
+		private static Loot _lootLogic;
+		internal static Loot Instance => _lootLogic ?? (_lootLogic = new Loot());
 
 		#endregion
 
 		/// <summary>
-		/// Main task executor for the Hack logic.
+		/// Main task executor for the Loot logic.
 		/// </summary>
 		/// <returns>Returns <c>true</c> if any action was executed, otherwise <c>false</c>.</returns>
 		internal new Task<bool> ExecuteLogic()
@@ -37,7 +37,7 @@ namespace Kombatant.Logic
 				return Task.FromResult(false);
 			}
 
-			if (!LootManager.HasLoot || BotBase.Instance.LootMode == LootMode.DontLoot || !WaitHelper.Instance.IsDoneWaiting("LootTimer", TimeSpan.FromMilliseconds(3000)))
+			if (!LootManager.HasLoot || BotBase.Instance.LootMode == LootMode.DontLoot || !WaitHelper.Instance.IsDoneWaiting("LootTimer", TimeSpan.FromMilliseconds(500)))
 			{
 				return Task.FromResult(false);
 			}
@@ -46,28 +46,31 @@ namespace Kombatant.Logic
 			{
 				case LootMode.NeedAndGreed:
 					var need = LootManager.AvailableLoots.FirstOrDefault(i => !i.Rolled && !(i.Item.Unique && ConditionParser.HasItem(i.ItemId)));
-					if (need.IsVaild)
+					if (need.Valid)
 					{
 						if (need.RollState == RollState.UpToNeed) need.Need();
 						else if (need.RollState == RollState.UpToGreed) need.Greed();
+						return Task.FromResult(true);
 					}
-					return Task.FromResult(true);
+					break;
 
 				case LootMode.GreedAll:
 					var greed = LootManager.AvailableLoots.FirstOrDefault(i => !i.Rolled && !(i.Item.Unique && ConditionParser.HasItem(i.ItemId)));
-					if (greed.IsVaild)
+					if (greed.Valid)
 					{
 						if (greed.RollState == RollState.UpToNeed || greed.RollState == RollState.UpToGreed) greed.Greed();
+						return Task.FromResult(true);
 					}
-					return Task.FromResult(true);
+					break;
 
 				case LootMode.PassAll:
 					var pass = LootManager.AvailableLoots.FirstOrDefault(i => i.RolledState < RollOption.Pass);
-					if (pass.IsVaild)
+					if (pass.Valid)
 					{
 						if (pass.RolledState <= RollOption.Pass) pass.Pass();
+						return Task.FromResult(true);
 					}
-					return Task.FromResult(true);
+					break;
 			}
 
 			return Task.FromResult(false);

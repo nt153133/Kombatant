@@ -1,4 +1,4 @@
-﻿#define DEBUG
+﻿//#define DEBUG
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -185,6 +185,7 @@ namespace Kombatant
 			_ = Memory.Offsets.Instance;
 			_ = Memory.GroundSpeedHook.Instance;
 			_ = Memory.CombatReachHook.Instance;
+			Core.Memory.Patches.Create(Offsets.Instance.KnockbackFunc, Enumerable.Repeat((byte)0x90, 5).ToArray(), "NoKnockbackPatch");
 			LocalizationInitializer.Initalize();
 			//Settings.BotBase.Instance.AutoRegisterDuties = false;
 		}
@@ -257,9 +258,10 @@ namespace Kombatant
 			// Unregister the hotkeys
 			HotkeyHelper.Instance.UnregisterHotkeys();
 
-			GroundSpeedHook.Instance.SpeedMultiplier = 1;
-			GroundSpeedHook.Instance.GroundMinimumSpeed = 0;
-			CombatReachHook.Instance.CombatReachAdjustment = 0;
+			Core.Memory.Patches["GroundSpeedHook"].Remove();
+			Core.Memory.Patches["CombatReachHook"].Remove();
+			Core.Memory.Patches["NoKnockbackPatch"].Remove();
+
 
 			// Stop Overlays
 			OverlayManager.StopFocusOverlay();
@@ -285,24 +287,28 @@ namespace Kombatant
 		/// <returns></returns>
 		private async Task<bool> KombatantLogic()
 		{
+#if DEBUG
 			using (new PerformanceLogger("TotalExecutionTime"))
+#endif
 			{
 #if DEBUG
 				using (new PerformanceLogger("RefreshOverlay"))
 #endif
 				{
-					//invoking UI thread to refresh overlay
-					if (BotBase.Instance.UseFocusOverlay)
-						OverlayManager.FocusOverlay.Update();
-					if (BotBase.Instance.UseStatusOverlay)
-						OverlayManager.StatusOverlay.Update();
+					if (WaitHelper.Instance.IsDoneWaiting("refreshOverlay", TimeSpan.FromMilliseconds(50), true))
+					{
+						//invoking UI thread to refresh overlay
+						if (BotBase.Instance.UseFocusOverlay)
+							OverlayManager.FocusOverlay.Update();
+						if (BotBase.Instance.UseStatusOverlay)
+							OverlayManager.StatusOverlay.Update();
+					}
 				}
 #if DEBUG
 				using (new PerformanceLogger("Memory"))
 #endif
 				{
-					if (await Hack.Instance.ExecuteLogic())
-						return await Task.FromResult(true);
+					Hack.Instance.ExecuteLogic();
 				}
 
 				// Execute Loot logic

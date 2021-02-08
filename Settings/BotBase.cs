@@ -315,6 +315,24 @@ namespace Kombatant.Settings
 
 		#endregion
 
+		//#region _autoQTE
+
+		//private bool _autoQTE;
+
+		//[DefaultValue(false)]
+		//[JsonProperty("AutoQTE")]
+		//public bool AutoQTE
+		//{
+		//	get => _autoQTE;
+		//	set
+		//	{
+		//		_autoQTE = value;
+		//		OnPropertyChanged();
+		//	}
+		//}
+
+		//#endregion
+
 		#region AutoTrade
 
 		private bool _autoTrade;
@@ -1407,7 +1425,6 @@ namespace Kombatant.Settings
 		#region Hack
 
 		private bool hackpanel;
-		[DefaultValue(false)]
 		public bool Hackpanel
 		{
 			get => hackpanel;
@@ -1419,7 +1436,6 @@ namespace Kombatant.Settings
 		}
 
 		private bool _enableAnimationLockHack;
-		[DefaultValue(false)]
 		public bool EnableAnimationLockHack
 		{
 			get => _enableAnimationLockHack;
@@ -1443,7 +1459,6 @@ namespace Kombatant.Settings
 		}
 
 		private bool _enableAnimationSpeedHack;
-		[DefaultValue(false)]
 		public bool EnableAnimationSpeedHack
 		{
 			get => _enableAnimationSpeedHack;
@@ -1513,7 +1528,7 @@ namespace Kombatant.Settings
 		}
 
 		private float _combatReachIncrement;
-		[DefaultValue(0f)]
+		[DefaultValue(3f)]
 		public float CombatReachIncrement
 		{
 			get => _combatReachIncrement;
@@ -1536,6 +1551,17 @@ namespace Kombatant.Settings
 			}
 		}
 
+		private bool _noKnockback;
+
+		public bool NoKnockback
+		{
+			get => _noKnockback;
+			set
+			{
+				_noKnockback = value;
+				OnPropertyChanged();
+			}
+		}
 		#endregion
 
 		private bool performanceLogger;
@@ -1576,6 +1602,17 @@ namespace Kombatant.Settings
 			}
 		}
 
+		private bool _showLootNotification;
+		[DefaultValue(true)]
+		public bool ShowLootNotification
+		{
+			get => _showLootNotification;
+			set
+			{
+				_showLootNotification = value;
+				OnPropertyChanged();
+			}
+		}
 		#endregion
 	}
 }

@@ -1,4 +1,4 @@
-﻿#define DEBUG
+﻿//#define DEBUG
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,6 +12,7 @@ using ff14bot.AClasses;
 using ff14bot.Enums;
 using ff14bot.Managers;
 using ff14bot.Objects;
+using GreyMagic;
 using Kombatant.Enums;
 using Kombatant.Extensions;
 using Kombatant.Forms;
@@ -195,8 +196,11 @@ namespace Kombatant.Logic
 		{
 			if (!(o is BattleCharacter t)) return false;
 			if (!t.IsValid || !t.IsVisible || !t.IsAlive || !t.IsTargetable || !t.CanAttack || t.IsStrikingDummy() || t.IsMe) return false;
-			if (t.CombatDistance() > BotBase.Instance.TargetScanMaxDistance) return false;
-			//if (t.CombatDistance() > (BotBase.Instance.TargetScanMaxDistance == 0 ? RoutineManager.Current.PullRange : BotBase.Instance.TargetScanMaxDistance)) return false;
+			//if (t.CombatDistance() > BotBase.Instance.TargetScanMaxDistance) return false;
+			if (t.CombatDistance() > (BotBase.Instance.TargetScanMaxDistance == 0
+				? RoutineManager.Current.PullRange
+				: BotBase.Instance.TargetScanMaxDistance +
+				  (BotBase.Instance.EnableCombatReachIncrement ? BotBase.Instance.CombatReachIncrement : 0))) return false;
 			if (t.IsInvincible()) return false;
 			if (BotBase.Instance.EnableLosCheck && !t.InLineOfSight()) return false;
 
@@ -310,43 +314,17 @@ namespace Kombatant.Logic
 					if (BotBase.Instance.TargetWarMachinaFirst)
 						result = result.OrderByDescending(i => i.HiddenGorgeType() == HiddenGorgeType.WarMachina); //优先选中机甲
 
-					//if (BotBase.Instance.TargetPlayerHealthPctUnder != 0) //如果为0则不优先选中玩家或NPC
-					//{
-					//	result = result.OrderBy(TargetingWeights);
-
-					//	float TargetingWeights(GameObject c)
-					//	{
-					//		float res = c.CurrentHealthPercent;
-					//		switch (c.HiddenGorgeType())
-					//		{
-					//			case HiddenGorgeType.Player:
-					//			case HiddenGorgeType.WarMachina:
-					//				if (res < BotBase.Instance.TargetPlayerHealthPctUnder) res -= 100;
-					//				break;
-					//			case HiddenGorgeType.Mammet:
-					//			case HiddenGorgeType.GobTank:
-					//			case HiddenGorgeType.GobMercenary:
-					//				break;
-
-					//			case HiddenGorgeType.Tower:
-					//			case HiddenGorgeType.Core:
-					//			case HiddenGorgeType.Cannon:
-					//			case HiddenGorgeType.CeruleumTank:
-					//			case HiddenGorgeType.undefined:
-					//				res = res + 1000;
-					//				break;
-					//		}
-
-					//		return res;
-					//	}
-
-					if (BotBase.Instance.TargetPcOrNpcFirst != null)
+					if (BotBase.Instance.TargetPcOrNpcFirst == null) //没有优先
 					{
-						if ((bool)BotBase.Instance.TargetPcOrNpcFirst) //如果优先选中玩家
-						{
-							result = result.OrderByDescending(i => i.Type == GameObjectType.Pc);
-						}
-						else //优先选中人偶、哥布林坦克、哥布林佣兵
+
+					}
+					else if ((bool)BotBase.Instance.TargetPcOrNpcFirst) //优先选中玩家
+					{
+						result = result.OrderByDescending(i => i.Type == GameObjectType.Pc);
+					}
+					else //优先选中NPC
+					{
+						if (WorldManager.ZoneId == 791 || WorldManager.ZoneId == 729)
 						{
 							result = result.OrderByDescending(i =>
 								i.HiddenGorgeType() == HiddenGorgeType.Mammet ||
@@ -361,7 +339,8 @@ namespace Kombatant.Logic
 
 					if (BotBase.Instance.TargetMountedEnemyFirst)
 						result = result.OrderByDescending(i => i.IsMounted && !i.HasAura(1394)); //优先选中在坐骑上且没有移动速度降低debuff的敌人
-					result = result.OrderByDescending(i => i.IsCasting && i.HasTarget && i.TargetGameObject.Type == GameObjectType.EventObject); //优先选中正在摸点/捡水的敌人
+
+					result = result.OrderByDescending(i => i.IsCasting && i.TargetGameObject?.Type == GameObjectType.EventObject); //优先选中正在摸点/捡水的敌人
 				}
 				else
 				{

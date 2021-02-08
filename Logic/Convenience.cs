@@ -76,6 +76,10 @@ namespace Kombatant.Logic
 			if (Core.Me.IsDead)
 				return await Task.FromResult(false);
 
+			//if (BotBase.Instance.AutoQTE)
+			//	if (ExecuteAutoQTE())
+			//		return await Task.FromResult(true);
+
 			if (BotBase.Instance.AutoSelectYes)
 				if (ExecuteAutoSelectYes())
 					return await Task.FromResult(true);
@@ -353,17 +357,18 @@ namespace Kombatant.Logic
 
 		private bool ExecuteAutoAcceptRaise()
 		{
-			if (ClientGameUiRevive.ReviveState == ReviveState.Dead)
+			//if (ClientGameUiRevive.ReviveState == ReviveState.Dead && Core.Me.HasAura(148))
+			if (Core.Me.IsDead && Core.Me.HasAura(148) && WaitHelper.Instance.IsDoneWaiting("Revive", new TimeSpan(0, 0, 1)))
 			{
-				if (Core.Me.HasAura(148))
-				{
-					if (SelectYesno.___Elements[5].TrimmedData != 0)
-					{
-						ClientGameUiRevive.Revive();
-						LogHelper.Instance.Log("Accepting Revive...");
-						return true;
-					}
-				}
+				//if (SelectYesno.___Elements[5].TrimmedData != 0)
+				//{
+				//	ClientGameUiRevive.Revive();
+				//	LogHelper.Instance.Log("Accepting Revive...");
+				//	return true;
+				//}
+				ClientGameUiRevive.Revive();
+				LogHelper.Instance.Log("Accepting Revive...");
+				return true;
 			}
 
 			return false;
@@ -388,6 +393,18 @@ namespace Kombatant.Logic
 			{
 				SelectYesno.Yes();
 				LogHelper.Instance.Log("Selecting Yes");
+				return true;
+			}
+
+			return false;
+		}
+
+		private bool ExecuteAutoQTE()
+		{
+			var qte = RaptureAtkUnitManager.GetWindowByName("QTE");
+			if (qte != null)
+			{
+				qte.SendAction(2,3,1,4,1);
 				return true;
 			}
 

@@ -121,6 +121,9 @@
                                 <CheckBox Margin="0,1"
                                           Content="{x:Static L:Localization.UI_AutoAcceptRevive}"
                                           IsChecked="{Binding BotBase.AutoAcceptRevive}" />
+                                <!--<CheckBox Margin="0,1"
+                                          Content="Auto QTE"
+                                          IsChecked="{Binding BotBase.AutoQTE}" />-->
                                 <StackPanel Orientation="Horizontal" >
                                     <CheckBox Margin="0,1"
                                               Content="{x:Static L:Localization.UI_AutoSprint}"
@@ -339,8 +342,9 @@
                                         Value="{Binding BotBase.TargetScanRate}" />-->
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="Loot Mode" Padding="3">
+                        <GroupBox Header="Auto Loot" Padding="3">
                             <StackPanel>
+                                <CheckBox Content="Show Notification" Margin="0,2" IsChecked="{Binding BotBase.ShowLootNotification}"></CheckBox>
                                 <RadioButton Margin="0,2" IsChecked="{Binding BotBase.LootMode, ConverterParameter=DontLoot, Converter={StaticResource enumBooleanConverter}}"
                                              Content="No auto loot" />
                                 <RadioButton Margin="0,2" IsChecked="{Binding BotBase.LootMode, ConverterParameter=NeedAndGreed, Converter={StaticResource enumBooleanConverter}}"
@@ -768,7 +772,7 @@
                 </Grid>
             </TabItem>
             <TabItem
-                Header="Hacks" Visibility="{Binding BotBase.Hackpanel, Converter={StaticResource BooleanToVisibilityConverter}}">
+                Header="Hack&amp;Debug" Visibility="{Binding BotBase.Hackpanel, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid
                     Margin="5,0">
                     <Grid.ColumnDefinitions>
@@ -853,7 +857,7 @@
                                         <ColumnDefinition Width="3"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Slider Minimum="0" Maximum="3" TickFrequency="0.1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ToolTip="Speed Multiplier"
+                                    <Slider Minimum="0" Maximum="3" TickFrequency="0.05" IsSnapToTickEnabled="True" VerticalAlignment="Center" ToolTip="Speed Multiplier"
                                             IsEnabled="{Binding BotBase.EnableMovementSpeedHack}" Value="{Binding BotBase.GroundSpeedMultiplier}"/>
                                     <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableMovementSpeedHack}" Text="{Binding BotBase.GroundSpeedMultiplier}"/>
                                 </Grid>
@@ -870,6 +874,7 @@
                                 </Grid>
                                 <Separator Margin="5" Opacity="0.5"/>
                                 <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Remove Movement lock" IsChecked="{Binding BotBase.RemoveMovementLock}"/>
+                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Immune Knockback/Draw-in" IsChecked="{Binding BotBase.NoKnockback}"/>
                             </StackPanel>
                         </GroupBox>
 

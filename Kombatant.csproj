@@ -108,8 +108,9 @@
     <Compile Include="Logic\Movement.cs" />
     <Compile Include="Logic\Tank.cs" />
     <Compile Include="Logic\Target.cs" />
+    <Compile Include="Managers\DutyManager.cs" />
     <Compile Include="Managers\LootManager.cs" />
-    <Compile Include="Memory\Hook.cs" />
+    <Compile Include="Memory\Hooks.cs" />
     <Compile Include="Memory\Offsets.cs" />
     <Compile Include="Resources\AssemblyInfo.cs" />
     <Compile Include="Resources\Controls.Designer.cs" />

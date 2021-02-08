@@ -21,6 +21,7 @@ using Kombatant.Constants;
 using Kombatant.Extensions;
 using Kombatant.Helpers;
 using Kombatant.Interfaces;
+using Kombatant.Managers;
 using Kombatant.Settings;
 using TreeSharp;
 using Action = TreeSharp.Action;
@@ -170,16 +171,26 @@ namespace Kombatant.Logic
 
 		private bool ShouldLeaveDuty()
 		{
-			if (!BotBase.Instance.AutoLeaveDuty)
-				return false;
-			if (!DutyManager.InInstance)
-				return false;
-			if (!DutyManager.CanLeaveActiveDuty)
-				return false;
-			if (DirectorManager.ActiveDirector is InstanceContentDirector icDirector && icDirector.InstanceEnded)
+			if (BotBase.Instance.AutoLeaveDuty)
 			{
-				return BotBase.Instance.SecondsToAutoLeaveDuty == 0 || WaitHelper.Instance.IsDoneWaiting(
-					@"CommenceDuty.AutoLeaveDuty", new TimeSpan(0, 0, BotBase.Instance.SecondsToAutoLeaveDuty));
+				if (DutyManager.InInstance)
+				{
+					if (DirectorManager.ActiveDirector is InstanceContentDirector icDirector)
+					{
+						if (icDirector.InstanceEnded)
+						{
+							//if (!LootManager.HasLoot)
+							{
+								if (DutyManager.CanLeaveActiveDuty)
+								{
+									if (BotBase.Instance.SecondsToAutoLeaveDuty == 0 ||
+									    WaitHelper.Instance.IsDoneWaiting(@"CommenceDuty.AutoLeaveDuty",
+										    new TimeSpan(0, 0, BotBase.Instance.SecondsToAutoLeaveDuty))) return true;
+								}
+							}
+						}
+					}
+				}
 			}
 
 			return false;
