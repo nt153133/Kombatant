@@ -188,11 +188,6 @@ Kombatant comes with tons of features to make your life easier. Below is a short
 
   Allows the user to specify hotkeys that will control i.e. the combat routine's built-in hotkeys and chain multiple keys together to one press (i.e. disable Kombatant's auto targeting while also disabling Kefka's AOE with one keypress).
 
-## Requirements
-This botbase requires the international version of RebornBuddy.
-
-There is **no** explicit support for the Chinese version of the bot.
-
 ## Installation
 
 1. Clone or unpack Kombatant into your `.\RebornBuddy\BotBases` folder.
@@ -215,10 +210,6 @@ There is **no** explicit support for the Chinese version of the bot.
   It works but the solution is dodgy and prone to errors.
 
 ## FAQ
-
- - **Q:** Why is the Chinese version not supported?
-
-   **A:** The Chinese version of RebornBuddy is not on par with it's international twin when it comes to features and API. I do not want to strip out several features and keep patching the botbase for what are essentially two different products. Sorry.
 
  - **Q:** How do I add additional sounds for the Duty Notify?
 
