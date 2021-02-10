@@ -184,15 +184,15 @@ Kombatant comes with tons of features to make your life easier. Below is a short
 
 - [x] __Auto Vote Mvp__
 
-Auto vote the other dps/tank/healer after duty ended.
+  Auto vote the other dps/tank/healer after duty ended.
 
 - [x] __Auto Leave Duty__
 
-Auto Leave dungeon after duty ended.
+  Auto Leave dungeon after duty ended.
 
 - [x] __Auto Register Duty__
 
-Auto register your wanted duty when available.
+  Auto register your wanted duty when available.
   
 - [x] __Auto Commence Duty__
 
