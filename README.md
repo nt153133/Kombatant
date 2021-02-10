@@ -69,14 +69,6 @@ Kombatant comes with tons of features to make your life easier. Below is a short
 - [x] __Auto Accept/Complete Quests__
 
   Automatically accepts open quests and will try to complete them if possible.
-  
-- [x] __Auto Commence Duty__
-
-  Automatically commences a duty after x seconds.
-
-- [x] __Auto Duty Notify__
-
-  Automatically notifies you with a random sound snippet when your duty is ready.
 
 - [x] __Auto Emote__
 
@@ -105,6 +97,14 @@ Kombatant comes with tons of features to make your life easier. Below is a short
 - [x] __Auto Sprint__
 
   Will use Sprint whenever it is available.
+  
+- [x] __Auto Mount/Dismount__
+
+  Auto mount up whenever you are not in combat and has no target, and auto dismount when you are targeting a valid enemy in range.
+  
+- [x] __Auto Loot__
+
+  Auto roll loots during combat base on you choosed looting rules.
 
 - [ ] __Mechanics Warning__
 
@@ -126,11 +126,15 @@ Kombatant comes with tons of features to make your life easier. Below is a short
 
   When a target is out of reach or become invincible, auto deselect it in order to choose a new one.
   
+- [x] __Advanced PVP Targeting Logic__
+
+  Allow you choose targeting mounted enemy player/casting enemy player/WarMachina/Npc/Pc first.
+  
 - [x] __Smart Pull__ 
 
   ~~When enabled, Kombatant will check whether you are in a party and if there is a tank present. The botbase will refrain from pulling mobs the tank has not tagged yet.~~
   
-  When enabled, Kombatant will only care about mobs which already in your threat list or being tagged by partymenmbers.
+  When enabled, Kombatant will only care about mobs which already in your threat list or being tagged by partymembers.
   
 - [x] __Max. Range Filter__
 
@@ -175,6 +179,28 @@ Kombatant comes with tons of features to make your life easier. Below is a short
   Will automatically pause the avoidance when fighting known dungeon bosses to ensure you do not forget to turn off avoidance.
 
   *Note: Does contain all dungeon bosses from A Realm Reborn, Heavensward and Stormblood. Does not contain any deep dungeon bosses, raid bosses or trials.*
+
+### Duty Finder
+
+- [x] __Auto Vote Mvp__
+
+Auto vote the other dps/tank/healer after duty ended.
+
+- [x] __Auto Leave Duty__
+
+Auto Leave dungeon after duty ended.
+
+- [x] __Auto Register Duty__
+
+Auto register your wanted duty when available.
+  
+- [x] __Auto Commence Duty__
+
+  Automatically commences a duty after x seconds.
+
+- [x] __Auto Duty Notify__
+
+  Automatically notifies you with a random sound snippet when your duty is ready.
 
 ### Hotkeys
 
