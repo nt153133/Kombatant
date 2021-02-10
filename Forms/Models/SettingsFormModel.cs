@@ -197,7 +197,7 @@ namespace Kombatant.Forms.Models
 			{
 				return new RelayCommand(s =>
 				{
-					BotBase.Instance.AnimationSpeed = uint.MaxValue;
+					BotBase.Instance.AnimationSpeed = 999999;
 				});
 			}
 		}

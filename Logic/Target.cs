@@ -192,7 +192,7 @@ namespace Kombatant.Logic
 			return true;
 		}
 
-		private static bool IsValidTarget(GameObject o)
+		internal static bool IsValidTarget(GameObject o)
 		{
 			if (!(o is BattleCharacter t)) return false;
 			if (!t.IsValid || !t.IsVisible || !t.IsAlive || !t.IsTargetable || !t.CanAttack || t.IsStrikingDummy() || t.IsMe) return false;
@@ -200,12 +200,13 @@ namespace Kombatant.Logic
 			if (t.CombatDistance() > (BotBase.Instance.TargetScanMaxDistance == 0
 				? RoutineManager.Current.PullRange
 				: BotBase.Instance.TargetScanMaxDistance +
-				  (BotBase.Instance.EnableCombatReachIncrement ? BotBase.Instance.CombatReachIncrement : 0))) return false;
+				  (BotBase.Instance.EnableCombatReachIncrement && !t.IsMounted ? BotBase.Instance.CombatReachIncrement : 0))) return false;
 			if (t.IsInvincible()) return false;
 			if (BotBase.Instance.EnableLosCheck && !t.InLineOfSight()) return false;
 
 			return true;
 		}
+
 		/// <summary>
 		/// Helper method to determine whether a given GameObject is a valid target
 		/// for the target strategy "Whitelist only".
@@ -305,49 +306,21 @@ namespace Kombatant.Logic
 			{
 				var result = group;
 
-				//result = PostFilterDistance(result);
-				result = PostFilterThreatList(result);
-				result = PostFilterFate(result);
-
-				if (WorldManager.InPvP)
+				if (!WorldManager.InPvP) //PVE TARGET LOGIC
 				{
-					if (BotBase.Instance.TargetWarMachinaFirst)
-						result = result.OrderByDescending(i => i.HiddenGorgeType() == HiddenGorgeType.WarMachina); //优先选中机甲
-
-					if (BotBase.Instance.TargetPcOrNpcFirst == null) //没有优先
+					if (Settings.BotBase.Instance.EnableSmartPull)
 					{
-
-					}
-					else if ((bool)BotBase.Instance.TargetPcOrNpcFirst) //优先选中玩家
-					{
-						result = result.OrderByDescending(i => i.Type == GameObjectType.Pc);
-					}
-					else //优先选中NPC
-					{
-						if (WorldManager.ZoneId == 791 || WorldManager.ZoneId == 729)
-						{
-							result = result.OrderByDescending(i =>
-								i.HiddenGorgeType() == HiddenGorgeType.Mammet ||
-								i.HiddenGorgeType() == HiddenGorgeType.GobTank ||
-								i.HiddenGorgeType() == HiddenGorgeType.GobMercenary);
-
-							result = result.OrderByDescending(i =>
-								i.Type == GameObjectType.Pc && i.CurrentHealthPercent <
-								BotBase.Instance.TargetPlayerUnderThisHPPct);
-						}
+						result = PostFilterThreatList(result);
 					}
 
-					if (BotBase.Instance.TargetMountedEnemyFirst)
-						result = result.OrderByDescending(i => i.IsMounted && !i.HasAura(1394)); //优先选中在坐骑上且没有移动速度降低debuff的敌人
-
-					result = result.OrderByDescending(i => i.IsCasting && i.TargetGameObject?.Type == GameObjectType.EventObject); //优先选中正在摸点/捡水的敌人
-				}
-				else
-				{
+					if (Settings.BotBase.Instance.FateTargetFilter && FateManager.WithinFate && !BotBase.Instance.EnableSmartPull)
+					{
+						result = result.Where(i => i.IsFate);
+					}
+					
 					if (BotBase.Instance.TargetTankedOnly)
 					{
-						if (!PartyManager.IsInParty || Core.Me.IsTank() ||
-							!PartyManager.VisibleMembers.Any(i => i.IsTank() && !i.IsMe))
+						if (!PartyManager.IsInParty || Core.Me.IsTank() || !PartyManager.VisibleMembers.Any(i => i.IsTank() && !i.IsMe))
 						{
 							return result;
 						}
@@ -377,6 +350,43 @@ namespace Kombatant.Logic
 						}
 					}
 				}
+				else //PVP TARGET LOGIC
+				{
+					if (BotBase.Instance.TargetWarMachinaFirst)
+						result = result.OrderByDescending(i =>
+							i.HiddenGorgeType() == HiddenGorgeType.WarMachina); //优先选中机甲
+
+					if (BotBase.Instance.TargetPcOrNpcFirst == null) //没有优先
+					{
+
+					}
+					else if ((bool) BotBase.Instance.TargetPcOrNpcFirst) //优先选中玩家
+					{
+						result = result.OrderByDescending(i => i.Type == GameObjectType.Pc);
+					}
+					else //优先选中NPC
+					{
+						if (WorldManager.ZoneId == 791 || WorldManager.ZoneId == 729)
+						{
+							result = result.OrderByDescending(i =>
+								i.HiddenGorgeType() == HiddenGorgeType.Mammet ||
+								i.HiddenGorgeType() == HiddenGorgeType.GobTank ||
+								i.HiddenGorgeType() == HiddenGorgeType.GobMercenary);
+						}
+
+						//强制选择生命值低于指定百分比的玩家
+						result = result.OrderByDescending(i =>
+							i.Type == GameObjectType.Pc && i.CurrentHealthPercent <
+							BotBase.Instance.TargetPlayerUnderThisHPPct);
+					}
+
+					if (BotBase.Instance.TargetMountedEnemyFirst)
+						result = result.OrderByDescending(i =>
+							i.IsMounted && !i.HasAura(1394)); //优先选中在坐骑上且没有移动速度降低debuff的敌人
+
+					result = result.OrderByDescending(i =>
+						i.IsCasting && i.TargetGameObject?.Type == GameObjectType.EventObject); //优先选中正在摸点/捡水的敌人
+				}
 
 				return result;
 			}
@@ -384,22 +394,29 @@ namespace Kombatant.Logic
 
 		private IEnumerable<BattleCharacter> PostFilterThreatList(IEnumerable<BattleCharacter> group)
 		{
-			if (Settings.BotBase.Instance.EnableSmartPull && !WorldManager.InPvP)
+			//if (PartyManager.IsInParty)
+			//{
+			//	return group.Where(o =>
+			//		o.IsEnemy() && o.TaggerObjectId == PartyManager.PartyId &&
+			//		(GameObjectManager.Attackers.Contains(o) || o.HasBeenTaggedByPartyMember()));
+			//}
+			//else
+
+			if (BotBase.Instance.FateTargetFilter && FateManager.WithinFate)
 			{
-				//if (PartyManager.IsInParty)
-				//{
-				//	return group.Where(o =>
-				//		o.IsEnemy() && o.TaggerObjectId == PartyManager.PartyId &&
-				//		(GameObjectManager.Attackers.Contains(o) || o.HasBeenTaggedByPartyMember()));
-				//}
-				//else
+				return group.Where(o => o.IsEnemy() && (o.TargetGameObject == Core.Me || o.IsFate && o.Tapped));
+			}
+			else
+			{
+				if (PartyManager.IsInParty)
 				{
-					return group.Where(o =>
-						o.IsEnemy() && (GameObjectManager.Attackers.Contains(o) || o.HasBeenTaggedByPartyMember()));
+					return group.Where(o => o.IsEnemy() && (GameObjectManager.Attackers.Contains(o) || o.TaggerObjectId == PartyManager.PartyId));
+				}
+				else
+				{
+					return group.Where(o => o.IsEnemy() && (GameObjectManager.Attackers.Contains(o) || o.TaggerObjectId == Core.Me.ObjectId));
 				}
 			}
-
-			return group;
 		}
 
 		//private IEnumerable<BattleCharacter> PostFilterDistance(IEnumerable<BattleCharacter> group)
@@ -410,30 +427,31 @@ namespace Kombatant.Logic
 		//	return group.Where(o => o.CombatDistance() < Settings.BotBase.Instance.TargetScanMaxDistance);
 		//}
 
-		/// <summary>
-		/// Applies a filter for FATE-only targets to a group of BattleCharacters.
-		/// </summary>
-		/// <param name="group"></param>
-		/// <returns></returns>
-		private IEnumerable<BattleCharacter> PostFilterFate(IEnumerable<BattleCharacter> group)
-		{
-			// FATE filter disabled? Return the group as-is.
-			if (!Settings.BotBase.Instance.FateTargetFilter)
-				return group;
+		///// <summary>
+		///// Applies a filter for FATE-only targets to a group of BattleCharacters.
+		///// </summary>
+		///// <param name="group"></param>
+		///// <returns></returns>
+		//private IEnumerable<BattleCharacter> PostFilterFate(IEnumerable<BattleCharacter> group)
+		//{
+		//	//// FATE filter disabled? Return the group as-is.
+		//	//if (!Settings.BotBase.Instance.FateTargetFilter)
+		//	//	return group;
 
-			// Do we have aggro from something else? Prioritize those targets!
-			if (GameObjectManager.Attackers.Any(o => o.TargetCharacter == Core.Me))
-				return GameObjectManager.Attackers
-					.Where(o => o.TargetCharacter == Core.Me);
+		//	//// Do we have aggro from something else? Prioritize those targets!
+		//	//if (GameObjectManager.Attackers.Any(o => o.TargetCharacter == Core.Me))
+		//	//	return GameObjectManager.Attackers
+		//	//		.Where(o => o.TargetCharacter == Core.Me);
 
-			// No external attackers, prioritize FATE mobs.
-			if (FateManager.WithinFate)
-				return group
-					.Where(o => o.IsFate);
+		//	//// No external attackers, prioritize FATE mobs.
+		//	////if (FateManager.WithinFate)
+		//	//return group.Where(o => o.IsFate);
+		//	return group.Where(i => i.IsFate);
 
-			// Nothing special? Return group as-is.
-			return group;
-		}
+
+		//	// Nothing special? Return group as-is.
+		//	return group;
+		//}
 
 		/// <summary>
 		/// Target selection: Assist fixed character.
@@ -498,8 +516,8 @@ namespace Kombatant.Logic
 			var nearestTank = PartyManager.VisibleMembers
 				.Where(member => member.IsTank())
 				.MinElement(member => member.BattleCharacter.Distance2DSqr());
-				//.OrderBy(member => member.BattleCharacter.Distance2DSqr())
-				//.FirstOrDefault();
+			//.OrderBy(member => member.BattleCharacter.Distance2DSqr())
+			//.FirstOrDefault();
 
 			// No tanksywhirls?
 			if (nearestTank == null)

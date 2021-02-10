@@ -491,6 +491,30 @@ namespace Kombatant.Settings
 
 		#endregion
 
+
+		private bool autoMount;
+		public bool AutoMount
+		{
+			get => autoMount;
+			set
+			{
+				autoMount = value;
+				OnPropertyChanged();
+			}
+		}
+
+
+		private bool autoDismount;
+		public bool AutoDismount
+		{
+			get => autoDismount;
+			set
+			{
+				autoDismount = value;
+				OnPropertyChanged();
+			}
+		}
+
 		#region Auto Sync Fate
 
 		private bool _autoSyncFate;

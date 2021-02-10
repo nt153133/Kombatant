@@ -108,6 +108,16 @@ namespace Kombatant.Logic
 				if (ExecuteAutoSprint())
 					return await Task.FromResult(true);
 
+			// Auto mount
+			if (BotBase.Instance.AutoMount)
+				if (ExecuteAutoMount())
+					return await Task.FromResult(true);
+
+			// Auto dismount
+			if (BotBase.Instance.AutoDismount)
+				if (ExecuteAutoDismount())
+					return await Task.FromResult(true);
+
 			// Auto sync FATE
 			if (BotBase.Instance.AutoSyncFate)
 				if (ExecuteAutoSyncFate())
@@ -358,17 +368,21 @@ namespace Kombatant.Logic
 		private bool ExecuteAutoAcceptRaise()
 		{
 			//if (ClientGameUiRevive.ReviveState == ReviveState.Dead && Core.Me.HasAura(148))
-			if (Core.Me.IsDead && Core.Me.HasAura(148) && WaitHelper.Instance.IsDoneWaiting("Revive", new TimeSpan(0, 0, 1)))
+			if (Core.Me.IsDead && Core.Me.HasAura(148) && SelectYesno.IsOpen)
 			{
-				//if (SelectYesno.___Elements[5].TrimmedData != 0)
-				//{
-				//	ClientGameUiRevive.Revive();
-				//	LogHelper.Instance.Log("Accepting Revive...");
-				//	return true;
-				//}
-				ClientGameUiRevive.Revive();
-				LogHelper.Instance.Log("Accepting Revive...");
-				return true;
+				var str = Core.Memory.ReadStringUTF8(new IntPtr(SelectYesno.___Elements[0].Data));
+				if (str.Contains("的救助吗？") || str.Contains("Accept Raise from ") || str.Contains("からの蘇生を受けますか？"))
+				{
+					//if (SelectYesno.___Elements[5].TrimmedData != 0)
+					//{
+					//	ClientGameUiRevive.Revive();
+					//	LogHelper.Instance.Log("Accepting Revive...");
+					//	return true;
+					//}
+					ClientGameUiRevive.Revive();
+					LogHelper.Instance.Log("Accepting Revive...");
+					return true;
+				}
 			}
 
 			return false;
@@ -404,7 +418,7 @@ namespace Kombatant.Logic
 			var qte = RaptureAtkUnitManager.GetWindowByName("QTE");
 			if (qte != null)
 			{
-				qte.SendAction(2,3,1,4,1);
+				qte.SendAction(2, 3, 1, 4, 1);
 				return true;
 			}
 
@@ -498,6 +512,30 @@ namespace Kombatant.Logic
 			//    RaptureAtkUnitManager.GetWindowByName("NeedGreed").SendAction(1, 3, uint.MaxValue);
 			//    await Coroutine.Wait(5000, () => RaptureAtkUnitManager.GetWindowByName("NeedGreed") == null);
 			//}
+		}
+
+		private bool ExecuteAutoMount()
+		{ 
+			if (!Core.Me.HasTarget && !Core.Me.IsMounted &&
+			    !MovementManager.IsOccupied && !MovementManager.IsMoving && !MovementManager.IsTurning && ActionManager.CanMount == 0 &&
+			    (!FateManager.WithinFate || Core.Me.GetCurrentFate() != null))
+			{
+				ActionManager.Mount();
+				return true;
+			}
+
+			return false;
+		}
+
+		private bool ExecuteAutoDismount()
+		{
+			if (Core.Me.HasTarget && Target.IsValidTarget(Core.Target) && Core.Me.IsMounted)
+			{
+				ActionManager.Dismount();
+				return true;
+			}
+
+			return false;
 		}
 
 		/// <summary>

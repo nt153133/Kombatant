@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using ff14bot.Enums;
 using ff14bot.Managers;
 using ff14bot.Objects;
@@ -16,6 +17,7 @@ namespace Kombatant.Extensions
         /// </summary>
         /// <param name="character"></param>
         /// <returns></returns>
+        [Obsolete("Use Tapped Instead")]
         internal static bool HasBeenTaggedByPartyMember(this Character character)
         {
             return character.TaggerType == 2;

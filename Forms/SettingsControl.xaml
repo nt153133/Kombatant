@@ -134,6 +134,17 @@
                                               Content="{x:Static L:Localization.Sprints_In_Dungeon_Only}"
                                               IsChecked="{Binding BotBase.AutoSprintInDutyOnly}" />
                                 </StackPanel>
+                                <StackPanel Orientation="Horizontal" >
+                                    <CheckBox Margin="0,1"
+                                              Content="Auto Mount"
+                                              Width="115"
+                                              ToolTip="Auto mount up whenever you are not in combat and has no target"
+                                              IsChecked="{Binding BotBase.AutoMount}" />
+                                    <CheckBox Margin="0,1"
+                                              Content="Dismount"
+                                              ToolTip="Auto dismount when you are targeting a valid enemy in range"
+                                              IsChecked="{Binding BotBase.AutoDismount}" />
+                                </StackPanel>
                                 <CheckBox Margin="0,1"
                                           Content="{x:Static L:Localization.UI_AutoEndActEncounters}"
                                           ToolTip="{x:Static L:Localization.UI_Tooltip_AutoEndActEncounters}"
