@@ -1,4 +1,5 @@
-﻿using System;
+﻿//!CompilerOption:Optimize:On
+using System;
 using System.Linq;
 using Clio.Common;
 using Clio.Utilities;
@@ -9,6 +10,7 @@ using ff14bot.Helpers;
 using ff14bot.Managers;
 using ff14bot.Objects;
 using Kombatant.Enums;
+using Kombatant.Settings;
 
 namespace Kombatant.Extensions
 {
@@ -25,8 +27,9 @@ namespace Kombatant.Extensions
 		/// <returns></returns>
 		internal static int NearbyEnemyCount(this GameObject obj)
 		{
-			return GameObjectManager.GameObjects
-				.Count(g => g.IsEnemy() && g.Distance2D(obj.Location) - g.CombatReach < 5.5f);
+			return GameObjectManager.GetObjectsOfType<BattleCharacter>(true)
+				.Count(g => g.CheckAliveAndValid() && g.Distance2D(obj.Location) - g.CombatReach < 5.5f &&
+				            ((g.StatusFlags & StatusFlags.Hostile) != 0 || g.CanAttack));
 		}
 
 		/// <summary>
@@ -173,12 +176,16 @@ namespace Kombatant.Extensions
 				i.IsEnemy() && i.Type == GameObjectType.Pc && i.TargetGameObject == o);
 		}
 
-		public static float CombatDistance(this GameObject target, bool isAOE = false)
+		public static float CombatDistance(this GameObject target)
 		{
 			if (target == null) return 0;
-			if (isAOE)
-				return Core.Me.Distance2D(target) - target.CombatReach;
-			return Core.Me.Distance2D(target) - Core.Me.CombatReach - target.CombatReach;
+			var increment = BotBase.Instance.EnableCombatReachIncrement ? BotBase.Instance.CombatReachIncrement : 0;
+			var targetCR = target.CombatReach;
+
+			if (WorldManager.InPvP && target is BattleCharacter b && !b.HasAura(1420)) targetCR = 0.5f;
+
+			//return Core.Me.Distance2D(target) - Core.Me.CombatReach - targetCR - increment;
+			return target.Distance2D() - 0.5f - targetCR - increment;
 		}
 
 		public static float Distance2DSqr(this GameObject target)

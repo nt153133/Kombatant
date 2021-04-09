@@ -1,4 +1,6 @@
-﻿//#define DEBUG
+﻿//!CompilerOption:Optimize:On
+
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -56,7 +58,7 @@ namespace Kombatant.Logic
 			var currentTarget = Core.Me.CurrentTarget as BattleCharacter;
 			var potentialTarget = null as BattleCharacter;
 
-#if DEBUG
+#if DBG
 			using (new PerformanceLogger("AutoDeseletTarget"))
 #endif
 			{
@@ -70,7 +72,7 @@ namespace Kombatant.Logic
 			// Automatically select a target if we do not have one. Uses one of the many colourful selection modes!
 			if (ShouldExecuteAutoTarget())
 			{
-#if DEBUG
+#if DBG
 				using (new PerformanceLogger("ChoosePotentialTarget"))
 #endif
 				{
@@ -136,7 +138,7 @@ namespace Kombatant.Logic
 							break;
 					}
 
-#if DEBUG
+#if DBG
 					using (new PerformanceLogger("CheckAndTargetPotentialTarget"))
 #endif
 					{
@@ -195,13 +197,15 @@ namespace Kombatant.Logic
 		internal static bool IsValidTarget(GameObject o)
 		{
 			if (!(o is BattleCharacter t)) return false;
-			if (!t.IsValid || !t.IsVisible || !t.IsAlive || !t.IsTargetable || !t.CanAttack || t.IsStrikingDummy() || t.IsMe) return false;
-			//if (t.CombatDistance() > BotBase.Instance.TargetScanMaxDistance) return false;
+			if (!t.IsValid || !t.IsVisible || !t.IsAlive || !t.IsTargetable || t.IsStrikingDummy() || t.IsMe) return false;
+
 			if (t.CombatDistance() > (BotBase.Instance.TargetScanMaxDistance == 0
 				? RoutineManager.Current.PullRange
-				: BotBase.Instance.TargetScanMaxDistance +
-				  (BotBase.Instance.EnableCombatReachIncrement && !t.IsMounted ? BotBase.Instance.CombatReachIncrement : 0))) return false;
+				: BotBase.Instance.TargetScanMaxDistance)) return false;
+			if (Math.Abs(t.Y - Core.Me.Y) > BotBase.Instance.TargetScanMaxDistance) return false;
 			if (t.IsInvincible()) return false;
+
+			if (/*(t.StatusFlags & StatusFlags.Hostile) == 0 && */!t.CanAttack) return false;
 			if (BotBase.Instance.EnableLosCheck && !t.InLineOfSight()) return false;
 
 			return true;
@@ -246,7 +250,7 @@ namespace Kombatant.Logic
 		/// <returns></returns>
 		private bool ShouldExecuteAutoTarget()
 		{
-#if DEBUG
+#if DBG
 			using (new PerformanceLogger("ShouldExecuteAutoTarget"))
 #endif
 			{
@@ -300,7 +304,7 @@ namespace Kombatant.Logic
 		/// <returns></returns>
 		private IEnumerable<BattleCharacter> ApplyPostFilters(IEnumerable<BattleCharacter> group)
 		{
-#if DEBUG
+#if DBG
 			using (new PerformanceLogger("TargetPostFilter"))
 #endif
 			{
@@ -310,14 +314,30 @@ namespace Kombatant.Logic
 				{
 					if (Settings.BotBase.Instance.EnableSmartPull)
 					{
-						result = PostFilterThreatList(result);
+						if (BotBase.Instance.FateTargetFilter && FateManager.WithinFate)
+						{
+							result = result.Where(o => o.IsEnemy() && (o.TargetGameObject == Core.Me || o.IsFate && o.Tapped));
+						}
+						else
+						{
+							if (PartyManager.PartyId != 0)
+							{
+								result = result.Where(o => o.IsEnemy() && (GameObjectManager.Attackers.Contains(o) || o.TaggerObjectId == PartyManager.PartyId));
+							}
+							else
+							{
+								result = result.Where(o => o.IsEnemy() && (GameObjectManager.Attackers.Contains(o) || o.TaggerObjectId == Core.Me.ObjectId));
+							}
+						}
+					}
+					else
+					{
+						if (Settings.BotBase.Instance.FateTargetFilter)
+						{
+							result = result.Where(i => i.IsFate);
+						}
 					}
 
-					if (Settings.BotBase.Instance.FateTargetFilter && FateManager.WithinFate && !BotBase.Instance.EnableSmartPull)
-					{
-						result = result.Where(i => i.IsFate);
-					}
-					
 					if (BotBase.Instance.TargetTankedOnly)
 					{
 						if (!PartyManager.IsInParty || Core.Me.IsTank() || !PartyManager.VisibleMembers.Any(i => i.IsTank() && !i.IsMe))
@@ -389,33 +409,6 @@ namespace Kombatant.Logic
 				}
 
 				return result;
-			}
-		}
-
-		private IEnumerable<BattleCharacter> PostFilterThreatList(IEnumerable<BattleCharacter> group)
-		{
-			//if (PartyManager.IsInParty)
-			//{
-			//	return group.Where(o =>
-			//		o.IsEnemy() && o.TaggerObjectId == PartyManager.PartyId &&
-			//		(GameObjectManager.Attackers.Contains(o) || o.HasBeenTaggedByPartyMember()));
-			//}
-			//else
-
-			if (BotBase.Instance.FateTargetFilter && FateManager.WithinFate)
-			{
-				return group.Where(o => o.IsEnemy() && (o.TargetGameObject == Core.Me || o.IsFate && o.Tapped));
-			}
-			else
-			{
-				if (PartyManager.IsInParty)
-				{
-					return group.Where(o => o.IsEnemy() && (GameObjectManager.Attackers.Contains(o) || o.TaggerObjectId == PartyManager.PartyId));
-				}
-				else
-				{
-					return group.Where(o => o.IsEnemy() && (GameObjectManager.Attackers.Contains(o) || o.TaggerObjectId == Core.Me.ObjectId));
-				}
 			}
 		}
 
@@ -560,7 +553,7 @@ namespace Kombatant.Logic
 			float GetDistanceSum(GameObject obj)
 			{
 				return GameObjectManager.GetObjectsOfType<BattleCharacter>(true)
-					.Select(i => i.Distance2DSqr(obj)).Where(i => i < 100).Sum();
+					.Select(i => i.Distance2DSqr(obj)).Where(i => i < 15).Sum();
 			}
 
 			var potentialTargets = GameObjectManager.GetObjectsOfType<BattleCharacter>()

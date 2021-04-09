@@ -107,7 +107,7 @@ namespace Kombatant.Logic
 				return false;
 
 			var target = Core.Target.GetCharacter();
-			return target.IsCasting && Constants.Attack.Gazes.Contains(target.CastingSpellId);
+			return target.IsCasting && Constants.Attack.Gazes.Contains(target.CastingSpellId) && target.SpellCastInfo.RemainingCastTime.TotalSeconds < 1;
 		}
 
 		/// <summary>
@@ -138,7 +138,7 @@ namespace Kombatant.Logic
 
 			// TODO: Localization and cleanup!
 			LogHelper.Instance.Log("AVERT GAZE: TURN AWAY!!");
-			OverlayHelper.Instance.AddToast("AVERT GAZE!", ToastFontColor, ToastShadowColor, gazeCastTime);
+			//OverlayHelper.Instance.AddToast("AVERT GAZE!", ToastFontColor, ToastShadowColor, gazeCastTime);
 
 			if (Core.Me.LookingAt(target.Location))
 				Core.Me.SetFacing(Core.Me.Heading - (float)Math.PI);

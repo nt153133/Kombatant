@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ff14bot.Directors;
 using ff14bot.Managers;
 
 namespace Kombatant.Interfaces
@@ -44,6 +45,11 @@ namespace Kombatant.Interfaces
         /// <returns></returns>
         protected bool ShouldExecutePreCombatBuff()
         {
+	        if (DirectorManager.ActiveDirector is InstanceContentDirector icDirector && icDirector.InstanceEnded)
+	        {
+		        return false;
+	        }
+
             return Settings.BotBase.Instance.EnablePreCombatBuff && RoutineManager.Current.PreCombatBuffBehavior != null;
         }
 

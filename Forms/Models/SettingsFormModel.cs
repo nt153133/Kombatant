@@ -1,4 +1,5 @@
-﻿using System;
+﻿//!CompilerOption:Optimize:On
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -202,24 +203,44 @@ namespace Kombatant.Forms.Models
 			}
 		}
 
-		public ICommand InvertAll
+		public ICommand CheckAll
 		{
 			get
 			{
 				return new RelayCommand(s =>
 				{
-					BotBase.Instance.EnableHealInCombat = !BotBase.Instance.EnableHealInCombat;
-					BotBase.Instance.EnableHealOutofCombat = !BotBase.Instance.EnableHealOutofCombat;
-					BotBase.Instance.EnablePreCombatBuff = !BotBase.Instance.EnablePreCombatBuff;
-					BotBase.Instance.EnablePullBuff = !BotBase.Instance.EnablePullBuff;
-					BotBase.Instance.EnablePull = !BotBase.Instance.EnablePull;
-					BotBase.Instance.EnableCombatBuff = !BotBase.Instance.EnableCombatBuff;
-					BotBase.Instance.EnableCombat = !BotBase.Instance.EnableCombat;
-					BotBase.Instance.EnableDeath = !BotBase.Instance.EnableDeath;
-					BotBase.Instance.EnableRest = !BotBase.Instance.EnableRest;
+					BotBase.Instance.EnableHealInCombat = true;
+					BotBase.Instance.EnableHealOutofCombat = true;
+					BotBase.Instance.EnablePreCombatBuff = true;
+					BotBase.Instance.EnablePullBuff = true;
+					BotBase.Instance.EnablePull = true;
+					BotBase.Instance.EnableCombatBuff = true;
+					BotBase.Instance.EnableCombat = true;
+					BotBase.Instance.EnableDeath = true;
+					BotBase.Instance.EnableRest = true;
 				});
 			}
 		}
+
+		public ICommand UnCheckAll
+		{
+			get
+			{
+				return new RelayCommand(s =>
+				{
+					BotBase.Instance.EnableHealInCombat = false;
+					BotBase.Instance.EnableHealOutofCombat = false;
+					BotBase.Instance.EnablePreCombatBuff = false;
+					BotBase.Instance.EnablePullBuff = false;
+					BotBase.Instance.EnablePull = false;
+					BotBase.Instance.EnableCombatBuff = false;
+					BotBase.Instance.EnableCombat = false;
+					BotBase.Instance.EnableDeath = false;
+					BotBase.Instance.EnableRest = false;
+				});
+			}
+		}
+
 
 		/// <summary>
 		/// Pops open the combat routine selector.

@@ -1,4 +1,5 @@
-﻿using System;
+﻿//!CompilerOption:Optimize:On
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -64,18 +65,35 @@ namespace Kombatant.Logic
 			if (BotBase.Instance.IsPaused)
 				return await Task.FromResult(false);
 
-			if (ShouldVoteMvp())
+			if (DutyManager.InInstance)
 			{
-				if (await VoteMvp().ExecuteCoroutine())
+				if (ShouldVoteMvp())
+				{
+					if (await VoteMvp().ExecuteCoroutine())
+						return await Task.FromResult(true);
+				}
+
+				if (ShouldLeaveDuty())
+				{
+					LogHelper.Instance.Log("Leaving Duty...");
+					DutyManager.LeaveActiveDuty();
 					return await Task.FromResult(true);
+				}
+
+				if (BotBase.Instance.AutoPickUpTreasure && !WorldManager.InPvP)
+				{
+					if (GameObjectManager.GetObjectsOfType<Treasure>(true)
+							.FirstOrDefault(i => i.IsTargetable && i.State == 0 && i.Distance2DSqr() < 8) is Treasure treasure)
+					{
+						LogHelper.Instance.Log(treasure);
+						treasure.Interact();
+						Core.Me.ClearTarget();
+						return await Task.FromResult(true);
+					}
+				}
 			}
 
-			if (ShouldLeaveDuty())
-			{
-				LogHelper.Instance.Log("Leaving Duty...");
-				DutyManager.LeaveActiveDuty();
-				return await Task.FromResult(true);
-			}
+
 
 			if (ShouldRegisterDuties())
 			{
@@ -125,71 +143,25 @@ namespace Kombatant.Logic
 			return await Task.FromResult(false);
 		}
 
-		//private InstanceContentResult[] DutiesToRegister
-		//{
-		//	get
-		//	{
-		//		if (string.IsNullOrWhiteSpace(BotBase.Instance.DutyIDsToRegister))
-		//		{
-		//			return new InstanceContentResult[] { };
-		//		}
-		//		try
-		//		{
-		//			string[] idStrings = BotBase.Instance.DutyIDsToRegister.Split(',');
-		//			uint[] idsUints = new uint[idStrings.Length];
-		//			for (int i = 0; i < idStrings.Length; i++)
-		//			{
-		//				idsUints[i] = uint.Parse(idStrings[i]);
-		//			}
-
-		//			try
-		//			{
-		//				var duties = DataManager.InstanceContentResults.Values
-		//					.Where(i => i.IsInDutyFinder && idsUints.Contains(i.Id)).ToArray();
-		//				if (duties.Length != idsUints.Length)
-		//				{
-		//					throw new Exception();
-		//				}
-
-		//				return duties;
-		//			}
-		//			catch (Exception e)
-		//			{
-		//				LogHelper.Instance.Log("任务搜索器中没有你要申请的全部副本。");
-		//				//LogHelper.Instance.Log(e);
-		//			}
-		//		}
-		//		catch (Exception e)
-		//		{
-		//			LogHelper.Instance.Log("输入副本ID的格式有误。");
-		//			//LogHelper.Instance.Log(e);
-		//		}
-
-		//		return new InstanceContentResult[] { };
-		//	}
-		//}
-
 		private bool ShouldLeaveDuty()
 		{
 			if (BotBase.Instance.AutoLeaveDuty)
 			{
-				if (DutyManager.InInstance)
+				if (DutyManager.InInstance &&
+				    DirectorManager.ActiveDirector is InstanceContentDirector icDirector &&
+				    icDirector.InstanceEnded && 
+				    !LootManager.HasLoot &&
+				    GameObjectManager.GetObjectsOfType<Treasure>(true).Where(i=>i.IsTargetable).All(i => i.State > 0) &&
+				    !Core.Me.InCombat &&
+				    DutyManager.CanLeaveActiveDuty)
 				{
-					if (DirectorManager.ActiveDirector is InstanceContentDirector icDirector)
-					{
-						if (icDirector.InstanceEnded)
-						{
-							//if (!LootManager.HasLoot)
-							{
-								if (DutyManager.CanLeaveActiveDuty)
-								{
-									if (BotBase.Instance.SecondsToAutoLeaveDuty == 0 ||
-									    WaitHelper.Instance.IsDoneWaiting(@"CommenceDuty.AutoLeaveDuty",
-										    new TimeSpan(0, 0, BotBase.Instance.SecondsToAutoLeaveDuty))) return true;
-								}
-							}
-						}
-					}
+					//LogHelper.Instance.Log(WaitHelper.Instance.TimeLeft(@"CommenceDuty.AutoLeaveDuty"));
+					if (BotBase.Instance.SecondsToAutoLeaveDuty == 0) return true;
+					if (WaitHelper.Instance.IsFinished(@"CommenceDuty.AutoLeaveDuty")) return true;
+				}
+				else
+				{
+					WaitHelper.Instance.AddWait(@"CommenceDuty.AutoLeaveDuty", new TimeSpan(0, 0, BotBase.Instance.SecondsToAutoLeaveDuty));
 				}
 			}
 
@@ -310,19 +282,12 @@ namespace Kombatant.Logic
 		private Composite VoteMvp()
 		{
 			Composite c = new Sequence(
-				//new Action(context => LogHelper.Instance.Log($"Starting sequence! waiting for _NotificationIcMvp open")),
 				new ActionRunCoroutine(o => Coroutine.Wait(500, () => RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp") != null)),
-				//new Action(context => LogHelper.Instance.Log($" _NotificationIcMvp opened")),
 				new Action(context =>
 				{
-					//LogHelper.Instance.Log($"Toggling agent {RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface()}...");
-					//RaptureAtkUnitManager.GetWindowByName("_NotificationIcMvp").TryFindAgentInterface().Toggle();
 					AgentModule.ToggleAgentInterfaceById(Memory.Offsets.Instance.AgentNotificationId);
-					//LogHelper.Instance.Log($"Toggling agent {59}...");
 					AgentModule.ToggleAgentInterfaceById(Memory.Offsets.Instance.AgentMvpId);
-					//LogHelper.Instance.Log($"Toggling agent {120}...");
 				}),
-				//new Action(context => LogHelper.Instance.Log("Waiting for VoteMvp to open...")),
 				new ActionRunCoroutine(o => Coroutine.Wait(3000, () => RaptureAtkUnitManager.GetWindowByName("VoteMvp") != null)),
 				new Action(context => LogHelper.Instance.Log("VoteMvp opened.")),
 				new Action(context =>
@@ -332,33 +297,6 @@ namespace Kombatant.Logic
 				}));
 
 			return c;
-
-			//if (DirectorManager.ActiveDirector is InstanceContentDirector icDirector && icDirector.InstanceEnded)
-			//{
-			//	LogHelper.Instance.Log($"Instance ended... Wait for PlayerRecommendation window to appear");
-			//	if (await Coroutine.Wait(3000, () => NotificationMvp != null))
-			//	{
-			//		LogHelper.Instance.Log($"Toggling agent {NotificationMvp.TryFindAgentInterface()}...");
-			//		NotificationMvp.TryFindAgentInterface().Toggle();
-			//		LogHelper.Instance.Log($"Toggling agent {59}...");
-			//		AgentModule.ToggleAgentInterfaceById(59);
-			//		LogHelper.Instance.Log($"Toggling agent {120}...");
-			//		AgentModule.ToggleAgentInterfaceById(120);
-			//		LogHelper.Instance.Log("Waiting -1 for VoteMvp to open...");
-
-			//		await Coroutine.Wait(-1, () => VoteMvp != null);
-			//		LogHelper.Instance.Log("VoteMvp opened.");
-			//		VoteMvp.SendAction(2, 3, 0, 3, VoteWho);
-			//		LogHelper.Instance.Log($"voted player [{VoteWho}]!");
-			//		return true;
-			//	}
-			//}
-
-			//return false;
-
-
-
-
 		}
 	}
 }

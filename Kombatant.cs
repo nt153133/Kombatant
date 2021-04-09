@@ -1,4 +1,6 @@
-﻿//#define DEBUG
+﻿//!CompilerOption:Optimize:On
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,7 +90,7 @@ namespace Kombatant
 						Content = LoadWindowContent(),
 						//Width = LoadWindowContent().Width+5,
 						//Height = LoadWindowContent().Height+30,
-						Title = "Kombatant",
+						Title = $"Kombatant {Core.Me?.Name}",
 						WindowStartupLocation = WindowStartupLocation.CenterScreen,
 					};
 
@@ -180,17 +182,26 @@ namespace Kombatant
 			}
 		}
 
+		internal static bool _memoFaliure;
 		private void init()
 		{
-			_ = Memory.Offsets.Instance;
-			_ = Memory.GroundSpeedHook.Instance;
-			_ = Memory.CombatReachHook.Instance;
-			Core.Memory.Patches.Create(Offsets.Instance.KnockbackFunc, Enumerable.Repeat((byte)0x90, 5).ToArray(), "NoKnockbackPatch");
+			try
+			{
+				_ = Offsets.Instance;
+				_ = GroundSpeedHook.Instance;
+				_ = CombatReachHook.Instance;
+				_ = FastCastHook.Instance;
+				_ = GcdHook.Instance;
+				Core.Memory.Patches.Create(Offsets.Instance.KnockbackFunc, Enumerable.Repeat((byte)0x90, 5).ToArray(), "NoKnockbackPatch");
+			}
+			catch (Exception e)
+			{
+				_memoFaliure = true;
+			}
 			LocalizationInitializer.Initalize();
 			//Settings.BotBase.Instance.AutoRegisterDuties = false;
 		}
 
-		private static int tickcount;
 		public override void Pulse()
 		{
 
@@ -258,9 +269,16 @@ namespace Kombatant
 			// Unregister the hotkeys
 			HotkeyHelper.Instance.UnregisterHotkeys();
 
-			Core.Memory.Patches["GroundSpeedHook"].Remove();
-			Core.Memory.Patches["CombatReachHook"].Remove();
-			Core.Memory.Patches["NoKnockbackPatch"].Remove();
+			try
+			{
+				Core.Memory.Patches["GroundSpeedHook"].Remove();
+				Core.Memory.Patches["CombatReachHook"].Remove();
+				Core.Memory.Patches["NoKnockbackPatch"].Remove();
+			}
+			catch (Exception e)
+			{
+
+			}
 
 
 			// Stop Overlays
@@ -287,41 +305,41 @@ namespace Kombatant
 		/// <returns></returns>
 		private async Task<bool> KombatantLogic()
 		{
-#if DEBUG
+#if DBG
 			using (new PerformanceLogger("TotalExecutionTime"))
 #endif
 			{
-#if DEBUG
+#if DBG
 				using (new PerformanceLogger("RefreshOverlay"))
 #endif
 				{
-					if (WaitHelper.Instance.IsDoneWaiting("refreshOverlay", TimeSpan.FromMilliseconds(50), true))
-					{
-						//invoking UI thread to refresh overlay
-						if (BotBase.Instance.UseFocusOverlay)
-							OverlayManager.FocusOverlay.Update();
-						if (BotBase.Instance.UseStatusOverlay)
-							OverlayManager.StatusOverlay.Update();
-					}
+					//invoking UI thread to refresh overlay
+					if (BotBase.Instance.UseFocusOverlay)
+						OverlayManager.FocusOverlay.Update();
+					if (BotBase.Instance.UseStatusOverlay)
+						OverlayManager.StatusOverlay.Update();
 				}
-#if DEBUG
+#if DBG
 				using (new PerformanceLogger("Memory"))
 #endif
 				{
-					Hack.Instance.ExecuteLogic();
+					if (BotBase.Instance.Hackpanel)
+					{
+						Hack.Instance.ExecuteLogic();
+					}
 				}
 
 				// Execute Loot logic
 				if (await Loot.Instance.ExecuteLogic())
 					return await Task.FromResult(true);
 
-#if DEBUG
+#if DBG
 				using (new PerformanceLogger("SetTickRate"))
 #endif
 				{
-					TreeRoot.TicksPerSecond = BotBase.Instance.IsPaused ? (byte)30 : (byte)255;
+					TreeRoot.TicksPerSecond = BotBase.Instance.IsPaused ? (byte)BotBase.Instance.PausingTickRate : (byte)BotBase.Instance.RunningTickRate;
 				}
-#if DEBUG
+#if DBG
 				using (new PerformanceLogger("CommenceDuty"))
 #endif
 				{
@@ -330,7 +348,7 @@ namespace Kombatant
 						return await Task.FromResult(true);
 				}
 
-#if DEBUG
+#if DBG
 				using (new PerformanceLogger("Mechanics"))
 #endif
 				{
@@ -339,7 +357,7 @@ namespace Kombatant
 						return await Task.FromResult(true);
 				}
 
-#if DEBUG
+#if DBG
 				using (new PerformanceLogger("Convenience"))
 #endif
 				{
@@ -348,7 +366,7 @@ namespace Kombatant
 						return await Task.FromResult(true);
 				}
 
-#if DEBUG
+#if DBG
 				using (new PerformanceLogger("Target"))
 #endif
 				{
@@ -357,7 +375,7 @@ namespace Kombatant
 						return await Task.FromResult(true);
 				}
 
-#if DEBUG
+#if DBG
 				using (new PerformanceLogger("Avoidance"))
 #endif
 				{
@@ -366,7 +384,7 @@ namespace Kombatant
 						return await Task.FromResult(true);
 				}
 
-#if DEBUG
+#if DBG
 				using (new PerformanceLogger("Movement"))
 #endif
 				{
@@ -375,7 +393,7 @@ namespace Kombatant
 						return await Task.FromResult(true);
 				}
 
-#if DEBUG
+#if DBG
 				using (new PerformanceLogger("CombatLogic"))
 #endif
 				{

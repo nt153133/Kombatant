@@ -1,4 +1,5 @@
-﻿using System;
+﻿//!CompilerOption:Optimize:On
+using System;
 using System.Collections.Generic;
 using Clio.Utilities.Helpers;
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿//!CompilerOption:Optimize:On
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -21,6 +22,7 @@ using Kombatant.Extensions;
 using Kombatant.Forms;
 using Kombatant.Helpers;
 using Kombatant.Interfaces;
+using Kombatant.Memory;
 using Kombatant.Resources;
 using Kombatant.Settings;
 using static Kombatant.Forms.StatusOverlayUiComponent;
@@ -99,7 +101,7 @@ namespace Kombatant.Logic
 					return await Task.FromResult(true);
 
 			// Auto skip cutscenes
-			if (BotBase.Instance.AutoSkipCutscenes && QuestLogManager.InCutscene)
+			if (BotBase.Instance.AutoSkipCutscenes)
 				if (await ExecuteSkipCutscene())
 					return await Task.FromResult(true);
 
@@ -124,12 +126,9 @@ namespace Kombatant.Logic
 					return await Task.FromResult(true);
 
 			if (BotBase.Instance.AutoTrade)
-				if (ExecuteAutoTrade())
+				if (await ExecuteAutoTrade())
 					return await Task.FromResult(true);
 
-			//if (BotBase.Instance.AutoAcceptRevive)
-			//    if (ExecuteAutoLeaveDuty())
-			//        return await Task.FromResult(true);
 			if (BotBase.Instance.AutoHandoverRequestItems)
 				return await ExecuteAutoHandoverRequestItems();
 
@@ -193,7 +192,20 @@ namespace Kombatant.Logic
 			// Auto progress text box
 			if (Talk.DialogOpen)
 			{
-				Talk.Next();
+				if (BotBase.Instance.ForceSkipTalk)
+				{
+					//lock (Core.Memory.Executor.AssemblyLock)
+					//{
+					//	Core.Memory.CallInjected64<uint>(Offsets.Instance.SkipTalk, RaptureAtkUnitManager.GetWindowByName("Talk").Pointer);
+					//}
+
+					RaptureAtkUnitManager.GetWindowByName("Talk").SendAction(0);
+				}
+				else
+				{
+					Talk.Next();
+				}
+
 				return true;
 			}
 
@@ -256,7 +268,7 @@ namespace Kombatant.Logic
 			if (!ActionManager.IsSprintReady) return false;
 			if (BotBase.Instance.AutoSprintInDutyOnly)
 			{
-				if (DirectorManager.ActiveDirector is InstanceContentDirector icd && icd.BarrierDown())
+				if (DirectorManager.ActiveDirector is InstanceContentDirector icd && icd.BarrierDown() && !icd.InstanceEnded)
 				{
 					ActionManager.Sprint();
 					return true;
@@ -303,10 +315,13 @@ namespace Kombatant.Logic
 		/// <returns></returns>
 		private async Task<bool> ExecuteSkipCutscene()
 		{
+			if (!QuestLogManager.InCutscene) return false;
+
 			// Try to skip the cutscene
 			if (WaitHelper.Instance.IsDoneWaiting("SkipCutscene", new TimeSpan(0, 0, 1), true))
 			{
 				AgentCutScene.Instance.PromptSkip();
+				return true;
 			}
 
 			if (AgentCutScene.Instance.CanSkip && SelectString.IsOpen)
@@ -316,12 +331,13 @@ namespace Kombatant.Logic
 				return true;
 			}
 
-			// If that is not an option, at least try to forward it as fast as possible...
-			if (Talk.DialogOpen)
-			{
-				Talk.Next();
-				return true;
-			}
+			//// If that is not an option, at least try to forward it as fast as possible...
+			//if (Talk.DialogOpen)
+			//{
+			//	Talk.Next();
+			//	return true;
+			//}
+
 
 			return false;
 		}
@@ -431,7 +447,7 @@ namespace Kombatant.Logic
 												   (!BotBase.Instance.AutoTradeFriendOnly || (c.StatusFlags & StatusFlags.Friend) != 0) &&
 												   !DutyManager.InInstance && c.IsWithinInteractRange;
 
-		private bool ExecuteAutoTrade()
+		private async Task<bool> ExecuteAutoTrade()
 		{
 			if (TradeOpen)
 			{
@@ -446,6 +462,8 @@ namespace Kombatant.Logic
 					if (InputNumeric.IsOpen)
 					{
 						InputNumeric.Ok((uint)InputNumeric.Field.MaxValue);
+						await Coroutine.Wait(1000, () => !InputNumeric.IsOpen);
+						RaptureAtkUnitManager.GetWindowByName("Trade").SendAction(1, 3, 0);
 						return true;
 					}
 
@@ -460,10 +478,16 @@ namespace Kombatant.Logic
 						SelectYesno.Yes();
 						return true;
 					}
+
+					//if (InventoryManager.GetBagByInventoryBagId((InventoryBagId)2005).UsedSlots == 6 && Trade.TradeStage == 3)
+					//{
+					//	RaptureAtkUnitManager.GetWindowByName("Trade").SendAction(1, 3, 0);
+					//	return true;
+					//}
 				}
 				else
 				{
-					if (Trade.TradeStage == 3)
+					if (Core.Memory.Read<int>(Offsets.Instance.TraderTradeStage) == 4 && Trade.TradeStage == 3)
 					{
 						RaptureAtkUnitManager.GetWindowByName("Trade").SendAction(1, 3, 0);
 						return true;
@@ -486,39 +510,13 @@ namespace Kombatant.Logic
 			}
 
 			return false;
-
-			//if (DungeonMaster.Managers.LootManager.IsVisible && LootManager.AvailableItems.Any(i => i.RollState == RollState.NoLoot))
-			//{
-			//    foreach (var availableItem in LootManager.AvailableItems)
-			//    {
-			//        Logging.Write(LogLevel.Normal, System.Windows.Media.Color.FromRgb(40,200,220), "放弃了：" );
-			//        Log(availableItem.Index + " " + availableItem.Item.ChnName + "State: " + availableItem.RollState + "ID: " + availableItem.RawId);
-			//    }
-			//    LootManager.AvailableItems.Where(i => i.RollState == RollState.NoLoot).ForEach(i => i.Roll(RollOptions.Pass));
-			//    return true;
-			//}
-			//while (RaptureAtkUnitManager.GetWindowByName("_NotificationLoot") != null)
-			//{
-			//    await Coroutine.ExternalTask(ExecuteAutoAbandonLoot());
-			//    AgentModule.GetAgentInterfaceById(35).Toggle();
-			//    await Coroutine.Wait(5000, () => RaptureAtkUnitManager.GetWindowByName("NeedGreed") != null);
-			//    RaptureAtkUnitManager.GetWindowByName("NeedGreed").SendAction(2, 3, 2, 0, 0);
-			//    await Coroutine.Wait(5000, () => SelectYesno.IsOpen && RaptureAtkUnitManager.GetWindowByName("SelectYesno").FindLabel(2).Text.Contains("确定要放弃"));
-			//    if (SelectYesno.IsOpen)
-			//    {
-			//        SelectYesno.Yes();
-			//    }
-			//    await Coroutine.Sleep(1000);
-			//    RaptureAtkUnitManager.GetWindowByName("NeedGreed").SendAction(1, 3, uint.MaxValue);
-			//    await Coroutine.Wait(5000, () => RaptureAtkUnitManager.GetWindowByName("NeedGreed") == null);
-			//}
 		}
 
 		private bool ExecuteAutoMount()
-		{ 
+		{
 			if (!Core.Me.HasTarget && !Core.Me.IsMounted &&
-			    !MovementManager.IsOccupied && !MovementManager.IsMoving && !MovementManager.IsTurning && ActionManager.CanMount == 0 &&
-			    (!FateManager.WithinFate || Core.Me.GetCurrentFate() != null))
+				!MovementManager.IsOccupied && !MovementManager.IsMoving && !MovementManager.IsTurning && ActionManager.CanMount == 0 &&
+				(!FateManager.WithinFate || Core.Me.GetCurrentFate() != null))
 			{
 				ActionManager.Mount();
 				return true;

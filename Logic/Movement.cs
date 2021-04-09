@@ -1,4 +1,5 @@
-﻿using System;
+﻿//!CompilerOption:Optimize:On
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;

@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.2</LangVersion>
+    <IntermediateOutputPath>C:\Users\Jane\AppData\Local\Temp\vs4840.tmp\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.2</LangVersion>
+    <IntermediateOutputPath>C:\Users\Jane\AppData\Local\Temp\vs4840.tmp\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -40,11 +42,13 @@
     <LangVersion>7.2</LangVersion>
     <DefineConstants>
     </DefineConstants>
+    <IntermediateOutputPath>C:\Users\Jane\AppData\Local\Temp\vs4840.tmp\x64\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <OutputPath>bin\x64\Debug\</OutputPath>
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.2</LangVersion>
+    <IntermediateOutputPath>C:\Users\Jane\AppData\Local\Temp\vs4840.tmp\x64\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Annotations\Annotations.cs" />
@@ -99,17 +103,15 @@
     <Compile Include="Logic\Avoidance.cs" />
     <Compile Include="Logic\Convenience.cs" />
     <Compile Include="Logic\CRLogic.cs" />
-    <Compile Include="Logic\DPS.cs" />
     <Compile Include="Logic\CommenceDuty.cs" />
     <Compile Include="Logic\Hack.cs" />
-    <Compile Include="Logic\Healer.cs" />
     <Compile Include="Logic\Loot.cs" />
     <Compile Include="Logic\Mechanics.cs" />
     <Compile Include="Logic\Movement.cs" />
-    <Compile Include="Logic\Tank.cs" />
     <Compile Include="Logic\Target.cs" />
     <Compile Include="Managers\DutyManager.cs" />
     <Compile Include="Managers\LootManager.cs" />
+    <Compile Include="Managers\TargetManager.cs" />
     <Compile Include="Memory\Hooks.cs" />
     <Compile Include="Memory\Offsets.cs" />
     <Compile Include="Resources\AssemblyInfo.cs" />

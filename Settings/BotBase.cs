@@ -199,7 +199,7 @@ namespace Kombatant.Settings
 
 		private bool _autoAcceptQuests;
 
-		[DefaultValue(false)]
+		[DefaultValue(true)]
 		[Description("Automatically accept quests")]
 		[JsonProperty("AutoAcceptQuests")]
 		public bool AutoAcceptQuests
@@ -250,7 +250,7 @@ namespace Kombatant.Settings
 
 		private bool _handoverHqIfnoNQ;
 
-		[DefaultValue(false)]
+		[DefaultValue(true)]
 		public bool HandoverHqIfnoNQ
 		{
 			get => _handoverHqIfnoNQ;
@@ -273,6 +273,23 @@ namespace Kombatant.Settings
 			set
 			{
 				_autoAcceptRevive = value;
+				OnPropertyChanged();
+			}
+		}
+
+		#endregion
+
+		#region AutoPickUpTreasure
+
+		private bool _autoPickupTreasure;
+
+		[DefaultValue(false)]
+		public bool AutoPickUpTreasure
+		{
+			get => _autoPickupTreasure;
+			set
+			{
+				_autoPickupTreasure = value;
 				OnPropertyChanged();
 			}
 		}
@@ -1262,7 +1279,7 @@ namespace Kombatant.Settings
 
 
 		private int _targetPlayerUnderThisHpPct;
-		[DefaultValue(0)]
+		[DefaultValue(25)]
 		public int TargetPlayerUnderThisHPPct
 		{
 			get => _targetPlayerUnderThisHpPct;
@@ -1289,7 +1306,7 @@ namespace Kombatant.Settings
 
 		private bool _targetMountedEnemyFirst;
 
-		[DefaultValue(false)]
+		[DefaultValue(true)]
 		public bool TargetMountedEnemyFirst
 		{
 			get => _targetMountedEnemyFirst;
@@ -1400,7 +1417,7 @@ namespace Kombatant.Settings
 
 		private bool _useStatusOverlay;
 
-		[DefaultValue(false)]
+		[DefaultValue(true)]
 		[JsonProperty("UseStatusOverlay")]
 		public bool UseStatusOverlay
 		{
@@ -1552,13 +1569,25 @@ namespace Kombatant.Settings
 		}
 
 		private float _combatReachIncrement;
-		[DefaultValue(3f)]
+		[DefaultValue(2f)]
 		public float CombatReachIncrement
 		{
 			get => _combatReachIncrement;
 			set
 			{
 				_combatReachIncrement = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private float _myCombatReachAdjustment;
+		[DefaultValue(0f)]
+		public float MyCombatReachAdjustment
+		{
+			get => _myCombatReachAdjustment;
+			set
+			{
+				_myCombatReachAdjustment = value;
 				OnPropertyChanged();
 			}
 		}
@@ -1586,28 +1615,116 @@ namespace Kombatant.Settings
 				OnPropertyChanged();
 			}
 		}
-		#endregion
 
-		private bool performanceLogger;
-		[DefaultValue(false)]
-		public bool PerformanceLogger
+		private bool _forceSkipTalk;
+
+		public bool ForceSkipTalk
 		{
-			get => performanceLogger;
+			get => _forceSkipTalk;
 			set
 			{
-				performanceLogger = value;
+				_forceSkipTalk = value;
 				OnPropertyChanged();
 			}
 		}
 
-		private int minLogMs;
-		[DefaultValue(5)]
-		public int MinLogMs
+		private bool _enableFastCast;
+		public bool EnableFastCast
 		{
-			get => minLogMs;
+			get => _enableFastCast;
 			set
 			{
-				minLogMs = value;
+				_enableFastCast = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private float _fastCastPercent;
+		[DefaultValue(100f)]
+		public float FastCastPercent
+		{
+			get => _fastCastPercent;
+			set
+			{
+				_fastCastPercent = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _enableReduceGcd;
+		public bool EnableReduceGcd
+		{
+			get => _enableReduceGcd;
+			set
+			{
+				_enableReduceGcd = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private float _gcdPercent;
+		[DefaultValue(100f)]
+		public float GcdPercent
+		{
+			get => _gcdPercent;
+			set
+			{
+				_gcdPercent = value;
+				OnPropertyChanged();
+			}
+		}
+
+		#endregion
+
+		private bool pulseDirector;
+		[DefaultValue(true)]
+		public bool PulseDirector
+		{
+			get => pulseDirector;
+			set
+			{
+				pulseDirector = value;
+				OnPropertyChanged();
+			}
+		}
+
+		//private bool performanceLogger;
+		//[DefaultValue(false)]
+		//public bool PerformanceLogger
+		//{
+		//	get => performanceLogger;
+		//	set
+		//	{
+		//		performanceLogger = value;
+		//		OnPropertyChanged();
+		//	}
+		//}
+
+		private int _RunningTickRate;
+		[DefaultValue(255)]
+		public int RunningTickRate
+		{
+			get => _RunningTickRate;
+			set
+			{
+				if (value > 255) value = 255;
+				if (value < 1) value = 1;
+				_RunningTickRate = value;
+				OnPropertyChanged();
+			}
+		}
+
+
+		private int _PausingTickRate;
+		[DefaultValue(15)]
+		public int PausingTickRate
+		{
+			get => _PausingTickRate;
+			set
+			{
+				if (value > 255) value = 255;
+				if (value < 1) value = 1;
+				_PausingTickRate = value;
 				OnPropertyChanged();
 			}
 		}

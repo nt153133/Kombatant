@@ -1,4 +1,5 @@
-﻿using System;
+﻿//!CompilerOption:Optimize:On
+using System;
 using System.Threading.Tasks;
 using Clio.Common;
 using Clio.Utilities;

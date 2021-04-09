@@ -1,4 +1,5 @@
-﻿using System;
+﻿//!CompilerOption:Optimize:On
+using System;
 using System.Linq;
 using ff14bot.Enums;
 using ff14bot.Managers;
@@ -148,7 +149,7 @@ namespace Kombatant.Extensions
         /// <returns></returns>
         internal static bool IsInvincible(this Character character)
         {
-            return character.Auras.AuraList.Select(a => a.Id).Intersect(Aura.Invincibility).Any();
+            return character.CharacterAuras.Select(a => a.Id).Intersect(Aura.Invincibility).Any();
         }
     }
 }

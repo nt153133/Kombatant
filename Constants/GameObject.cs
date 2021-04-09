@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿//!CompilerOption:Optimize:On
+using System.Linq;
 
 namespace Kombatant.Constants
 {

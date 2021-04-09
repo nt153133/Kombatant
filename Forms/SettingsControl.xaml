@@ -121,6 +121,9 @@
                                 <CheckBox Margin="0,1"
                                           Content="{x:Static L:Localization.UI_AutoAcceptRevive}"
                                           IsChecked="{Binding BotBase.AutoAcceptRevive}" />
+                                <CheckBox Margin="0,1,-0.4,1"
+                                    Content="Auto Pick Up Treasure"
+                                    IsChecked="{Binding BotBase.AutoPickUpTreasure}" />
                                 <!--<CheckBox Margin="0,1"
                                           Content="Auto QTE"
                                           IsChecked="{Binding BotBase.AutoQTE}" />-->
@@ -594,7 +597,11 @@
                         <RowDefinition
                             Height="16" />
                         <RowDefinition
-                            Height="Auto" />
+                            Height="20" />
+                        <RowDefinition
+                            Height="4" />
+                        <RowDefinition
+                            Height="20" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="240" />
@@ -665,12 +672,15 @@
                     </GroupBox>
 
                     <Button Grid.Column="0"
-                            Grid.Row="4" Content="{x:Static L:Localization.UI_InvertAll}"
+                            Grid.Row="4" Content="Check All"
                             HorizontalAlignment="Stretch"
-                            Command="{Binding InvertAll}" />
-
+                            Command="{Binding CheckAll}" />
                     <Button Grid.Column="2"
-                            Grid.Row="4" Content="{x:Static L:Localization.UI_SelectCr}"
+                            Grid.Row="4" Content="Uncheck All"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding UnCheckAll}" />
+                    <Button Grid.Column="0"
+                            Grid.Row="6" Grid.ColumnSpan="3" Content="{x:Static L:Localization.UI_SelectCr}"
                             HorizontalAlignment="Stretch"
                             Command="{Binding SelectCombatRoutine}" />
 
@@ -699,7 +709,7 @@
                         <RowDefinition Height="4" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="4" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="20" />
 
                     </Grid.RowDefinitions>
 
@@ -777,7 +787,7 @@
                               IsEnabled="{Binding Hotkeys.EnableFollowingKey}"
                               SelectedValue="{Binding Hotkeys.FollowingToggleKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <Button Grid.Row="12" Grid.Column="4"
+                    <Button Grid.Row="12" Grid.ColumnSpan="3" Grid.Column="2"
                             Content="{x:Static L:Localization.UI_ReloadHotkeys}"
                             Command="{Binding ReloadHotkeys}" />
                 </Grid>
@@ -825,14 +835,38 @@
                                 </Grid>
                                 <Separator Margin="5" Opacity="0.5"/>
 
-                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Reduce ability animation" IsChecked="{Binding BotBase.EnableAnimationLockHack}"/>
+                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Reduce GCD" IsChecked="{Binding BotBase.EnableReduceGcd}"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="177"/>
                                         <ColumnDefinition Width="3"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Slider Minimum="0" Maximum="600" VerticalAlignment="Center" TickFrequency="50" IsSnapToTickEnabled="True" 
+                                    <Slider Minimum="75" Maximum="100" VerticalAlignment="Center" TickFrequency="0.5" IsSnapToTickEnabled="True" 
+                                            IsEnabled="{Binding BotBase.EnableReduceGcd}" Value="{Binding BotBase.GcdPercent}"/>
+                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableReduceGcd}" Text="{Binding BotBase.GcdPercent}"/>
+                                </Grid>
+                                <Separator Margin="5" Opacity="0.5"/>
+                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Fast Cast" IsChecked="{Binding BotBase.EnableFastCast}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="177"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider Minimum="50" Maximum="100" VerticalAlignment="Center" TickFrequency="1" IsSnapToTickEnabled="True" 
+                                            IsEnabled="{Binding BotBase.EnableFastCast}" Value="{Binding BotBase.FastCastPercent}"/>
+                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableFastCast}" Text="{Binding BotBase.FastCastPercent}"/>
+                                </Grid>
+                                <Separator Margin="5" Opacity="0.5"/>
+                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Reduce animation lock" IsChecked="{Binding BotBase.EnableAnimationLockHack}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="177"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider Minimum="0" Maximum="600" VerticalAlignment="Center" TickFrequency="10" IsSnapToTickEnabled="True" 
                                             IsEnabled="{Binding BotBase.EnableAnimationLockHack}" Value="{Binding BotBase.AnimationLockMaxDelay}"/>
                                     <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableAnimationLockHack}" Text="{Binding BotBase.AnimationLockMaxDelay}"/>
                                 </Grid>
@@ -855,9 +889,20 @@
                                         <ColumnDefinition Width="3"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Slider Minimum="0" Maximum="5" TickFrequency="0.1" IsSnapToTickEnabled="True" VerticalAlignment="Center"
+                                    <Slider Minimum="0" Maximum="3" TickFrequency="0.1" IsSnapToTickEnabled="True" VerticalAlignment="Center"
                                             IsEnabled="{Binding BotBase.EnableCombatReachIncrement}" Value="{Binding BotBase.CombatReachIncrement}"/>
                                     <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableCombatReachIncrement}" Text="{Binding BotBase.CombatReachIncrement}"/>
+                                </Grid>
+                                <Label Height="3" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="177"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider Minimum="0" Maximum="10" TickFrequency="0.5" IsSnapToTickEnabled="True" VerticalAlignment="Center"
+                                            IsEnabled="{Binding BotBase.EnableCombatReachIncrement}" Value="{Binding BotBase.MyCombatReachAdjustment}"/>
+                                    <TextBox Grid.Column="2" Height="21" IsEnabled="{Binding BotBase.EnableCombatReachIncrement}" Text="{Binding BotBase.MyCombatReachAdjustment}"/>
                                 </Grid>
                                 <Separator Margin="5" Opacity="0.5"/>
                                 <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Movement speed Hack" IsChecked="{Binding BotBase.EnableMovementSpeedHack}"/>
@@ -886,22 +931,37 @@
                                 <Separator Margin="5" Opacity="0.5"/>
                                 <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Remove Movement lock" IsChecked="{Binding BotBase.RemoveMovementLock}"/>
                                 <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Immune Knockback/Draw-in" IsChecked="{Binding BotBase.NoKnockback}"/>
+                                <Label></Label>
+                                <CheckBox Margin="0,1" VerticalAlignment="Center"  Content="Forcing Skip Dialogue" IsChecked="{Binding BotBase.ForceSkipTalk}"/>
                             </StackPanel>
                         </GroupBox>
 
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical">
-                        <GroupBox Padding="3" Header="Debug" Visibility="{Binding BotBase.Hackpanel, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <GroupBox Padding="3" Header="Misc" Visibility="{Binding BotBase.Hackpanel, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <StackPanel>
-                                <CheckBox Margin="0,1" VerticalAlignment="Center" Content="Performance Logger" IsChecked="{Binding BotBase.PerformanceLogger}"/>
+                                <CheckBox Margin="0,1" VerticalAlignment="Center" Content="Pulse Director" IsChecked="{Binding BotBase.PulseDirector}"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Padding="3" Header="Misc" Visibility="{Binding BotBase.Hackpanel, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="177"/>
                                         <ColumnDefinition Width="3"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Label Content="Minimum log time"></Label>
-                                    <TextBox Grid.Column="2"  Height="21" IsEnabled="{Binding BotBase.PerformanceLogger}" Text="{Binding BotBase.MinLogMs}" TextAlignment="Center"/>
+                                    <Label Content="Running tickrate"></Label>
+                                    <TextBox Grid.Column="2"  Height="21" Text="{Binding BotBase.RunningTickRate}" TextAlignment="Center"/>
+                                </Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="177"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="Pausing tickrate"></Label>
+                                    <TextBox Grid.Column="2"  Height="21" Text="{Binding BotBase.PausingTickRate}" TextAlignment="Center"/>
                                 </Grid>
                             </StackPanel>
                         </GroupBox>
