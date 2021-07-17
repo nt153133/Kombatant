@@ -88,6 +88,10 @@
                                               Content="{x:Static L:Localization.UI_MechanicWarnings}"
                                               ToolTip="{x:Static L:Localization.UI_Tooltip_MechanicWarnings}"
                                               IsChecked="{Binding BotBase.MechanicWarnings}"  />
+                                <CheckBox Margin="0,1,-0.4,1"
+                                          Content="Auto QTE"
+                                          IsChecked="{Binding BotBase.AutoQTE}" 
+                                          IsEnabled="{Binding BotBase.MechanicWarnings}"/>
                                 <CheckBox
                                               Content="{x:Static L:Localization.UI_AutoFaceTarget}"
                                               ToolTip="{x:Static L:Localization.UI_Tooltip_AutoFaceTarget}"
@@ -124,9 +128,6 @@
                                 <CheckBox Margin="0,1,-0.4,1"
                                     Content="Auto Pick Up Treasure"
                                     IsChecked="{Binding BotBase.AutoPickUpTreasure}" />
-                                <CheckBox Margin="0,1"
-                                          Content="Auto QTE"
-                                          IsChecked="{Binding BotBase.AutoQTE}" />
                                 <StackPanel Orientation="Horizontal" >
                                     <CheckBox Margin="0,1"
                                               Content="{x:Static L:Localization.UI_AutoSprint}"
