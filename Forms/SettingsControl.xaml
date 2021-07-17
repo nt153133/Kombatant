@@ -124,9 +124,9 @@
                                 <CheckBox Margin="0,1,-0.4,1"
                                     Content="Auto Pick Up Treasure"
                                     IsChecked="{Binding BotBase.AutoPickUpTreasure}" />
-                                <!--<CheckBox Margin="0,1"
+                                <CheckBox Margin="0,1"
                                           Content="Auto QTE"
-                                          IsChecked="{Binding BotBase.AutoQTE}" />-->
+                                          IsChecked="{Binding BotBase.AutoQTE}" />
                                 <StackPanel Orientation="Horizontal" >
                                     <CheckBox Margin="0,1"
                                               Content="{x:Static L:Localization.UI_AutoSprint}"
@@ -672,11 +672,11 @@
                     </GroupBox>
 
                     <Button Grid.Column="0"
-                            Grid.Row="4" Content="Check All"
+                            Grid.Row="4" Content="Enable All"
                             HorizontalAlignment="Stretch"
                             Command="{Binding CheckAll}" />
                     <Button Grid.Column="2"
-                            Grid.Row="4" Content="Uncheck All"
+                            Grid.Row="4" Content="Disable All"
                             HorizontalAlignment="Stretch"
                             Command="{Binding UnCheckAll}" />
                     <Button Grid.Column="0"
@@ -941,6 +941,16 @@
                         <GroupBox Padding="3" Header="Misc" Visibility="{Binding BotBase.Hackpanel, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <StackPanel>
                                 <CheckBox Margin="0,1" VerticalAlignment="Center" Content="Pulse Director" IsChecked="{Binding BotBase.PulseDirector}"/>
+                                <CheckBox Margin="0,1" VerticalAlignment="Center" Content="Performance Logger" IsChecked="{Binding BotBase.PerformanceLogger}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="177"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="minlog ms"></Label>
+                                    <TextBox Grid.Column="2"  Height="21" Text="{Binding BotBase.MinLogMs}" TextAlignment="Center"/>
+                                </Grid>
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Padding="3" Header="Misc" Visibility="{Binding BotBase.Hackpanel, Converter={StaticResource BooleanToVisibilityConverter}}">

@@ -332,23 +332,23 @@ namespace Kombatant.Settings
 
 		#endregion
 
-		//#region _autoQTE
+		#region _autoQTE
 
-		//private bool _autoQTE;
+		private bool _autoQTE;
 
-		//[DefaultValue(false)]
-		//[JsonProperty("AutoQTE")]
-		//public bool AutoQTE
-		//{
-		//	get => _autoQTE;
-		//	set
-		//	{
-		//		_autoQTE = value;
-		//		OnPropertyChanged();
-		//	}
-		//}
+		[DefaultValue(false)]
+		[JsonProperty("AutoQTE")]
+		public bool AutoQTE
+		{
+			get => _autoQTE;
+			set
+			{
+				_autoQTE = value;
+				OnPropertyChanged();
+			}
+		}
 
-		//#endregion
+		#endregion
 
 		#region AutoTrade
 
@@ -1688,17 +1688,29 @@ namespace Kombatant.Settings
 			}
 		}
 
-		//private bool performanceLogger;
-		//[DefaultValue(false)]
-		//public bool PerformanceLogger
-		//{
-		//	get => performanceLogger;
-		//	set
-		//	{
-		//		performanceLogger = value;
-		//		OnPropertyChanged();
-		//	}
-		//}
+		private bool performanceLogger;
+		[DefaultValue(false)]
+		public bool PerformanceLogger
+		{
+			get => performanceLogger;
+			set
+			{
+				performanceLogger = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private float _minlogms;
+		[DefaultValue(5f)]
+		public float MinLogMs
+		{
+			get => _minlogms;
+			set
+			{
+				_minlogms = value;
+				OnPropertyChanged();
+			}
+		}
 
 		private int _RunningTickRate;
 		[DefaultValue(255)]

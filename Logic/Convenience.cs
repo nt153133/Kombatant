@@ -264,8 +264,8 @@ namespace Kombatant.Logic
 		private bool ExecuteAutoSprint()
 		{
 			if (WorldManager.InPvP) return false;
-			if (Core.Me.InCombat || GameObjectManager.Attackers.Any() || !MovementManager.IsMoving) return false;
 			if (!ActionManager.IsSprintReady) return false;
+			if (Core.Me.InCombat || !MovementManager.IsMoving || GameObjectManager.Attackers.Any()) return false;
 			if (BotBase.Instance.AutoSprintInDutyOnly)
 			{
 				if (DirectorManager.ActiveDirector is InstanceContentDirector icd && icd.BarrierDown() && !icd.InstanceEnded)
@@ -298,11 +298,19 @@ namespace Kombatant.Logic
 				var fate = FateManager.GetFateById(target.FateId);
 
 				// Sync us down, Scotty!
-				if (fate != null && fate.Within2D(Core.Me.Location) && Core.Me.ClassLevel > fate.MaxLevel)
+
+				if (fate != null)
 				{
-					LogHelper.Instance.Log(Localization.Localization.Msg_AutoSyncFate, fate.Name);
-					Core.Me.SyncToFate();
-					return true;
+					var shouldSync = Core.Me.ElementalLevel > 0
+						? Core.Me.ElementalLevel > fate.MaxLevel
+						: Core.Me.ClassLevel > fate.MaxLevel;
+
+					if (fate.Within2D(Core.Me.Location) && shouldSync)
+					{
+						LogHelper.Instance.Log(Localization.Localization.Msg_AutoSyncFate, fate.Name);
+						Core.Me.SyncToFate();
+						return true;
+					}
 				}
 			}
 

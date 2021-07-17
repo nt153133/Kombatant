@@ -1,5 +1,5 @@
 ﻿//!CompilerOption:Optimize:On
-
+#define DBG
 
 using System;
 using System.Collections.Generic;
@@ -44,6 +44,9 @@ namespace Kombatant.Logic
 		internal new async Task<bool> ExecuteLogic()
 		{
 			// Do not execute this logic if the botbase is paused.
+			if (!BotBase.Instance.AutoTarget)
+				return await Task.FromResult(false);
+
 			if (Settings.BotBase.Instance.IsPaused || IsTraveling())
 				return await Task.FromResult(false);
 
@@ -59,10 +62,10 @@ namespace Kombatant.Logic
 			var potentialTarget = null as BattleCharacter;
 
 #if DBG
-			using (new PerformanceLogger("AutoDeseletTarget"))
+			using (new PerformanceLogger("AutoDeselectTarget"))
 #endif
 			{
-				if (BotBase.Instance.AutoTarget && BotBase.Instance.AutoDeSelectTarget && currentTarget != null && !IsValidTarget(currentTarget) && !currentTarget.IsStrikingDummy())
+				if (BotBase.Instance.AutoDeSelectTarget && currentTarget != null && !IsValidTarget(currentTarget) && !currentTarget.IsStrikingDummy())
 				{
 					Core.Me.ClearTarget();
 					return await Task.FromResult(true);
@@ -93,7 +96,7 @@ namespace Kombatant.Logic
 							potentialTarget = TargetNearestEnemy();
 							break;
 
-						case TargetingMode.LowestHealth:
+						case TargetingMode.LowestCurrentHealth:
 							potentialTarget = TargetLowestHpEnemy();
 							break;
 
@@ -105,7 +108,7 @@ namespace Kombatant.Logic
 							potentialTarget = TargetLowestHpPercentEnemy();
 							break;
 
-						case TargetingMode.HighestHealth:
+						case TargetingMode.HighestCurrentHealth:
 							potentialTarget = TargetHighestHpEnemy();
 							break;
 
@@ -360,9 +363,9 @@ namespace Kombatant.Logic
 							case TargetingMode.Nearest:
 							case TargetingMode.BestAoE:
 							case TargetingMode.OnlyWhitelisted:
-							case TargetingMode.LowestHealth:
+							case TargetingMode.LowestCurrentHealth:
 							case TargetingMode.LowestHealthPercent:
-							case TargetingMode.HighestHealth:
+							case TargetingMode.HighestCurrentHealth:
 							case TargetingMode.HighestHealthPercent:
 							case TargetingMode.MostTargeted:
 								result = result.Where(i => i.TargetGameObject is BattleCharacter bc && bc.IsTank());

@@ -45,7 +45,7 @@ namespace Kombatant.Constants
         internal static readonly HashSet<uint> ForceStandStill = new HashSet<uint>
         {
             639,     // Pyretic
-            690,     // Pyretic
+            960,     // Pyretic
             1049,    // Pyretic
             1133,    // Pyretic
             1599,    // Pyretic

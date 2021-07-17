@@ -1,5 +1,5 @@
 ﻿//!CompilerOption:Optimize:On
-
+//#define DBG
 
 using System;
 using System.Collections.Generic;

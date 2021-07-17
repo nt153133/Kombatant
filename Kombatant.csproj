@@ -89,6 +89,7 @@
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\OverlayHelper.cs" />
     <Compile Include="Helpers\PulseFlagHelper.cs" />
+    <Compile Include="Helpers\SendKeysHelper.cs" />
     <Compile Include="Helpers\WaitHelper.cs" />
     <Compile Include="Helpers\WpfHelper.cs" />
     <Compile Include="Interfaces\ILogicExecutor.cs" />

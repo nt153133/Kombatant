@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Media;
+using Buddy.Coroutines;
 using ff14bot;
 using ff14bot.Directors;
 using ff14bot.Managers;
@@ -9,6 +11,7 @@ using ff14bot.Objects;
 using Kombatant.Extensions;
 using Kombatant.Helpers;
 using Kombatant.Interfaces;
+using Kombatant.Settings;
 
 namespace Kombatant.Logic
 {
@@ -72,11 +75,24 @@ namespace Kombatant.Logic
 			{
 				if (ExecuteStandStill())
 				{
-					if (Core.Me.IsCasting)
-						ActionManager.StopCasting();
+
 
 					return await Task.FromResult(true);
 				}
+			}
+
+			if (BotBase.Instance.AutoQTE)
+			{
+				var qte = RaptureAtkUnitManager.GetWindowByName("QTE");
+				if (qte != null && qte.IsVisible)
+				{
+					var h = Core.Memory.Process.MainWindowHandle;
+					SendKeysHelper.NativeMethods.PostMessage(h, SendKeysHelper.NativeMethods.WM_KEYDOWN, (IntPtr)Keys.Space, IntPtr.Zero);
+					SendKeysHelper.NativeMethods.PostMessage(h, SendKeysHelper.NativeMethods.WM_KEYUP, (IntPtr)Keys.Space, IntPtr.Zero);
+					return await Task.FromResult(true);
+				}
+
+				await Task.FromResult(false);
 			}
 
 			// Handle auras that force the player to stand still when the aura reaches zero.
@@ -151,28 +167,38 @@ namespace Kombatant.Logic
 		/// </summary>
 		private bool ExecuteStandStill()
 		{
-			Core.Me.ClearTarget();
-			ChatManager.SendChat("/battlemode off");
-			// Select the aura that still has the longest time left.
+			//Core.Me.ClearTarget();
 			var longestAura = Core.Me.Auras
-				.Where(aura => Constants.Aura.ForceStandStill.Contains(aura.Id) && aura.TimeLeft > 0.5)
+				.Where(aura => Constants.Aura.ForceStandStill.Contains(aura.Id))
 				.OrderByDescending(aura => aura.TimeLeft)
 				.FirstOrDefault();
-
-			// If all auras are gone (i.e. the boss died), we do not need to wait.
-			if (longestAura == null)
+			if (longestAura != null)
 			{
-				WaitHelper.Instance.RemoveWait(@"Mechanics.StandStillMessage");
-				return false;
+				ChatManager.SendChat("/battlemode off");
+				MovementManager.Move(MovementDirection.AllAllowed, longestAura.TimespanLeft);
+				if (Core.Me.IsCasting)
+					ActionManager.StopCasting();
 			}
+			//// Select the aura that still has the longest time left.
+			//var longestAura = Core.Me.Auras
+			//	.Where(aura => Constants.Aura.ForceStandStill.Contains(aura.Id) && aura.TimeLeft > 0.5)
+			//	.OrderByDescending(aura => aura.TimeLeft)
+			//	.FirstOrDefault();
 
-			// Already waiting for an aura to disappear.
-			if (WaitHelper.Instance.IsWaiting(@"Mechanics.StandStillMessage"))
-				return true;
+			//// If all auras are gone (i.e. the boss died), we do not need to wait.
+			//if (longestAura == null)
+			//{
+			//	WaitHelper.Instance.RemoveWait(@"Mechanics.StandStillMessage");
+			//	return false;
+			//}
 
-			WaitHelper.Instance.AddWait(@"Mechanics.StandStillMessage", longestAura.TimespanLeft.Add(TimeSpan.FromMilliseconds(StandStillLatencyAdd)));
-			var toastMessage = string.Format(Localization.Localization.Msg_MechanicWarning_StandStill, longestAura.Name);
-			OverlayHelper.Instance.AddToast(toastMessage, ToastFontColor, ToastShadowColor, longestAura.TimespanLeft.Subtract(TimeSpan.FromMilliseconds(100)));
+			//// Already waiting for an aura to disappear.
+			//if (WaitHelper.Instance.IsWaiting(@"Mechanics.StandStillMessage"))
+			//	return true;
+
+			//WaitHelper.Instance.AddWait(@"Mechanics.StandStillMessage", longestAura.TimespanLeft.Add(TimeSpan.FromMilliseconds(StandStillLatencyAdd)));
+			//var toastMessage = string.Format(Localization.Localization.Msg_MechanicWarning_StandStill, longestAura.Name);
+			//OverlayHelper.Instance.AddToast(toastMessage, ToastFontColor, ToastShadowColor, longestAura.TimespanLeft.Subtract(TimeSpan.FromMilliseconds(100)));
 
 			// Return true because we want to wait the entirety of the aura.
 			return true;
