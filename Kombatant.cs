@@ -188,11 +188,6 @@ namespace Kombatant
 			try
 			{
 				_ = Offsets.Instance;
-				_ = GroundSpeedHook.Instance;
-				_ = CombatReachHook.Instance;
-				_ = FastCastHook.Instance;
-				_ = GcdHook.Instance;
-				Core.Memory.Patches.Create(Offsets.Instance.KnockbackFunc, Enumerable.Repeat((byte)0x90, 5).ToArray(), "NoKnockbackPatch");
 			}
 			catch (Exception e)
 			{
@@ -318,15 +313,6 @@ namespace Kombatant
 						OverlayManager.FocusOverlay.Update();
 					if (BotBase.Instance.UseStatusOverlay)
 						OverlayManager.StatusOverlay.Update();
-				}
-#if DBG
-				using (new PerformanceLogger("Memory"))
-#endif
-				{
-					if (BotBase.Instance.Hackpanel)
-					{
-						Hack.Instance.ExecuteLogic();
-					}
 				}
 
 				// Execute Loot logic

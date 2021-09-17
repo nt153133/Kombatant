@@ -105,7 +105,6 @@
     <Compile Include="Logic\Convenience.cs" />
     <Compile Include="Logic\CRLogic.cs" />
     <Compile Include="Logic\CommenceDuty.cs" />
-    <Compile Include="Logic\Hack.cs" />
     <Compile Include="Logic\Loot.cs" />
     <Compile Include="Logic\Mechanics.cs" />
     <Compile Include="Logic\Movement.cs" />
@@ -113,7 +112,6 @@
     <Compile Include="Managers\DutyManager.cs" />
     <Compile Include="Managers\LootManager.cs" />
     <Compile Include="Managers\TargetManager.cs" />
-    <Compile Include="Memory\Hooks.cs" />
     <Compile Include="Memory\Offsets.cs" />
     <Compile Include="Resources\AssemblyInfo.cs" />
     <Compile Include="Resources\Controls.Designer.cs" />
