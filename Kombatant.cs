@@ -323,7 +323,7 @@ namespace Kombatant
 				using (new PerformanceLogger("SetTickRate"))
 #endif
 				{
-					TreeRoot.TicksPerSecond = BotBase.Instance.IsPaused ? (byte)BotBase.Instance.PausingTickRate : (byte)BotBase.Instance.RunningTickRate;
+					//TreeRoot.TicksPerSecond = BotBase.Instance.IsPaused ? (byte)BotBase.Instance.PausingTickRate : (byte)BotBase.Instance.RunningTickRate;
 				}
 #if DBG
 				using (new PerformanceLogger("CommenceDuty"))
