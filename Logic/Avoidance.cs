@@ -1,19 +1,14 @@
-﻿//!CompilerOption:Optimize:On
+//!CompilerOption:Optimize:On
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using Clio.Utilities.Plugins;
-using ff14bot.AClasses;
 using ff14bot.Behavior;
-using ff14bot.Interfaces;
 using ff14bot.Managers;
 using Kombatant.Extensions;
 using Kombatant.Helpers;
 using Kombatant.Interfaces;
 using BotBase = Kombatant.Settings.BotBase;
-using PluginContainer = Clio.Utilities.Plugins.PluginContainer;
-using PluginManager = ff14bot.Managers.PluginManager;
 
 namespace Kombatant.Logic
 {
@@ -32,7 +27,7 @@ namespace Kombatant.Logic
 
         private bool _wasAvoiding;
         private bool _isFighting;
-        private static ff14bot.Managers.PluginContainer sidestep = PluginManager.Plugins.FirstOrDefault(i => i.Plugin.Name == "SideStep");
+        private static PluginContainer sidestep = PluginManager.Plugins.FirstOrDefault(i => i.Plugin.Name == "SideStep");
         /// <summary>
         /// Main task executor for the Avoidance logic.
         /// </summary>
