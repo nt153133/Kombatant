@@ -452,7 +452,7 @@ namespace Kombatant.Logic
 		private static bool TradeOpen => RaptureAtkUnitManager.GetWindowByName("Trade") != null;
 		private static bool ContextMenuOpened => RaptureAtkUnitManager.GetWindowByName("ContextMenu") != null;
 		private static bool HasValidTradeTarget => Core.Me.HasTarget && Core.Target is Character c && !c.IsMe && c.Type == GameObjectType.Pc &&
-												   (!BotBase.Instance.AutoTradeFriendOnly || (c.StatusFlags & StatusFlags.Friend) != 0) &&
+												   //(!BotBase.Instance.AutoTradeFriendOnly || (c.StatusFlags & StatusFlags.Friend) != 0) &&
 												   !DutyManager.InInstance && c.IsWithinInteractRange;
 
 		private async Task<bool> ExecuteAutoTrade()

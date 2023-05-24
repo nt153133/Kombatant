@@ -182,10 +182,10 @@
                                     <CheckBox Margin="0,1"
                                               Content="{x:Static L:Localization.UI_AutoTrade}"
                                               IsChecked="{Binding BotBase.AutoTrade}" HorizontalAlignment="Left" Width="115" />
-                                    <CheckBox Margin="0,1"
+                                    <!--<CheckBox Margin="0,1"
                                               Content="{x:Static L:Localization.UI_FriendsOnly}"
                                               IsChecked="{Binding BotBase.AutoTradeFriendOnly}"
-                                              IsEnabled="{Binding BotBase.AutoTrade}" />
+                                              IsEnabled="{Binding BotBase.AutoTrade}" />-->
                                     <!--<CheckBox
                                     Content="AutoLeaveDuty"
                                     IsChecked="{Binding BotBase.AutoLeaveDuty}" />-->
