@@ -39,7 +39,6 @@ namespace Kombatant.Memory
 		{
 			using (var patternFinder = new PatternFinder(Core.Memory))
 			{
-				InitializeValue(patternFinder, ref AgentMvpVTable, nameof(AgentMvpVTable), "Search 48 8D 05 ? ? ? ? 48 89 03 33 C0 48 89 43 28 89 43 30 48 8B C3 48 83 C4 ? 5B C3 CC CC CC CC CC CC 40 53 Add 3 TraceRelative");
 				InitializeValue(patternFinder, ref AgentMvpVTable, nameof(AgentMvpVTable), "Search 48 8D 05 ? ? ? ? 48 89 03 33 C0 48 89 43 ? 48 89 43 ? 48 8B C3 48 83 C4 ? 5B C3 ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 40 53 Add 3 TraceRelative");
 				InitializeValue(patternFinder, ref AgentNotificationVTable, nameof(AgentNotificationVTable), "Search 48 8D 05 ? ? ? ? 48 8B D9 48 89 01 E8 ? ? ? ? 48 8B CB E8 ? ? ? ? 48 8B CB 48 83 C4 ? 5B E9 ? ? ? ? CC CC CC CC Add 3 TraceRelative");
 				InitializeValue(patternFinder, ref LootFunc, nameof(LootFunc), "Search E8 ? ? ? ? EB 4A 48 8D 4F 10 Add 1 TraceRelative");
